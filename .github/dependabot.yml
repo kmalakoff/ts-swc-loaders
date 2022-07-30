@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: daily
+    ignore:
+      - dependency-name: 'mkdirp'
+      - dependency-name: 'pirates'
+      - dependency-name: 'rimraf'
+      - dependency-name: 'ts-node'
+      - dependency-name: 'regenerator-runtime'
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      # Check for updates to GitHub Actions every weekday
+      interval: 'daily'

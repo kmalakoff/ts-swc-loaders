@@ -14,6 +14,7 @@ describe('module', function () {
     var args = spawnArgs(type, cmd, ['--watch-extensions', 'ts,tsx', 'test/module/**/*.*'], { cwd: DATA_DIR, stdio: 'inherit' });
 
     spawn(args[0], args[1], args[2], function (err) {
+      console.log('err', err);
       assert.ok(!err);
       done();
     });

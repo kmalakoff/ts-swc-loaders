@@ -10,6 +10,7 @@ describe('commonjs', function () {
     var args = spawnArgs('commonjs', 'mocha-compat', ['--watch-extensions', 'ts,tsx', 'test/commonjs/**/*.*'], { cwd: DATA_DIR, stdio: 'inherit' });
 
     spawn(args[0], args[1], args[2], function (err) {
+      console.log('err', err);
       assert.ok(!err);
       done();
     });

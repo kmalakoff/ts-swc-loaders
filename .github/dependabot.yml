@@ -7,6 +7,7 @@ updates:
     ignore:
       - dependency-name: 'mkdirp'
       - dependency-name: 'pirates'
+      - dependency-name: 'micromatch'
       - dependency-name: 'rimraf'
       - dependency-name: 'ts-node'
       - dependency-name: 'regenerator-runtime'

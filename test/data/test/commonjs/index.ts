@@ -1,4 +1,5 @@
 require('core-js/actual/symbol/for');
+require('core-js/actual/map');
 
 const assert = require('assert');
 const App = require('./lib/react.tsx');

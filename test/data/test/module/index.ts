@@ -1,4 +1,5 @@
 import 'core-js/actual/symbol/for.js';
+import 'core-js/actual/map/index.js';
 
 import assert from 'assert';
 import App from './lib/react.tsx';

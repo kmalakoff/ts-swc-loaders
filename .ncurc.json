@@ -1,4 +1,4 @@
 {
   "upgrade": true,
-  "reject": ["mkdirp", "pirates", "micromatch", "rimraf", "ts-node", "regenerator-runtime"]
+  "reject": ["mkdirp", "pirates", "micromatch", "rimraf", "slash", "ts-node", "regenerator-runtime"]
 }

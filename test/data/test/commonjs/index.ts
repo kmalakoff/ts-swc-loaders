@@ -1,16 +1,16 @@
 require('core-js/actual/symbol/for');
 require('core-js/actual/map');
 
-const assert = require('assert');
-const App = require('./lib/react.tsx');
-const string = require('./lib/string.cjs');
+var assert = require('assert');
+var App = require('./lib/react.tsx');
+var string = require('./lib/string.cjs');
 
-describe('commonjs', function () {
-  it('react.tsx', function () {
+describe('commonjs', () => {
+  it('react.tsx', () => {
     assert.ok(App);
   });
 
-  it('string.cjs', function () {
+  it('string.cjs', () => {
     assert.equal(string, 'string');
   });
 });

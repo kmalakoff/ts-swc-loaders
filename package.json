@@ -1,6 +1,6 @@
 {
   "name": "ts-swc-loaders",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Typescript loaders for swc",
   "keywords": [
     "typescript",
@@ -30,10 +30,11 @@
   ],
   "scripts": {
     "build": "",
+    "deploy": "tsds deploy",
     "format": "biome check --apply-unsafe lib/ test/",
-    "prepublishOnly": "npm run format && depcheck",
     "test": "tsds link && mocha-compat test/**/*.test.js --no-timeouts && tsds unlink",
-    "test:engines": "nvu engines npm test"
+    "test:engines": "nvu engines npm test",
+    "version": "tsds version"
   },
   "dependencies": {
     "@swc/core": "^1.4.0",
@@ -55,12 +56,12 @@
     "@biomejs/biome": "^1.5.3",
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.11.17",
-    "cross-spawn-cb": "^0.6.15",
+    "cross-spawn-cb": "^0.6.17",
     "depcheck": "^1.4.7",
     "mocha": "^10.3.0",
     "mocha-compat": "^3.5.5",
     "react": "^18.2.0",
-    "ts-dev-stack": "^0.9.5"
+    "ts-dev-stack": "^0.9.6"
   },
   "engines": {
     "node": ">=0.8"

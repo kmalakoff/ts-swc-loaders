@@ -1,30 +1,31 @@
-var assert = require('assert');
-var path = require('path');
-var spawn = require('cross-spawn-cb');
-var spawnArgs = require('../../lib/spawnArgs');
-var devStack = require('ts-dev-stack');
+const assert = require('assert');
+const path = require('path');
+const spawn = require('cross-spawn-cb');
+const spawnArgs = require('../..').spawnArgs;
 
-var MODULE_DIR = path.resolve(__dirname, '..', '..');
-var DATA_DIR = path.resolve(__dirname, '..', 'data');
-var DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules', 'ts-swc-loaders');
+const devStack = require('ts-dev-stack');
 
-var major = +process.versions.node.split('.')[0];
-var type = major >= 12 ? 'module' : 'commonjs';
-var cmd = path.resolve(__dirname, '..', '..', 'node_modules', '.bin', major >= 12 ? '_mocha' : '_mocha-compat');
+const MODULE_DIR = path.resolve(__dirname, '..', '..');
+const DATA_DIR = path.resolve(__dirname, '..', 'data');
+const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules', 'ts-swc-loaders');
+
+const major = +process.versions.node.split('.')[0];
+const type = major >= 12 ? 'module' : 'commonjs';
+const cmd = path.resolve(__dirname, '..', '..', 'node_modules', '.bin', major >= 12 ? '_mocha' : '_mocha-compat');
 
 describe('module', function () {
-  it('tests', function (done) {
-    var args = spawnArgs(type, cmd, ['--watch-extensions', 'ts,tsx', 'test/module/**/*.*'], { cwd: DATA_DIR, stdio: 'inherit' });
-    spawn(args[0], args[1], args[2], function (err) {
+  it('tests', function(done) {
+    const args = spawnArgs(type, cmd, ['--watch-extensions', 'ts,tsx', 'test/module/**/*.*'], { cwd: DATA_DIR, stdio: 'inherit' });
+    spawn(args[0], args[1], args[2], function(err) {
       assert.ok(!err);
       done();
     });
   });
 
-  before(function (cb) {
+  before(function(cb) {
     devStack.link([], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }, cb);
   });
-  after(function (cb) {
+  after(function(cb) {
     devStack.unlink([], { installPath: DATA_MODULE_DIR }, cb);
   });
 });

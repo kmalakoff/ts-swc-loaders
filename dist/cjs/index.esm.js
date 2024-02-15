@@ -2,14 +2,27 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-Object.defineProperty(exports, "spawnArgs", {
-    enumerable: true,
-    get: function() {
+function _export(target, all) {
+    for(var name in all)Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+    });
+}
+_export(exports, {
+    createMatcher: function() {
+        return _createMatcher.default;
+    },
+    spawnArgs: function() {
         return _spawnArgscjs.default;
+    },
+    transformSync: function() {
+        return _transformSync.default;
     }
 });
 _export_star(require("./esm/loaderCurrent.js"), exports);
 _export_star(require("./esm/loaderLegacy.js"), exports);
+var _transformSync = /*#__PURE__*/ _interop_require_default(require("./esm/transformSync.js"));
+var _createMatcher = /*#__PURE__*/ _interop_require_default(require("./createMatcher.js"));
 var _spawnArgscjs = /*#__PURE__*/ _interop_require_default(require("./spawnArgs.js"));
 function _export_star(from, to) {
     Object.keys(from).forEach(function(k) {

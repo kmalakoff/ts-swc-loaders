@@ -20,7 +20,7 @@ function _interop_require_default(obj) {
 var __dirname = (0, _url.fileURLToPath)(new URL(".", require("url").pathToFileURL(__filename).toString()));
 var major = +_process.default.versions.node.split(".")[0];
 var version = major >= 14 ? "local" : "lts";
-var worker = _path.default.resolve(__dirname, "..", "..", "cjs", "workers", "transformSync.js");
+var worker = _path.default.resolve(__dirname, "..", "workers", "transformSync.cjs");
 function transformSync(contents, filename, config) {
     return (0, _nodeversioncall.default)(version, worker, contents, filename, config);
 }

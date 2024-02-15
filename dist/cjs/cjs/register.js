@@ -23,7 +23,7 @@ var _Cache = /*#__PURE__*/ _interop_require_default(require("../Cache.js"));
 var _createMatcher = /*#__PURE__*/ _interop_require_default(require("../createMatcher.js"));
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../loadTSConfig.js"));
-var _transformSync = /*#__PURE__*/ _interop_require_default(require("./transformSync.js"));
+var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("./transformSync.js"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -58,7 +58,7 @@ function compile(contents, filePath) {
     if (_extensions.default.indexOf(_path.default.extname(filePath)) < 0) return contents || " ";
     if (!match(filePath)) return contents || " ";
     var data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
-        return (0, _transformSync.default)(contents, filePath, config);
+        return (0, _transformSynccjs.default)(contents, filePath, config);
     });
     return data.code;
 }

@@ -3,12 +3,12 @@ import path from 'path';
 import { URL, fileURLToPath, pathToFileURL } from 'url';
 import process from 'process';
 
-import Cache from '../Cache.js';
-import createMatcher from '../createMatcher.js';
-import extensions from '../extensions.js';
-import loadTSConfig from '../loadTSConfig.js';
-import packageType from '../packageType.js';
-import transformSync from './transformSync.js';
+import Cache from '../Cache.mjs';
+import createMatcher from '../createMatcher.mjs';
+import extensions from '../extensions.mjs';
+import loadTSConfig from '../loadTSConfig.mjs';
+import packageType from '../packageType.mjs';
+import transformSync from './transformSync.mjs';
 
 const major = +process.versions.node.split('.')[0];
 const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';

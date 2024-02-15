@@ -1,12 +1,12 @@
 import path from 'path';
 import { URL, fileURLToPath, pathToFileURL } from 'url';
 
-import Cache from '../Cache.js';
-import createMatcher from '../createMatcher.js';
-import extensions from '../extensions.js';
-import loadTSConfig from '../loadTSConfig.js';
-import packageType from '../packageType.js';
-import transformSync from './transformSync.js';
+import Cache from '../Cache.mjs';
+import createMatcher from '../createMatcher.mjs';
+import extensions from '../extensions.mjs';
+import loadTSConfig from '../loadTSConfig.mjs';
+import packageType from '../packageType.mjs';
+import transformSync from './transformSync.mjs';
 
 const INTERNAL_PATHS = [new URL('..', import.meta.url).href, new URL('../../node_modules', import.meta.url).href];
 const isInternal = (x) => INTERNAL_PATHS.some((y) => x.startsWith(y));

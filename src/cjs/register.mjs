@@ -3,10 +3,10 @@ import pirates from 'pirates';
 import '../polyfills.cjs';
 
 import Cache from '../Cache.js';
-import createMatcher from '../createMatcher.js';
-import extensions from '../extensions.js';
-import loadTSConfig from '../loadTSConfig.js';
-import transformSync from './transformSync.mjs';
+import createMatcher from '../createMatcher.mjs';
+import extensions from '../extensions.mjs';
+import loadTSConfig from '../loadTSConfig.mjs';
+import transformSync from './transformSync.cjs';
 
 const INTERNAL_PATHS = [path.resolve(__dirname, '..'), path.resolve(__dirname, '..', '..', 'node_modules')];
 function isInternal(x) {

@@ -1,7 +1,7 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.5.3/schema.json",
   "files": {
-    "ignore": [".yarn/**", "android/**", "build/**", "dist/**", "ios/**", "node_modules/**", "out/**", "test/data/**", "vendor/**", "test/data/errors/"]
+    "ignore": ["assets/**", "dist/**", "node_modules/**", "test/data/**", "test/spec/**"]
   },
   "formatter": {
     "enabled": true,
@@ -19,18 +19,14 @@
     "rules": {
       "recommended": true,
       "complexity": {
-        "noForEach": "off",
-        "useArrowFunction": "off"
+        "noForEach": "off"
       },
       "correctness": {
         "noUnusedVariables": "warn",
         "noInnerDeclarations": "off"
       },
       "style": {
-        "noParameterAssign": "off",
-        "noArguments": "off",
-        "noVar": "off",
-        "useTemplate": "off"
+        "noParameterAssign": "off"
       }
     }
   }

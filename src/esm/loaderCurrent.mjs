@@ -8,37 +8,37 @@ import createMatcher from '../createMatcher.js';
 import extensions from '../extensions.js';
 import loadTSConfig from '../loadTSConfig.js';
 import packageType from '../packageType.js';
-import transformSync from '../transformSync.js';
+import transformSync from './transformSync.js';
 
-var major = +process.versions.node.split('.')[0];
-var importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
+const major = +process.versions.node.split('.')[0];
+const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
 
-var INTERNAL_PATHS = [new URL('..', import.meta.url).href, new URL('../../node_modules', import.meta.url).href];
-var isInternal = (x) => INTERNAL_PATHS.some((y) => x.startsWith(y));
+const INTERNAL_PATHS = [new URL('..', import.meta.url).href, new URL('../../node_modules', import.meta.url).href];
+const isInternal = (x) => INTERNAL_PATHS.some((y) => x.startsWith(y));
 
-var moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
-var indexExtensions = extensions.map((x) => 'index' + x);
+const moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
+const indexExtensions = extensions.map((x) => `index${x}`);
 
-var cache = new Cache();
-var config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));
-var match = createMatcher(config);
+const cache = new Cache();
+const config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));
+const match = createMatcher(config);
 
-export var resolve = async (specifier, context, defaultResolve) => {
+export async function resolve(specifier, context, defaultResolve) {
   if (specifier.startsWith('node:')) specifier = specifier.slice(5); // node built-in
-  var parentURL = context.parentURL && path.isAbsolute(context.parentURL) ? pathToFileURL(context.parentURL) : context.parentURL; // windows
-  var url = parentURL ? new URL(specifier, parentURL).href : new URL(specifier).href;
+  const parentURL = context.parentURL && path.isAbsolute(context.parentURL) ? pathToFileURL(context.parentURL) : context.parentURL; // windows
+  const url = parentURL ? new URL(specifier, parentURL).href : new URL(specifier).href;
 
   // resolve from extension or as a module
   if (path.extname(specifier) || moduleRegEx.test(specifier)) {
-    var data = await defaultResolve(specifier, context, defaultResolve);
+    const data = await defaultResolve(specifier, context, defaultResolve);
     if (!data.format) data.format = packageType(url);
     return data;
   }
 
   // directory
   if (specifier.endsWith('/')) {
-    var items = fs.readdirSync(specifier);
-    for (var item of items) {
+    const items = fs.readdirSync(specifier);
+    for (const item of items) {
       if (indexExtensions.indexOf(item) >= 0) {
         return await resolve(specifier + item, context, defaultResolve);
       }
@@ -47,7 +47,7 @@ export var resolve = async (specifier, context, defaultResolve) => {
 
   // guess extension
   else {
-    for (var ext of extensions) {
+    for (const ext of extensions) {
       try {
         return await resolve(specifier + ext, context, defaultResolve);
       } catch (_err) {
@@ -57,18 +57,18 @@ export var resolve = async (specifier, context, defaultResolve) => {
   }
 
   throw new Error(`Cannot resolve: ${specifier}`);
-};
+}
 
-export var load = async (url, context, defaultLoad) => {
+export async function load(url, context, defaultLoad) {
   if (url.startsWith('node:')) return await defaultLoad(url, context, defaultLoad);
   if (url.endsWith('.json')) context[importJSONKey] = Object.assign(context[importJSONKey] || {}, { type: 'json' });
 
-  var parentURL = context.parentURL && path.isAbsolute(context.parentURL) ? pathToFileURL(context.parentURL) : context.parentURL; // windows
+  const parentURL = context.parentURL && path.isAbsolute(context.parentURL) ? pathToFileURL(context.parentURL) : context.parentURL; // windows
   url = parentURL ? new URL(specifier, parentURL).href : url;
 
-  var loaded = await defaultLoad(url, context, defaultLoad);
-  var filePath = fileURLToPath(url);
-  var hasSource = loaded.source;
+  const loaded = await defaultLoad(url, context, defaultLoad);
+  const filePath = fileURLToPath(url);
+  const hasSource = loaded.source;
   if (!hasSource) loaded.source = fs.readFileSync(filePath);
 
   // filter
@@ -78,12 +78,12 @@ export var load = async (url, context, defaultLoad) => {
   if (!match(filePath)) return loaded;
 
   // transform
-  var contents = loaded.source.toString();
-  var data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, () => transformSync(contents, filePath, config));
+  const contents = loaded.source.toString();
+  const data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, () => transformSync(contents, filePath, config));
 
   return {
     ...loaded,
     format: hasSource ? 'module' : 'commonjs',
     source: data.code,
   };
-};
+}

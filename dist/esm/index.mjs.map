@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.mjs"],"sourcesContent":["import { register } from './cjs/register.mjs';\nregister();\n\nexport { default as spawnArgs } from './spawnArgs.cjs';\n"],"names":["register","default","spawnArgs"],"mappings":"AAAA,SAASA,QAAQ,QAAQ,qBAAqB;AAC9CA;AAEA,SAASC,WAAWC,SAAS,QAAQ,kBAAkB"}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["polyfills.cjs"],"sourcesContent":["require('core-js/actual/string/ends-with');\nrequire('core-js/actual/string/starts-with');\nrequire('core-js/actual/object/assign');\n"],"names":["require"],"mappings":";AAAAA,QAAQ;AACRA,QAAQ;AACRA,QAAQ"}

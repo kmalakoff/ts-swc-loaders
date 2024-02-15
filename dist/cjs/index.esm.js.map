@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.esm.mjs"],"sourcesContent":["export * from './esm/loaderCurrent.mjs';\nexport * from './esm/loaderLegacy.mjs';\n\nexport { default as spawnArgs } from './spawnArgs.cjs';\n"],"names":["spawnArgs"],"mappings":";;;;+BAGoBA;;;eAAAA,qBAAS;;;qBAHf;qBACA;mEAEuB"}

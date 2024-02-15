@@ -1,1 +1,1 @@
-ignores: ["depcheck", "mocha", "regenerator-runtime"]
+ignores: ["ts-swc-loaders", "depcheck", "ts-dev-stack", "@types/*", "regenerator-runtime"]

@@ -18,28 +18,31 @@
   "type": "commonjs",
   "exports": {
     ".": {
-      "import": "./lib/esm/index.mjs",
-      "require": "./lib/cjs/index.js"
+      "import": "./dist/esm/index.esm.mjs",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
     },
     "./*": "./*"
   },
-  "main": "lib/cjs/index.js",
-  "module": "lib/esm/index.mjs",
+  "main": "dist/cjs/index.js",
+  "module": "dist/dist/esm/index.esm.mjs",
+  "types": "dist/types/index.d.ts",
   "files": [
-    "lib"
+    "dist"
   ],
   "scripts": {
-    "build": "",
+    "build": "tsds build",
+    "depcheck": "depcheck",
     "deploy": "tsds deploy",
-    "format": "biome check --apply-unsafe lib/ test/",
-    "test": "tsds link && mocha-compat test/**/*.test.js --no-timeouts && tsds unlink",
+    "format": "biome check --apply-unsafe src/ test/",
+    "test": "mocha-compat test/**/*.test.js --no-timeouts",
     "test:engines": "nvu engines npm test",
     "version": "tsds version"
   },
   "dependencies": {
-    "@swc/core": "^1.4.0",
-    "core-js": "^3.35.1",
-    "get-tsconfig-compat": "^0.0.1",
+    "@swc/core": "^1.4.1",
+    "core-js": "^3.36.0",
+    "get-tsconfig-compat": "^0.1.0",
     "micromatch": "^3.1.10",
     "mkdirp": "^0.5.6",
     "node-version-call": "^0.4.7",
@@ -55,15 +58,22 @@
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
     "@types/mocha": "^10.0.6",
-    "@types/node": "^20.11.17",
-    "cross-spawn-cb": "^0.6.17",
+    "@types/node": "^20.11.19",
+    "cross-spawn-cb": "^0.6.18",
     "depcheck": "^1.4.7",
     "mocha": "^10.3.0",
     "mocha-compat": "^3.5.5",
     "react": "^18.2.0",
-    "ts-dev-stack": "^0.9.6"
+    "ts-dev-stack": "^0.11.0"
   },
   "engines": {
     "node": ">=0.8"
+  },
+  "tsds": {
+    "source": "src/index.mjs",
+    "targets": [
+      "cjs",
+      "esm"
+    ]
   }
 }

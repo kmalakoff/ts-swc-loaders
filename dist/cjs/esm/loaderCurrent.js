@@ -248,6 +248,7 @@ function _resolve() {
                 case 1:
                     data = _state.sent();
                     if (!data.format) data.format = (0, _packageType.default)(url);
+                    if (specifier1.endsWith("/node_modules/yargs/yargs")) data.format = "commonjs"; // args bin is cjs in a module
                     return [
                         2,
                         data

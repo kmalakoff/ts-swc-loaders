@@ -34,6 +34,7 @@ async function _getFormat(url, context, defaultGetFormat) {
   if (url.startsWith('file://')) {
     let format = EXT_TO_FORMAT[path.extname(url)];
     if (!format) format = packageType(url);
+    if (url.endsWith('/node_modules/yargs/yargs')) format = 'commonjs'; // args bin is cjs in a module
     return { format };
   }
 

@@ -28,6 +28,7 @@ export async function resolve(specifier1, context, defaultResolve) {
     if (path.extname(specifier1) || moduleRegEx.test(specifier1)) {
         const data = await defaultResolve(specifier1, context, defaultResolve);
         if (!data.format) data.format = packageType(url);
+        if (specifier1.endsWith('/node_modules/yargs/yargs')) data.format = 'commonjs'; // args bin is cjs in a module
         return data;
     }
     // directory

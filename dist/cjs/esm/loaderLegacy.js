@@ -194,6 +194,7 @@ function __getFormat() {
                     if (url.startsWith("file://")) {
                         format = EXT_TO_FORMAT[_path.default.extname(url)];
                         if (!format) format = (0, _packageType.default)(url);
+                        if (url.endsWith("/node_modules/yargs/yargs")) format = "commonjs"; // args bin is cjs in a module
                         return [
                             2,
                             {

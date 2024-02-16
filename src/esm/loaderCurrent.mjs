@@ -32,6 +32,7 @@ export async function resolve(specifier, context, defaultResolve) {
   if (path.extname(specifier) || moduleRegEx.test(specifier)) {
     const data = await defaultResolve(specifier, context, defaultResolve);
     if (!data.format) data.format = packageType(url);
+    if (specifier.endsWith('/node_modules/yargs/yargs')) data.format = 'commonjs'; // args bin is cjs in a module
     return data;
   }
 

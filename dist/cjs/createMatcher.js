@@ -8,7 +8,7 @@ Object.defineProperty(exports, "default", {
         return createMatcher;
     }
 });
-var _micromatch = /*#__PURE__*/ _interop_require_default(require("micromatch"));
+var _minimatch = /*#__PURE__*/ _interop_require_default(require("minimatch"));
 var _pathposix = /*#__PURE__*/ _interop_require_default(require("path-posix"));
 var _slash = /*#__PURE__*/ _interop_require_default(require("slash"));
 function _interop_require_default(obj) {
@@ -22,7 +22,7 @@ function createMatcher(config) {
         var pattern = (0, _slash.default)(condition);
         if (!_pathposix.default.isAbsolute(pattern) && !pattern.startsWith("*")) pattern = _pathposix.default.join(configPath, pattern);
         return function match(filePath) {
-            return filePath.startsWith(pattern) || _micromatch.default.isMatch(filePath, pattern);
+            return filePath.startsWith(pattern) || (0, _minimatch.default)(filePath, pattern);
         };
     }
     var includes = (config.config.include || []).map(matchFn);

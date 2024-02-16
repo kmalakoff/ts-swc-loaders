@@ -1,4 +1,4 @@
-import micromatch from 'micromatch';
+import minimatch from 'minimatch';
 import path from 'path-posix';
 import slash from 'slash';
 
@@ -10,7 +10,7 @@ export default function createMatcher(config) {
     if (!path.isAbsolute(pattern) && !pattern.startsWith('*')) pattern = path.join(configPath, pattern);
 
     return function match(filePath) {
-      return filePath.startsWith(pattern) || micromatch.isMatch(filePath, pattern);
+      return filePath.startsWith(pattern) || minimatch(filePath, pattern);
     };
   }
 

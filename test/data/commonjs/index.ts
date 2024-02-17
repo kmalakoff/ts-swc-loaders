@@ -5,12 +5,7 @@ var assert = require('assert');
 var App = require('./lib/react.tsx');
 var string = require('./lib/string.cjs');
 
-describe('commonjs', () => {
-  it('react.tsx', () => {
-    assert.ok(App);
-  });
+assert.ok(App);
+assert.equal(string, 'string');
 
-  it('string.cjs', () => {
-    assert.equal(string, 'string');
-  });
-});
+console.log(`success: ${process.argv[process.argv.length-1]}`);

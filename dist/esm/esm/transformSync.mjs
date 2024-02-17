@@ -1,7 +1,7 @@
 import path from 'path';
-import { fileURLToPath } from 'url';
 import call from 'node-version-call';
 import process from 'process';
+import { fileURLToPath } from 'url';
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const major = +process.versions.node.split('.')[0];
 const version = major >= 14 ? 'local' : 'lts';

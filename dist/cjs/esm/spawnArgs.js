@@ -5,24 +5,19 @@ Object.defineProperty(exports, "__esModule", {
 Object.defineProperty(exports, "default", {
     enumerable: true,
     get: function() {
-        return transformSync;
+        return spawnArgs;
     }
 });
-var _path = /*#__PURE__*/ _interop_require_default(require("path"));
-var _nodeversioncall = /*#__PURE__*/ _interop_require_default(require("node-version-call"));
 var _process = /*#__PURE__*/ _interop_require_default(require("process"));
-var _url = require("url");
+var _createSpawnArgs = /*#__PURE__*/ _interop_require_default(require("../createSpawnArgs.js"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-var __dirname = (0, _url.fileURLToPath)(new URL(".", require("url").pathToFileURL(__filename).toString()));
-var major = +_process.default.versions.node.split(".")[0];
-var version = major >= 14 ? "local" : "lts";
-var worker = _path.default.resolve(__dirname, "..", "workers", "transformSync.cjs");
-function transformSync(contents, filename, config) {
-    return (0, _nodeversioncall.default)(version, worker, contents, filename, config);
+var local = +_process.default.versions.node.split(".")[0];
+function spawnArgs(type, options, major) {
+    return (0, _createSpawnArgs.default)(type, options, major || local);
 }
 
 if ((typeof exports.default === 'function' || (typeof exports.default === 'object' && exports.default !== null)) && typeof exports.default.__esModule === 'undefined') {

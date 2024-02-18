@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 
-while(process.argv[0] !== 'ts-swc-loaders') process.argv.shift();
+var getopts = require('getopts-compat');
 
-require(process.argv.shift())
-require('./' + process.argv.shift())
+var options = getopts(process.argv.slice(2), {
+  alias: { require: 'r' },
+  stopEarly: true,
+});
+
+require(options.require);
+process.argv = options._;
+require('./' + process.argv.shift());

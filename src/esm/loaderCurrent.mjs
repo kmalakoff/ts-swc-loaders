@@ -29,10 +29,10 @@ export async function resolve(specifier, context, defaultResolve) {
   const url = parentURL ? new URL(specifier, parentURL).href : new URL(specifier).href;
 
   // resolve from extension or as a module
-  const ext = path.extname(specifier);
-  if (ext.length || moduleRegEx.test(specifier)) {
+  if (path.extname(specifier) || moduleRegEx.test(specifier)) {
     const data = await defaultResolve(specifier, context, defaultResolve);
-    if (!data.format) data.format = ext.length ? packageType(url) : 'commonjs'; // no extension assume commonjs
+    if (!data.format) data.format = packageType(url);
+    if (specifier.endsWith('/node_modules/yargs/yargs')) data.format = 'commonjs'; // args bin is cjs in a module
     return data;
   }
 

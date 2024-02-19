@@ -32,10 +32,12 @@ async function _getFormat(url, context, defaultGetFormat) {
 
   // file
   if (url.startsWith('file://')) {
-    const ext = path.extname(url);
-    let format = EXT_TO_FORMAT[ext];
-    if (!format) format = ext.length ? packageType(url) : 'commonjs'; // no extension assume commonjs
-    return { format };
+    let format = EXT_TO_FORMAT[path.extname(url)];
+    if (!format) format = packageType(url);
+    if (url.endsWith('/node_modules/yargs/yargs')) format = 'commonjs'; // args bin is cjs in a module
+    return {
+      format,
+    };
   }
 
   // relative

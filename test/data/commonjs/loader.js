@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 var getopts = require('getopts-compat');
 
 var options = getopts(process.argv.slice(2), {
@@ -9,4 +7,4 @@ var options = getopts(process.argv.slice(2), {
 
 require(options.require);
 process.argv = options._;
-require('./' + process.argv.shift());
+require(process.argv.shift());

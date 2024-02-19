@@ -25,10 +25,10 @@ export async function resolve(specifier1, context, defaultResolve) {
     const parentURL = context.parentURL && path.isAbsolute(context.parentURL) ? pathToFileURL(context.parentURL) : context.parentURL; // windows
     const url = parentURL ? new URL(specifier1, parentURL).href : new URL(specifier1).href;
     // resolve from extension or as a module
-    const ext = path.extname(specifier1);
-    if (ext.length || moduleRegEx.test(specifier1)) {
+    if (path.extname(specifier1) || moduleRegEx.test(specifier1)) {
         const data = await defaultResolve(specifier1, context, defaultResolve);
-        if (!data.format) data.format = ext.length ? packageType(url) : 'commonjs'; // no extension assume commonjs
+        if (!data.format) data.format = packageType(url);
+        if (specifier1.endsWith('/node_modules/yargs/yargs')) data.format = 'commonjs'; // args bin is cjs in a module
         return data;
     }
     // directory

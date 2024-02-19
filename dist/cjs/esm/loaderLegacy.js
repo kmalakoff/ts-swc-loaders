@@ -177,7 +177,7 @@ function _getFormat(url, context, defaultGetFormat) {
 }
 function __getFormat() {
     __getFormat = _async_to_generator(function(url, context, defaultGetFormat) {
-        var parentURL, ext, format;
+        var parentURL, format;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -192,9 +192,9 @@ function __getFormat() {
                     ];
                     // file
                     if (url.startsWith("file://")) {
-                        ext = _path.default.extname(url);
-                        format = EXT_TO_FORMAT[ext];
-                        if (!format) format = ext.length ? (0, _packageType.default)(url) : "commonjs"; // no extension assume commonjs
+                        format = EXT_TO_FORMAT[_path.default.extname(url)];
+                        if (!format) format = (0, _packageType.default)(url);
+                        if (url.endsWith("/node_modules/yargs/yargs")) format = "commonjs"; // args bin is cjs in a module
                         return [
                             2,
                             {

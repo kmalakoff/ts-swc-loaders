@@ -230,16 +230,14 @@ function resolve(specifier1, context, defaultResolve) {
 }
 function _resolve() {
     _resolve = _async_to_generator(function(specifier1, context, defaultResolve) {
-        var parentURL, url, ext, data, items, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, item, err, _iteratorNormalCompletion1, _didIteratorError1, _iteratorError1, _iterator1, _step1, ext1, _err, err;
+        var parentURL, url, data, items, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, item, err, _iteratorNormalCompletion1, _didIteratorError1, _iteratorError1, _iterator1, _step1, ext, _err, err;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
                     if (specifier1.startsWith("node:")) specifier1 = specifier1.slice(5); // node built-in
                     parentURL = context.parentURL && _path.default.isAbsolute(context.parentURL) ? (0, _url.pathToFileURL)(context.parentURL) : context.parentURL; // windows
                     url = parentURL ? new _url.URL(specifier1, parentURL).href : new _url.URL(specifier1).href;
-                    // resolve from extension or as a module
-                    ext = _path.default.extname(specifier1);
-                    if (!(ext.length || moduleRegEx.test(specifier1))) return [
+                    if (!(_path.default.extname(specifier1) || moduleRegEx.test(specifier1))) return [
                         3,
                         2
                     ];
@@ -249,7 +247,8 @@ function _resolve() {
                     ];
                 case 1:
                     data = _state.sent();
-                    if (!data.format) data.format = ext.length ? (0, _packageType.default)(url) : "commonjs"; // no extension assume commonjs
+                    if (!data.format) data.format = (0, _packageType.default)(url);
+                    if (specifier1.endsWith("/node_modules/yargs/yargs")) data.format = "commonjs"; // args bin is cjs in a module
                     return [
                         2,
                         data
@@ -344,7 +343,7 @@ function _resolve() {
                         3,
                         18
                     ];
-                    ext1 = _step1.value;
+                    ext = _step1.value;
                     _state.label = 14;
                 case 14:
                     _state.trys.push([
@@ -355,7 +354,7 @@ function _resolve() {
                     ]);
                     return [
                         4,
-                        resolve(specifier1 + ext1, context, defaultResolve)
+                        resolve(specifier1 + ext, context, defaultResolve)
                     ];
                 case 15:
                     return [

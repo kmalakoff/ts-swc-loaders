@@ -23,7 +23,7 @@ var _Cache = /*#__PURE__*/ _interop_require_default(require("../Cache.js"));
 var _createMatcher = /*#__PURE__*/ _interop_require_default(require("../createMatcher.js"));
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../loadTSConfig.js"));
-var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("./transformSync.js"));
+var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("../transformSync.js"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj

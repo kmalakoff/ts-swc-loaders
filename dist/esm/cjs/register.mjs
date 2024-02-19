@@ -5,7 +5,7 @@ import Cache from '../Cache.mjs';
 import createMatcher from '../createMatcher.mjs';
 import extensions from '../extensions.mjs';
 import loadTSConfig from '../loadTSConfig.mjs';
-import transformSync from './transformSync.cjs';
+import transformSync from '../transformSync.cjs';
 const INTERNAL_PATHS = [
     path.resolve(__dirname, '..'),
     path.resolve(__dirname, '..', '..', 'node_modules')

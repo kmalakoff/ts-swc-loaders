@@ -23,7 +23,7 @@ var _createMatcher = /*#__PURE__*/ _interop_require_default(require("../createMa
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../loadTSConfig.js"));
 var _packageType = /*#__PURE__*/ _interop_require_default(require("../packageType.js"));
-var _transformSync = /*#__PURE__*/ _interop_require_default(require("./transformSync.js"));
+var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("../transformSync.js"));
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
@@ -257,7 +257,7 @@ function __transformSource() {
                     ];
                     contents = loaded.source.toString();
                     data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
-                        return (0, _transformSync.default)(contents, filePath, config);
+                        return (0, _transformSynccjs.default)(contents, filePath, config);
                     });
                     return [
                         2,

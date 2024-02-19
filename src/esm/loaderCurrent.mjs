@@ -8,7 +8,7 @@ import createMatcher from '../createMatcher.mjs';
 import extensions from '../extensions.mjs';
 import loadTSConfig from '../loadTSConfig.mjs';
 import packageType from '../packageType.mjs';
-import transformSync from '../transformSync.cjs';
+import transformSync from './transformSync.mjs';
 
 const major = +process.versions.node.split('.')[0];
 const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
@@ -29,10 +29,10 @@ export async function resolve(specifier, context, defaultResolve) {
   const url = parentURL ? new URL(specifier, parentURL).href : new URL(specifier).href;
 
   // resolve from extension or as a module
-  if (path.extname(specifier) || moduleRegEx.test(specifier)) {
+  const ext = path.extname(specifier);
+  if (ext.length || moduleRegEx.test(specifier)) {
     const data = await defaultResolve(specifier, context, defaultResolve);
-    if (!data.format) data.format = packageType(url);
-    if (specifier.endsWith('/node_modules/yargs/yargs')) data.format = 'commonjs'; // args bin is cjs in a module
+    if (!data.format) data.format = ext.length ? packageType(url) : 'commonjs'; // no extension assume commonjs
     return data;
   }
 

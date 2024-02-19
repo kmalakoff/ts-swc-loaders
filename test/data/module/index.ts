@@ -1,8 +1,7 @@
-import 'core-js/actual/map/index.js';
-import 'core-js/actual/symbol/for.js';
 import process from 'process';
 
 import assert from 'assert';
+// @ts-ignore
 import App from './lib/react.tsx';
 import string from './lib/string.cjs';
 

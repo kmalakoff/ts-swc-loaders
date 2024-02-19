@@ -12,17 +12,17 @@ _export(exports, {
     createMatcher: function() {
         return _createMatcher.default;
     },
-    spawnArgs: function() {
-        return _spawnArgscjs.default;
+    spawnParams: function() {
+        return _spawnParamscjs.default;
     },
     transformSync: function() {
         return _transformSynccjs.default;
     }
 });
 var _register = require("./cjs/register.js");
-var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("./cjs/transformSync.js"));
+var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("./transformSync.js"));
 var _createMatcher = /*#__PURE__*/ _interop_require_default(require("./createMatcher.js"));
-var _spawnArgscjs = /*#__PURE__*/ _interop_require_default(require("./cjs/spawnArgs.js"));
+var _spawnParamscjs = /*#__PURE__*/ _interop_require_default(require("./spawnParams.js"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj

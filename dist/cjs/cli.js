@@ -32,7 +32,7 @@ var path = require("path");
 var crossSpawn = require("cross-spawn-cb");
 var pathKey = require("env-path-key");
 var prepend = require("path-string-prepend");
-var spawnArgs = require("./index.js").spawnArgs;
+var spawnParams = require("./index.js").spawnParams;
 var major = +process.versions.node.split(".")[0];
 var type = major < 12 ? "commonjs" : "module";
 module.exports = function cli(args, options) {
@@ -41,13 +41,12 @@ module.exports = function cli(args, options) {
     var PATH_KEY = pathKey();
     env[PATH_KEY] = prepend(env[PATH_KEY] || "", path.resolve(__dirname, "..", "..", "node_modules", ".bin"));
     env[PATH_KEY] = prepend(env[PATH_KEY] || "", path.resolve(process.cwd(), "node_modules", ".bin"));
-    var spanwOptions = _object_spread({
+    var params = spawnParams(type, _object_spread({
         stdio: "inherit",
         cwd: cwd,
         env: env
-    }, options || {});
-    var argsSpawn = spawnArgs(type, spanwOptions);
-    crossSpawn(args[0], argsSpawn.args.concat(args.slice(1)), argsSpawn.options, function(err) {
+    }, options || {}));
+    crossSpawn(args[0], params.args.concat(args.slice(1)), params.options, function(err) {
         if (err) {
             console.log(err.message);
             return exit(err.code || -1);

@@ -12,18 +12,18 @@ _export(exports, {
     createMatcher: function() {
         return _createMatcher.default;
     },
-    spawnArgs: function() {
-        return _spawnArgs.default;
+    spawnParams: function() {
+        return _spawnParamscjs.default;
     },
     transformSync: function() {
-        return _transformSync.default;
+        return _transformSynccjs.default;
     }
 });
 _export_star(require("./esm/loaderCurrent.js"), exports);
 _export_star(require("./esm/loaderLegacy.js"), exports);
-var _transformSync = /*#__PURE__*/ _interop_require_default(require("./esm/transformSync.js"));
+var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("./transformSync.js"));
 var _createMatcher = /*#__PURE__*/ _interop_require_default(require("./createMatcher.js"));
-var _spawnArgs = /*#__PURE__*/ _interop_require_default(require("./esm/spawnArgs.js"));
+var _spawnParamscjs = /*#__PURE__*/ _interop_require_default(require("./spawnParams.js"));
 function _export_star(from, to) {
     Object.keys(from).forEach(function(k) {
         if (k !== "default" && !Object.prototype.hasOwnProperty.call(to, k)) {

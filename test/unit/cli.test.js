@@ -16,10 +16,9 @@ const type = major < 12 ? 'commonjs' : 'module';
 describe('cli', function () { 
   describe('happy path', function () { 
     // TODO: fix cli for NODE_OPTIONS
-    (major >= 12 && major <= 16 )||
       it('run with cli option', function (done)  {
-        // cli([type + '/loader', './index.ts', 'arg'], { encoding: 'utf8', cwd: DATA_DIR }, function (err, res) {
-        spawn(CLI, [type + '/loader', './index.ts', 'arg'], { encoding: 'utf8', cwd: DATA_DIR }, function (err, res) {
+        // cli(['./' + type + '/loader', './index.ts', 'arg'], { encoding: 'utf8', cwd: DATA_DIR }, function (err, res) {
+        spawn(CLI, ['./' + type + '/loader', './index.ts', 'arg'], { encoding: 'utf8', cwd: DATA_DIR }, function (err, res) {
           var stdout = err ? err.stdout : res.stdout;
           assert.equal(stdout, 'success: arg\n');
           done();
@@ -29,7 +28,7 @@ describe('cli', function () {
 
   describe('unhappy path', function () {
     it('missing command', function (done)  {
-      spawn(CLI, [], { stdout: 'inherit' },function  (err) {
+      spawn(CLI, { stdout: 'inherit' },function  (err) {
         assert.ok(!!err);
         done();
       });

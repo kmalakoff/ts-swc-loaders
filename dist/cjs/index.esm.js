@@ -16,12 +16,12 @@ _export(exports, {
         return _spawnArgs.default;
     },
     transformSync: function() {
-        return _transformSynccjs.default;
+        return _transformSync.default;
     }
 });
 _export_star(require("./esm/loaderCurrent.js"), exports);
 _export_star(require("./esm/loaderLegacy.js"), exports);
-var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("./transformSync.js"));
+var _transformSync = /*#__PURE__*/ _interop_require_default(require("./esm/transformSync.js"));
 var _createMatcher = /*#__PURE__*/ _interop_require_default(require("./createMatcher.js"));
 var _spawnArgs = /*#__PURE__*/ _interop_require_default(require("./esm/spawnArgs.js"));
 function _export_star(from, to) {
@@ -42,4 +42,4 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-/* CJS INTEROP */ if (exports.__esModule && exports.default) { module.exports = exports.default; for (var key in exports) module.exports[key] = exports[key]; }
+/* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }

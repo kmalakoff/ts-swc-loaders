@@ -25,7 +25,7 @@ var _createMatcher = /*#__PURE__*/ _interop_require_default(require("../createMa
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../loadTSConfig.js"));
 var _packageType = /*#__PURE__*/ _interop_require_default(require("../packageType.js"));
-var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("../transformSync.js"));
+var _transformSync = /*#__PURE__*/ _interop_require_default(require("./transformSync.js"));
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
@@ -230,14 +230,16 @@ function resolve(specifier1, context, defaultResolve) {
 }
 function _resolve() {
     _resolve = _async_to_generator(function(specifier1, context, defaultResolve) {
-        var parentURL, url, data, items, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, item, err, _iteratorNormalCompletion1, _didIteratorError1, _iteratorError1, _iterator1, _step1, ext, _err, err;
+        var parentURL, url, ext, data, items, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, item, err, _iteratorNormalCompletion1, _didIteratorError1, _iteratorError1, _iterator1, _step1, ext1, _err, err;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
                     if (specifier1.startsWith("node:")) specifier1 = specifier1.slice(5); // node built-in
                     parentURL = context.parentURL && _path.default.isAbsolute(context.parentURL) ? (0, _url.pathToFileURL)(context.parentURL) : context.parentURL; // windows
                     url = parentURL ? new _url.URL(specifier1, parentURL).href : new _url.URL(specifier1).href;
-                    if (!(_path.default.extname(specifier1) || moduleRegEx.test(specifier1))) return [
+                    // resolve from extension or as a module
+                    ext = _path.default.extname(specifier1);
+                    if (!(ext.length || moduleRegEx.test(specifier1))) return [
                         3,
                         2
                     ];
@@ -247,8 +249,7 @@ function _resolve() {
                     ];
                 case 1:
                     data = _state.sent();
-                    if (!data.format) data.format = (0, _packageType.default)(url);
-                    if (specifier1.endsWith("/node_modules/yargs/yargs")) data.format = "commonjs"; // args bin is cjs in a module
+                    if (!data.format) data.format = ext.length ? (0, _packageType.default)(url) : "commonjs"; // no extension assume commonjs
                     return [
                         2,
                         data
@@ -343,7 +344,7 @@ function _resolve() {
                         3,
                         18
                     ];
-                    ext = _step1.value;
+                    ext1 = _step1.value;
                     _state.label = 14;
                 case 14:
                     _state.trys.push([
@@ -354,7 +355,7 @@ function _resolve() {
                     ]);
                     return [
                         4,
-                        resolve(specifier1 + ext, context, defaultResolve)
+                        resolve(specifier1 + ext1, context, defaultResolve)
                     ];
                 case 15:
                     return [
@@ -466,7 +467,7 @@ function _load() {
                     // transform
                     contents = loaded.source.toString();
                     data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
-                        return (0, _transformSynccjs.default)(contents, filePath, config);
+                        return (0, _transformSync.default)(contents, filePath, config);
                     });
                     return [
                         2,
@@ -480,4 +481,4 @@ function _load() {
     });
     return _load.apply(this, arguments);
 }
-/* CJS INTEROP */ if (exports.__esModule && exports.default) { module.exports = exports.default; for (var key in exports) module.exports[key] = exports[key]; }
+/* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }

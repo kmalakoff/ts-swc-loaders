@@ -1,1 +1,0 @@
-{"version":3,"sources":["require.cjs"],"sourcesContent":["require('./index.js');\n\nrequire(process.argv[2]);\n"],"names":["require","process","argv"],"mappings":"AAAAA,QAAQ;AAERA,QAAQC,QAAQC,IAAI,CAAC,EAAE"}

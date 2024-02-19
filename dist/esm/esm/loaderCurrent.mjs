@@ -7,7 +7,7 @@ import createMatcher from '../createMatcher.mjs';
 import extensions from '../extensions.mjs';
 import loadTSConfig from '../loadTSConfig.mjs';
 import packageType from '../packageType.mjs';
-import transformSync from '../transformSync.cjs';
+import transformSync from './transformSync.mjs';
 const major = +process.versions.node.split('.')[0];
 const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
 const INTERNAL_PATHS = [
@@ -25,10 +25,10 @@ export async function resolve(specifier1, context, defaultResolve) {
     const parentURL = context.parentURL && path.isAbsolute(context.parentURL) ? pathToFileURL(context.parentURL) : context.parentURL; // windows
     const url = parentURL ? new URL(specifier1, parentURL).href : new URL(specifier1).href;
     // resolve from extension or as a module
-    if (path.extname(specifier1) || moduleRegEx.test(specifier1)) {
+    const ext = path.extname(specifier1);
+    if (ext.length || moduleRegEx.test(specifier1)) {
         const data = await defaultResolve(specifier1, context, defaultResolve);
-        if (!data.format) data.format = packageType(url);
-        if (specifier1.endsWith('/node_modules/yargs/yargs')) data.format = 'commonjs'; // args bin is cjs in a module
+        if (!data.format) data.format = ext.length ? packageType(url) : 'commonjs'; // no extension assume commonjs
         return data;
     }
     // directory

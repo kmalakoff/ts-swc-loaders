@@ -23,7 +23,7 @@ var _createMatcher = /*#__PURE__*/ _interop_require_default(require("../createMa
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../loadTSConfig.js"));
 var _packageType = /*#__PURE__*/ _interop_require_default(require("../packageType.js"));
-var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("../transformSync.js"));
+var _transformSync = /*#__PURE__*/ _interop_require_default(require("./transformSync.js"));
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
@@ -177,7 +177,7 @@ function _getFormat(url, context, defaultGetFormat) {
 }
 function __getFormat() {
     __getFormat = _async_to_generator(function(url, context, defaultGetFormat) {
-        var parentURL, format;
+        var parentURL, ext, format;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -192,9 +192,9 @@ function __getFormat() {
                     ];
                     // file
                     if (url.startsWith("file://")) {
-                        format = EXT_TO_FORMAT[_path.default.extname(url)];
-                        if (!format) format = (0, _packageType.default)(url);
-                        if (url.endsWith("/node_modules/yargs/yargs")) format = "commonjs"; // args bin is cjs in a module
+                        ext = _path.default.extname(url);
+                        format = EXT_TO_FORMAT[ext];
+                        if (!format) format = ext.length ? (0, _packageType.default)(url) : "commonjs"; // no extension assume commonjs
                         return [
                             2,
                             {
@@ -257,7 +257,7 @@ function __transformSource() {
                     ];
                     contents = loaded.source.toString();
                     data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
-                        return (0, _transformSynccjs.default)(contents, filePath, config);
+                        return (0, _transformSync.default)(contents, filePath, config);
                     });
                     return [
                         2,
@@ -273,4 +273,4 @@ function __transformSource() {
 var major = +process.versions.node.split(".")[0];
 var getFormat = major < 16 ? _getFormat : undefined;
 var transformSource = major < 16 ? _transformSource : undefined;
-/* CJS INTEROP */ if (exports.__esModule && exports.default) { module.exports = exports.default; for (var key in exports) module.exports[key] = exports[key]; }
+/* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }

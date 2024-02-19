@@ -6,7 +6,7 @@ import createMatcher from '../createMatcher.mjs';
 import extensions from '../extensions.mjs';
 import loadTSConfig from '../loadTSConfig.mjs';
 import packageType from '../packageType.mjs';
-import transformSync from './transformSync.mjs';
+import transformSync from '../transformSync.cjs';
 
 const INTERNAL_PATHS = [new URL('..', import.meta.url).href, new URL('../../node_modules', import.meta.url).href];
 const isInternal = (x) => INTERNAL_PATHS.some((y) => x.startsWith(y));
@@ -35,9 +35,7 @@ async function _getFormat(url, context, defaultGetFormat) {
     let format = EXT_TO_FORMAT[path.extname(url)];
     if (!format) format = packageType(url);
     if (url.endsWith('/node_modules/yargs/yargs')) format = 'commonjs'; // args bin is cjs in a module
-    return {
-      format,
-    };
+    return { format };
   }
 
   // relative

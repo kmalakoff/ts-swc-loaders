@@ -11,6 +11,7 @@ updates:
       - dependency-name: 'rimraf'
       - dependency-name: 'slash'
       - dependency-name: 'ts-node'
+      - dependency-name: 'which'
       - dependency-name: 'regenerator-runtime'
   - package-ecosystem: 'github-actions'
     directory: '/'

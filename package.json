@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@swc/core": "^1.4.2",
+    "call-once-fn": "^1.0.1",
     "core-js": "^3.36.0",
     "cross-spawn-cb": "^0.6.18",
     "env-path-key": "^0.3.0",
@@ -60,7 +61,8 @@
     "short-hash": "^1.0.0",
     "slash": "^1.0.0",
     "ts-node": "10.8.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "which": "^3.0.1"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",

@@ -32,6 +32,7 @@ var path = require("path");
 var spawn = require("cross-spawn-cb");
 var pathKey = require("env-path-key");
 var prepend = require("path-string-prepend");
+var once = require("call-once-fn");
 var spawnParams = require("./index.js").spawnParams;
 var major = +process.versions.node.split(".")[0];
 var type = major < 12 ? "commonjs" : "module";
@@ -46,12 +47,23 @@ module.exports = function cli(args, options) {
         cwd: cwd,
         env: env
     }, options || {}));
-    spawn(args[0], params.args.concat(args.slice(1)), params.options, function(err) {
+    var callback = once(function(err) {
         if (err) {
             console.log(err.message);
             return exit(err.code || -1);
         }
         exit(0);
     });
+    if (params.options.NODE_OPTIONS || params.args[0] === "--require") {
+        spawn(args[0], params.args.concat(args.slice(1)), params.options, callback);
+    } else {
+        require("which")(args[0], {
+            path: env[PATH_KEY]
+        }).then(function(cmd) {
+            spawn("node", params.args.concat([
+                cmd
+            ]).concat(args.slice(1)), params.options, callback);
+        }).catch(callback);
+    }
 };
 /* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }

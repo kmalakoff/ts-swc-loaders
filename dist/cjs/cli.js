@@ -29,7 +29,7 @@ function _object_spread(target) {
 }
 var exit = require("exit");
 var path = require("path");
-var crossSpawn = require("cross-spawn-cb");
+var spawn = require("cross-spawn-cb");
 var pathKey = require("env-path-key");
 var prepend = require("path-string-prepend");
 var spawnParams = require("./index.js").spawnParams;
@@ -39,19 +39,24 @@ module.exports = function cli(args, options) {
     var cwd = process.cwd();
     var env = _object_spread({}, process.env);
     var PATH_KEY = pathKey();
-    env[PATH_KEY] = prepend(env[PATH_KEY] || "", path.resolve(__dirname, "..", "..", "node_modules", ".bin"));
+    env[PATH_KEY] = prepend(env[PATH_KEY] || "", path.resolve(__dirname, "..", "..", "..", "node_modules", ".bin"));
     env[PATH_KEY] = prepend(env[PATH_KEY] || "", path.resolve(process.cwd(), "node_modules", ".bin"));
     var params = spawnParams(type, _object_spread({
         stdio: "inherit",
         cwd: cwd,
         env: env
     }, options || {}));
-    crossSpawn(args[0], params.args.concat(args.slice(1)), params.options, function(err) {
+    function callback(err) {
         if (err) {
             console.log(err.message);
             return exit(err.code || -1);
         }
         exit(0);
-    });
+    }
+    if (params.options.NODE_OPTIONS || params.args[0] === "--require") {
+        spawn(args[0], params.args.concat(args.slice(1)), params.options, callback);
+    } else {
+        spawn("node", params.args.concat(args), params.options, callback);
+    }
 };
 /* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }

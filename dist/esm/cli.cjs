@@ -1,6 +1,6 @@
 const exit = require('exit');
 const path = require('path');
-const crossSpawn = require('cross-spawn-cb');
+const spawn = require('cross-spawn-cb');
 const pathKey = require('env-path-key');
 const prepend = require('path-string-prepend');
 const spawnParams = require('./index.mjs').spawnParams;
@@ -12,7 +12,7 @@ module.exports = function cli(args, options) {
         ...process.env
     };
     const PATH_KEY = pathKey();
-    env[PATH_KEY] = prepend(env[PATH_KEY] || '', path.resolve(__dirname, '..', '..', 'node_modules', '.bin'));
+    env[PATH_KEY] = prepend(env[PATH_KEY] || '', path.resolve(__dirname, '..', '..', '..', 'node_modules', '.bin'));
     env[PATH_KEY] = prepend(env[PATH_KEY] || '', path.resolve(process.cwd(), 'node_modules', '.bin'));
     const params = spawnParams(type, {
         stdio: 'inherit',
@@ -20,11 +20,16 @@ module.exports = function cli(args, options) {
         env,
         ...options || {}
     });
-    crossSpawn(args[0], params.args.concat(args.slice(1)), params.options, (err)=>{
+    function callback(err) {
         if (err) {
             console.log(err.message);
             return exit(err.code || -1);
         }
         exit(0);
-    });
+    }
+    if (params.options.NODE_OPTIONS || params.args[0] === '--require') {
+        spawn(args[0], params.args.concat(args.slice(1)), params.options, callback);
+    } else {
+        spawn('node', params.args.concat(args), params.options, callback);
+    }
 };

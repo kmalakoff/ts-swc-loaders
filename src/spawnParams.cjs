@@ -10,7 +10,7 @@ module.exports = function spawnParams(type, options) {
 
   // args
   const args = major > 4 ? ['--no-warnings=ExperimentalWarning'] : [];
-  if (major <= 16) args.push('--experimental-modules');
+  // if (major <= 16) args.push('--experimental-modules');
 
   // options
   const env = options.env || processCompat.env;

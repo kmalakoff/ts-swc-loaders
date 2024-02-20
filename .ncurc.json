@@ -1,4 +1,4 @@
 {
   "upgrade": true,
-  "reject": ["mkdirp", "minimatch", "pirates", "rimraf", "slash", "ts-node"]
+  "reject": ["mkdirp", "minimatch", "pirates", "rimraf", "slash", "ts-node", "which"]
 }

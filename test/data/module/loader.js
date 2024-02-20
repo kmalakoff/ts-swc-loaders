@@ -1,9 +1,14 @@
-import process from 'process';
+import process from 'node:process';
 import getopts from 'getopts-compat';
-import { pathToFileURL } from "node:url"; 
+import { pathToFileURL, fileURLToPath } from "node:url"; 
 
-var options = getopts(process.argv.slice(2), {
+const __filename = fileURLToPath(import.meta.url);
+const index = process.argv.indexOf(__filename.substring(0, __filename.lastIndexOf('.')));
+if (index>0) process.argv = process.argv.slice(index+1);
+
+var options = getopts(process.argv, {
   alias: { import: 'i', loader: 'l', warnings: 'w' },
+  boolean: ['experimental-modules'],
   stopEarly: true,
 });
 

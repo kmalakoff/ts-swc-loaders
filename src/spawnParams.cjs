@@ -8,9 +8,14 @@ module.exports = function spawnParams(type, options) {
   if (type === 'commonjs') return { args: ['--require', 'ts-swc-loaders'], options };
   if (major >= 18) return { args: ['--no-warnings=ExperimentalWarning', '--import', importArgs], options };
 
+  // args
+  const args = major > 4 ? ['--no-warnings=ExperimentalWarning'] : [];
+  if (major <= 16) args.push('--experimental-modules');
+
+  // options
   const env = options.env || processCompat.env;
-  const spawnOptions = { ...(options || {}) };
-  spawnOptions.env = { ...env };
-  spawnOptions.env.NODE_OPTIONS = `--loader ts-swc-loaders${env.NODE_OPTIONS ? ` ${spawnOptions.env.NODE_OPTIONS}` : ''}`;
-  return { args: major > 4 ? ['--no-warnings=ExperimentalWarning'] : [], options: spawnOptions };
+  options = { ...(options || {}) };
+  options.env = { ...env };
+  options.env.NODE_OPTIONS = `--loader ts-swc-loaders${env.NODE_OPTIONS ? ` ${options.env.NODE_OPTIONS}` : ''}`;
+  return { args, options };
 };

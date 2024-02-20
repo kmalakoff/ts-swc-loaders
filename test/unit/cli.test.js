@@ -15,8 +15,7 @@ const type = major < 12 ? 'commonjs' : 'module';
 
 describe('cli', function () { 
   describe('happy path', function () { 
-    // TODO: fix cli for NODE_OPTIONS
-      it('run with cli option', function (done)  {
+    it('run with cli option', function (done)  {
         // cli(['./' + type + '/loader', './index.ts', 'arg'], { encoding: 'utf8', cwd: DATA_DIR }, function (err, res) {
         spawn(CLI, ['./' + type + '/loader', './index.ts', 'arg'], { encoding: 'utf8', cwd: DATA_DIR }, function (err, res) {
           var stdout = err ? err.stdout : res.stdout;

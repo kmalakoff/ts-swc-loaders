@@ -1,6 +1,9 @@
 var getopts = require('getopts-compat');
 
-var options = getopts(process.argv.slice(2), {
+var index = process.argv.indexOf(__filename.substring(0, __filename.lastIndexOf('.')));
+if (index>0) process.argv = process.argv.slice(index+1);
+
+var options = getopts(process.argv, {
   alias: { require: 'r' },
   stopEarly: true,
 });

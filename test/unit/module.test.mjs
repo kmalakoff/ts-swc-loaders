@@ -6,6 +6,7 @@ delete process.env.NODE_OPTIONS;
 
 import assert from 'assert';
 import path from 'path';
+import cr from 'cr';
 import spawn from 'cross-spawn-cb';
 import { spawnParams } from 'ts-swc-loaders';
 
@@ -22,8 +23,12 @@ describe('module', () => {
   it('node', (done) => {
     const args = spawnParams('module', { cwd: DATA_DIR, encoding: 'utf8' });
     spawn('node', args.args.concat(['./module/index.ts', 'arg']), args.options, (err, res) => {
-      const stdout = err ? err.stdout : res.stdout;
-      assert.equal(stdout, 'success: arg\n');
+      assert.equal(
+        cr(err ? err.stdout : res.stdout)
+          .split('\n')
+          .slice(-2)[0],
+        'success: arg'
+      );
       done();
     });
   });

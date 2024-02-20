@@ -13,7 +13,7 @@ var options = getopts(process.argv, {
 });
 
 process.argv = options._;
-// --loader 
+// --loader
 if (process.env.NODE_OPTIONS) {
   import(process.argv.shift());
 }
@@ -24,6 +24,7 @@ else if (options.import) {
     import(process.argv.shift());
   })
 } 
+// run through node
 else {
-  throw new Error('Loader options missing')
+  import(process.argv.shift());
 }

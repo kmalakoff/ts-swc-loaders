@@ -18,18 +18,22 @@ module.exports = function spawnParams(type, options) {
         ],
         options
     };
+    // args
+    const args = major > 4 ? [
+        '--no-warnings=ExperimentalWarning'
+    ] : [];
+    if (major <= 16) args.push('--experimental-modules');
+    // options
     const env = options.env || processCompat.env;
-    const spawnOptions = {
+    options = {
         ...options || {}
     };
-    spawnOptions.env = {
+    options.env = {
         ...env
     };
-    spawnOptions.env.NODE_OPTIONS = `--loader ts-swc-loaders${env.NODE_OPTIONS ? ` ${spawnOptions.env.NODE_OPTIONS}` : ''}`;
+    options.env.NODE_OPTIONS = `--loader ts-swc-loaders${env.NODE_OPTIONS ? ` ${options.env.NODE_OPTIONS}` : ''}`;
     return {
-        args: major > 4 ? [
-            '--no-warnings=ExperimentalWarning'
-        ] : [],
-        options: spawnOptions
+        args,
+        options
     };
 };

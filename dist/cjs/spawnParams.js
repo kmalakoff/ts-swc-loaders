@@ -47,15 +47,19 @@ module.exports = function spawnParams(type, options) {
         ],
         options: options
     };
+    // args
+    var args = major > 4 ? [
+        "--no-warnings=ExperimentalWarning"
+    ] : [];
+    if (major <= 16) args.push("--experimental-modules");
+    // options
     var env = options.env || processCompat.env;
-    var spawnOptions = _object_spread({}, options || {});
-    spawnOptions.env = _object_spread({}, env);
-    spawnOptions.env.NODE_OPTIONS = "--loader ts-swc-loaders".concat(env.NODE_OPTIONS ? " ".concat(spawnOptions.env.NODE_OPTIONS) : "");
+    options = _object_spread({}, options || {});
+    options.env = _object_spread({}, env);
+    options.env.NODE_OPTIONS = "--loader ts-swc-loaders".concat(env.NODE_OPTIONS ? " ".concat(options.env.NODE_OPTIONS) : "");
     return {
-        args: major > 4 ? [
-            "--no-warnings=ExperimentalWarning"
-        ] : [],
-        options: spawnOptions
+        args: args,
+        options: options
     };
 };
 /* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }

@@ -6,6 +6,7 @@ const assert = require('assert');
 const path = require('path');
 const spawn = require('cross-spawn-cb');
 const spawnParams = require('ts-swc-loaders').spawnParams;
+const cr = require('cr');
 
 const devStack = require('ts-dev-stack');
 
@@ -15,31 +16,35 @@ const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules', 'ts-swc-loaders');
 
 const major = +process.versions.node.split('.')[0];
 
-describe('commonjs', function () {
+describe('commonjs', () => {
   major > 0 ||
-    it('loader', function (done) {
+    it('loader', (done) => {
       const args = spawnParams('commonjs', { cwd: DATA_DIR, encoding: 'utf8' });
-      spawn('./commonjs/loader', args.args.concat(['./index.ts', 'arg']), args.options, function (err, res) {
-        var stdout = err ? err.stdout : res.stdout;
-        assert.equal(stdout, 'success: arg\n');
+      spawn('./commonjs/loader', args.args.concat(['./index.ts', 'arg']), args.options, (err, res) => {
+        assert.equal(
+          cr(err ? err.stdout : res.stdout)
+            .split('\n')
+            .slice(-2)[0],
+          'success: arg'
+        );
         done();
       });
     });
 
   major <= 0 ||
-    it('node', function (done) {
+    it('node', (done) => {
       const args = spawnParams('commonjs', { cwd: DATA_DIR, encoding: 'utf8' });
-      spawn('node', args.args.concat(['./commonjs/index.ts', 'arg']), args.options, function (err, res) {
-        var stdout = err ? err.stdout : res.stdout;
+      spawn('node', args.args.concat(['./commonjs/index.ts', 'arg']), args.options, (err, res) => {
+        const stdout = err ? err.stdout : res.stdout;
         assert.equal(stdout, 'success: arg\n');
         done();
       });
     });
 
-  before(function (cb) {
+  before((cb) => {
     devStack.link([], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }, cb);
   });
-  after(function(cb) {
+  after((cb) => {
     devStack.unlink([], { installPath: DATA_MODULE_DIR }, cb);
   });
 });

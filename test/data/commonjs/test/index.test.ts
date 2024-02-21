@@ -4,17 +4,17 @@ require('core-js/actual/map');
 console.log(1, process.argv);
 
 try {
-var App = require('./lib/react.tsx');
-console.log(2);
-var string = require('./lib/string.cjs');
+  var string = require('./lib/string.cjs');
+  console.log(2);
+  var App = require('./lib/react.tsx');
 } catch (err) {
   console.log(err)
 }
 console.log(3);
 
+if (string !== 'string') throw new Error('String not equal to string')
 if (!App.default) throw new Error('App not loaded');
 console.log(4);
-if (string !== 'string') throw new Error('String not equal to string')
 
 console.log(5);
 

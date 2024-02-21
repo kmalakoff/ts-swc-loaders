@@ -28,7 +28,7 @@ describe.skip('module', () => {
         cr(err ? err.stdout : res.stdout)
           .split('\n')
           .slice(-2)[0]
-          .indexOf('success:') === 0
+          .indexOf('Success!') === 0
       );
       done();
     });

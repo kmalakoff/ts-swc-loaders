@@ -1,13 +1,13 @@
-import '../polyfills.cjs';
 import path from 'path';
 import pirates from 'pirates';
+import '../polyfills.cjs';
 
 import Cache from '../Cache.js';
 import createMatcher from '../createMatcher.mjs';
 import extensions from '../extensions.mjs';
 import loadTSConfig from '../loadTSConfig.mjs';
 import transformSync from '../transformSync.cjs';
-import isInternal from './isInternal.cjs'
+import isInternal from './isInternal.cjs';
 
 const cache = new Cache();
 const config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));
@@ -21,12 +21,15 @@ export function register(options, hookOpts) {
 }
 
 export function compile(contents, filePath) {
-  if (filePath.indexOf('index.test.ts') >= 0) console.log(1, filePath)
+  if (filePath.indexOf('index.test.ts') >= 0) console.log(1, filePath);
   // filter
-  if (isInternal(filePath)) return contents;
-  if (filePath.indexOf('index.test.ts') >= 0) console.log(2, filePath)
+  if (isInternal(filePath)) {
+    if (filePath.indexOf('index.test.ts') >= 0) console.log(22, filePath);
+    return contents;
+  }
+  if (filePath.indexOf('index.test.ts') >= 0) console.log(2, filePath);
   if (filePath.endsWith('.d.ts')) return ' ';
-  if (filePath.indexOf('index.test.ts') >= 0) console.log(3, filePath)
+  if (filePath.indexOf('index.test.ts') >= 0) console.log(3, filePath);
   if (extensions.indexOf(path.extname(filePath)) < 0) return contents || ' ';
   if (!match(filePath)) return contents || ' ';
 

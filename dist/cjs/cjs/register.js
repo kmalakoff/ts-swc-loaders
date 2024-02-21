@@ -52,15 +52,20 @@ function register(options, hookOpts) {
     }, hookOpts || {}));
 }
 function compile(contents, filePath) {
-    console.log(filePath)
+    if (filePath.indexOf('index.test.ts') >= 0) console.log(1, filePath)
     // filter
     if (isInternal(filePath)) return contents;
+    if (filePath.indexOf('index.test.ts') >= 0) console.log(2, filePath)
     if (filePath.endsWith(".d.ts")) return " ";
+    if (filePath.indexOf('index.test.ts') >= 0) console.log(3, filePath)
     if (_extensions.default.indexOf(_path.default.extname(filePath)) < 0) return contents || " ";
+    if (filePath.indexOf('index.test.ts') >= 0) console.log(4, filePath)
     if (!match(filePath)) return contents || " ";
+    if (filePath.indexOf('index.test.ts') >= 0) console.log(5, filePath)
     var data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
         return (0, _transformSynccjs.default)(contents, filePath, config);
     });
+    if (filePath.indexOf('index.test.ts') >= 0) console.log(6, filePath)
     return data.code;
 }
 /* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }

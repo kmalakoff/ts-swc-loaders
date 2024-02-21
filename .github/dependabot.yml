@@ -12,6 +12,7 @@ updates:
       - dependency-name: 'slash'
       - dependency-name: 'ts-node'
       - dependency-name: 'which'
+      - dependency-name: '@swc/core'
       - dependency-name: 'regenerator-runtime'
   - package-ecosystem: 'github-actions'
     directory: '/'

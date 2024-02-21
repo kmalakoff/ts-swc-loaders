@@ -3,35 +3,48 @@ const path = require('path');
 const spawn = require('cross-spawn-cb');
 const pathKey = require('env-path-key');
 const prepend = require('path-string-prepend');
-const once = require('call-once-fn');
 const spawnParams = require('./index.mjs').spawnParams;
+const which = require('which');
 
 const major = +process.versions.node.split('.')[0];
 const type = major < 12 ? 'commonjs' : 'module';
 
-module.exports = function cli(args, options) {
-  const cwd = process.cwd();
+module.exports = function cli(args, options, cb) {
+  options = options || {};
+  const cwd = options.cwd || process.cwd();
   const env = { ...process.env };
   const PATH_KEY = pathKey();
   env[PATH_KEY] = prepend(env[PATH_KEY] || '', path.resolve(__dirname, '..', '..', '..', '..', 'node_modules', '.bin'));
   env[PATH_KEY] = prepend(env[PATH_KEY] || '', path.resolve(process.cwd(), 'node_modules', '.bin'));
-  const params = spawnParams(type, { stdio: 'inherit', cwd, env, ...(options || {}) });
+  const params = spawnParams(type, { stdio: 'inherit', cwd, env, ...options });
+  // biome-ignore lint/performance/noDelete: <explanation>
+  if (options.encoding) delete params.options.stdio;
 
-  const callback = once((err) => {
+  function callback(err, res) {
+    if (cb) return cb(err, res);
     if (err) {
       console.log(err.message);
       return exit(err.code || -1);
     }
     exit(0);
-  });
-
-  if (params.options.NODE_OPTIONS || params.args[0] === '--require') {
-    spawn(args[0], params.args.concat(args.slice(1)), params.options, callback);
-  } else {
-    require('which')(args[0], { path: env[PATH_KEY] })
-      .then((cmd) => {
-        spawn('node', params.args.concat([cmd]).concat(args.slice(1)), params.options, callback);
-      })
-      .catch(callback);
   }
+
+  // look up the full path
+  which(args[0], { path: env[PATH_KEY] }, (_err, cmd) => {
+    // not found, use the original
+    if (!cmd) cmd = args[0];
+
+    // spawn on windows
+    const cmdExt = path.extname(cmd);
+    if (path.extname(args[0]) !== cmdExt) return spawn(cmd, params.args.concat(args.slice(1)), params.options, callback);
+
+    // relative, use the original
+    if (args[0][0] === '.') cmd = args[0];
+
+    // node <= 0.12 didn't take the --require option
+    if (major < 12) return spawn(cmd, params.args.concat(args.slice(1)), params.options, callback);
+
+    // send to node
+    spawn(process.execPath, params.args.concat([cmd]).concat(args.slice(1)), params.options, callback);
+  });
 };

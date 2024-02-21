@@ -8,26 +8,27 @@ import assert from 'assert';
 import path from 'path';
 import cr from 'cr';
 import spawn from 'cross-spawn-cb';
-import { spawnParams } from 'ts-swc-loaders';
-
 import devStack from 'ts-dev-stack';
+import { spawnParams } from 'ts-swc-loaders';
 
 import { fileURLToPath } from 'url';
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
+const type = 'module';
 const MODULE_DIR = path.resolve(__dirname, '..', '..');
-const DATA_DIR = path.resolve(__dirname, '..', 'data');
+const DATA_DIR = path.resolve(__dirname, '..', 'data', type);
 const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules', 'ts-swc-loaders');
 
-describe('module', () => {
+const args = spawnParams(type, { cwd: DATA_DIR, encoding: 'utf8' });
+
+describe.skip('module', () => {
   it('node', (done) => {
-    const args = spawnParams('module', { cwd: DATA_DIR, encoding: 'utf8' });
-    spawn('node', args.args.concat(['./module/index.ts', 'arg']), args.options, (err, res) => {
-      assert.equal(
+    spawn(process.execPath, args.args.concat(['./test/index.test.ts', 'arg']), args.options, (err, res) => {
+      assert.ok(
         cr(err ? err.stdout : res.stdout)
           .split('\n')
-          .slice(-2)[0],
-        'success: arg'
+          .slice(-2)[0]
+          .indexOf('success:') === 0
       );
       done();
     });

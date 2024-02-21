@@ -23,11 +23,11 @@ export function register(options, hookOpts) {
 export function compile(contents, filePath) {
   if (filePath.indexOf('index.test.ts') >= 0) console.log('compile', 1, filePath);
   try {
-  // filter
-  if (isInternal(filePath)) {
-    if (filePath.indexOf('index.test.ts') >= 0) console.log('compile', 22, filePath);
-    return contents;
-  }
+    // filter
+    if (isInternal(filePath)) {
+      if (filePath.indexOf('index.test.ts') >= 0) console.log('compile', 22, filePath);
+      return contents;
+    }
   } catch (err) {
     console.log(err);
     return;

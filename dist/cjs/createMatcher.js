@@ -20,7 +20,7 @@ function createMatcher(config) {
     var configPath = _pathposix.default.dirname((0, _slash.default)(config.path));
     function matchFn(condition) {
         var pattern = (0, _slash.default)(condition);
-        if (!_pathposix.default.isAbsolute(pattern) && !pattern.startsWith("*")) pattern = _pathposix.default.join(configPath, pattern);
+        if (!_pathposix.default.isAbsolute(pattern) && pattern[0] !== "*") pattern = _pathposix.default.join(configPath, pattern);
         return function match(filePath) {
             return filePath.startsWith(pattern) || (0, _minimatch.default)(filePath, pattern);
         };

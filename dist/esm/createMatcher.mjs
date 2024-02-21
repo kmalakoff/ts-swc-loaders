@@ -5,7 +5,7 @@ export default function createMatcher(config) {
     const configPath = path.dirname(slash(config.path));
     function matchFn(condition) {
         let pattern = slash(condition);
-        if (!path.isAbsolute(pattern) && !pattern.startsWith('*')) pattern = path.join(configPath, pattern);
+        if (!path.isAbsolute(pattern) && pattern[0] !== '*') pattern = path.join(configPath, pattern);
         return function match(filePath) {
             return filePath.startsWith(pattern) || minimatch(filePath, pattern);
         };

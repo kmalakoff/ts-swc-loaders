@@ -5,7 +5,7 @@ const INTERNAL_PATHS = [
     path.resolve(DIST, '..', 'node_modules')
 ];
 module.exports = function isInternal(test) {
-    if (test.indexOf(INTERNAL_PATHS[0]) === 0) return true;
-    if (test.indexOf(INTERNAL_PATHS[1]) === 0) return true;
+    if (test.startsWith(INTERNAL_PATHS[0])) return true;
+    if (test.startsWith(INTERNAL_PATHS[1])) return true;
     return false;
 };

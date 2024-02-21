@@ -2,6 +2,9 @@ require('core-js/actual/symbol/for');
 require('core-js/actual/map');
 
 console.log(1, process.argv);
+require('ts-swc-loaders');
+console.log(11);
+
 
 try {
   console.log(12);

@@ -1,5 +1,7 @@
 import process from 'process';
 
+console.log(process.argv);
+
 // @ts-ignore
 import App from './lib/react.tsx';
 import string from './lib/string.cjs';

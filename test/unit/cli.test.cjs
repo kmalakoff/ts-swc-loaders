@@ -9,7 +9,7 @@ const devStack = require('ts-dev-stack');
 const cr = require('cr');
 
 const CLI = path.resolve(__dirname, '..', '..', 'bin', 'cli.js');
-// const cli = require('../../dist/cjs/cli.js');
+const cli = require('../../dist/cjs/cli.js');
 
 const major = +process.versions.node.split('.')[0];
 const type = major < 12 ? 'commonjs' : 'module';
@@ -21,8 +21,8 @@ const cmd = major < 12 ? 'mocha-compat' : 'mocha';
 
 describe('cli', () => {
   it('run with cli option', (done) => {
-    // cli([cmd, 'test/*.test.ts'], { encoding: 'utf8', cwd: DATA_DIR}, (err, res) => {
-    spawn(CLI, [cmd, 'test/*.test.ts'], { encoding: 'utf8', cwd: DATA_DIR }, (err, res) => {
+    cli([cmd, 'test/*.test.ts'], { encoding: 'utf8', cwd: DATA_DIR}, (err, res) => {
+    // spawn(CLI, [cmd, 'test/*.test.ts'], { encoding: 'utf8', cwd: DATA_DIR }, (err, res) => {
       console.log(err, res);
       assert.ok(
         cr(err ? err.stdout : res.stdout)

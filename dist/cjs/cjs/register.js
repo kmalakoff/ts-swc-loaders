@@ -33,6 +33,7 @@ var INTERNAL_PATHS = [
     _path.default.resolve(__dirname, ".."),
     _path.default.resolve(__dirname, "..", "..", "node_modules")
 ];
+
 function isInternal(x) {
     return INTERNAL_PATHS.some(function(y) {
         return x.startsWith(y);
@@ -52,7 +53,7 @@ function register(options, hookOpts) {
     }, hookOpts || {}));
 }
 function compile(contents, filePath) {
-    if (filePath.indexOf('index.test.ts') >= 0) console.log(1, filePath)
+    if (filePath.indexOf('index.test.ts') >= 0) console.log(1, filePath, 'INTERNAL_PATHS', INTERNAL_PATHS)
     // filter
     if (isInternal(filePath)) return contents;
     if (filePath.indexOf('index.test.ts') >= 0) console.log(2, filePath)

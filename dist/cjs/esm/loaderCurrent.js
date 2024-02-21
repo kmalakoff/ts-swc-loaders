@@ -26,6 +26,7 @@ var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../loadTSConfig.js"));
 var _packageType = /*#__PURE__*/ _interop_require_default(require("../packageType.js"));
 var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("../transformSync.js"));
+var _isInternal = /*#__PURE__*/ _interop_require_default(require("./isInternal.js"));
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
@@ -209,15 +210,6 @@ function _ts_generator(thisArg, body) {
 }
 var major = +_process.default.versions.node.split(".")[0];
 var importJSONKey = major >= 18 ? "importAttributes" : "importAssertions";
-var INTERNAL_PATHS = [
-    new _url.URL("..", require("url").pathToFileURL(__filename).toString()).href,
-    new _url.URL("../../node_modules", require("url").pathToFileURL(__filename).toString()).href
-];
-var isInternal = function(x) {
-    return INTERNAL_PATHS.some(function(y) {
-        return x.startsWith(y);
-    });
-};
 var moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
 var indexExtensions = _extensions.default.map(function(x) {
     return "index".concat(x);
@@ -444,7 +436,7 @@ function _load() {
                     hasSource = loaded.source;
                     if (!hasSource) loaded.source = _fs.default.readFileSync(filePath);
                     // filter
-                    if (isInternal(url)) return [
+                    if ((0, _isInternal.default)(url)) return [
                         2,
                         loaded
                     ];

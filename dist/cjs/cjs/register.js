@@ -16,28 +16,19 @@ _export(exports, {
         return register;
     }
 });
+require("../polyfills.js");
 var _path = /*#__PURE__*/ _interop_require_default(require("path"));
 var _pirates = /*#__PURE__*/ _interop_require_default(require("pirates"));
-require("../polyfills.js");
 var _Cache = /*#__PURE__*/ _interop_require_default(require("../Cache.js"));
 var _createMatcher = /*#__PURE__*/ _interop_require_default(require("../createMatcher.js"));
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../loadTSConfig.js"));
 var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("../transformSync.js"));
+var _isInternalcjs = /*#__PURE__*/ _interop_require_default(require("./isInternal.js"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
-}
-var INTERNAL_PATHS = [
-    _path.default.resolve(__dirname, ".."),
-    _path.default.resolve(__dirname, "..", "..", "node_modules")
-];
-
-function isInternal(x) {
-    return INTERNAL_PATHS.some(function(y) {
-        return x.startsWith(y);
-    });
 }
 var cache = new _Cache.default();
 var config = (0, _loadTSConfig.default)(_path.default.resolve(process.cwd(), "tsconfig.json"));
@@ -53,20 +44,17 @@ function register(options, hookOpts) {
     }, hookOpts || {}));
 }
 function compile(contents, filePath) {
-    if (filePath.indexOf('index.test.ts') >= 0) console.log(1, filePath, 'INTERNAL_PATHS', INTERNAL_PATHS)
+    if (filePath.indexOf("index.test.ts") >= 0) console.log(1, filePath);
     // filter
-    if (isInternal(filePath)) return contents;
-    if (filePath.indexOf('index.test.ts') >= 0) console.log(2, filePath)
+    if ((0, _isInternalcjs.default)(filePath)) return contents;
+    if (filePath.indexOf("index.test.ts") >= 0) console.log(2, filePath);
     if (filePath.endsWith(".d.ts")) return " ";
-    if (filePath.indexOf('index.test.ts') >= 0) console.log(3, filePath)
+    if (filePath.indexOf("index.test.ts") >= 0) console.log(3, filePath);
     if (_extensions.default.indexOf(_path.default.extname(filePath)) < 0) return contents || " ";
-    if (filePath.indexOf('index.test.ts') >= 0) console.log(4, filePath)
     if (!match(filePath)) return contents || " ";
-    if (filePath.indexOf('index.test.ts') >= 0) console.log(5, filePath)
     var data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
         return (0, _transformSynccjs.default)(contents, filePath, config);
     });
-    if (filePath.indexOf('index.test.ts') >= 0) console.log(6, filePath)
     return data.code;
 }
 /* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }

@@ -21,9 +21,12 @@ export function register(options, hookOpts) {
 }
 
 export function compile(contents, filePath) {
+  if (filePath.indexOf('index.test.ts') >= 0) console.log(1, filePath)
   // filter
   if (isInternal(filePath)) return contents;
+  if (filePath.indexOf('index.test.ts') >= 0) console.log(2, filePath)
   if (filePath.endsWith('.d.ts')) return ' ';
+  if (filePath.indexOf('index.test.ts') >= 0) console.log(3, filePath)
   if (extensions.indexOf(path.extname(filePath)) < 0) return contents || ' ';
   if (!match(filePath)) return contents || ' ';
 

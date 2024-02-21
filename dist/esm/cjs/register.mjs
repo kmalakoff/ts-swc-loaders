@@ -1,18 +1,12 @@
+import '../polyfills.cjs';
 import path from 'path';
 import pirates from 'pirates';
-import '../polyfills.cjs';
 import Cache from '../Cache.mjs';
 import createMatcher from '../createMatcher.mjs';
 import extensions from '../extensions.mjs';
 import loadTSConfig from '../loadTSConfig.mjs';
 import transformSync from '../transformSync.cjs';
-const INTERNAL_PATHS = [
-    path.resolve(__dirname, '..'),
-    path.resolve(__dirname, '..', '..', 'node_modules')
-];
-function isInternal(x) {
-    return INTERNAL_PATHS.some((y)=>x.startsWith(y));
-}
+import isInternal from './isInternal.cjs';
 const cache = new Cache();
 const config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));
 config.config.compilerOptions.module = 'CommonJS';
@@ -25,9 +19,12 @@ export function register(options, hookOpts) {
     }, hookOpts || {}));
 }
 export function compile(contents, filePath) {
+    if (filePath.indexOf('index.test.ts') >= 0) console.log(1, filePath);
     // filter
     if (isInternal(filePath)) return contents;
+    if (filePath.indexOf('index.test.ts') >= 0) console.log(2, filePath);
     if (filePath.endsWith('.d.ts')) return ' ';
+    if (filePath.indexOf('index.test.ts') >= 0) console.log(3, filePath);
     if (extensions.indexOf(path.extname(filePath)) < 0) return contents || ' ';
     if (!match(filePath)) return contents || ' ';
     const data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, ()=>transformSync(contents, filePath, config));

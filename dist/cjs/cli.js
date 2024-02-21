@@ -62,15 +62,11 @@ module.exports = function cli(args, options, cb) {
     which(args[0], {
         path: env[PATH_KEY]
     }, function(_err, cmd) {
-        console.log(_err, cmd)
         // not found, use the original
         if (!cmd) cmd = args[0];
         // spawn on windows
         var cmdExt = path.extname(cmd);
-        if (path.extname(args[0]) !== cmdExt) {
-            console.log(cmd, params.args)
-            return spawn(cmd, params.args.concat(args.slice(1)), params.options, callback);
-        }
+        if (path.extname(args[0]) !== cmdExt) return spawn(cmd, params.args.concat(args.slice(1)), params.options, callback);
         // relative, use the original
         if (args[0][0] === ".") cmd = args[0];
         // node <= 0.12 didn't take the --require option

@@ -24,6 +24,7 @@ var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../loadTSConfig.js"));
 var _packageType = /*#__PURE__*/ _interop_require_default(require("../packageType.js"));
 var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("../transformSync.js"));
+var _isInternal = /*#__PURE__*/ _interop_require_default(require("./isInternal.js"));
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
@@ -153,15 +154,6 @@ function _ts_generator(thisArg, body) {
         };
     }
 }
-var INTERNAL_PATHS = [
-    new _url.URL("..", require("url").pathToFileURL(__filename).toString()).href,
-    new _url.URL("../../node_modules", require("url").pathToFileURL(__filename).toString()).href
-];
-var isInternal = function(x) {
-    return INTERNAL_PATHS.some(function(y) {
-        return x.startsWith(y);
-    });
-};
 var EXT_TO_FORMAT = {
     ".json": "json",
     ".mjs": "module",
@@ -184,7 +176,7 @@ function __getFormat() {
                     parentURL = context.parentURL && _path.default.isAbsolute(context.parentURL) ? (0, _url.pathToFileURL)(context.parentURL) : context.parentURL; // windows
                     url = parentURL ? new _url.URL(specifier, parentURL).href : url;
                     // internals
-                    if (isInternal(url)) return [
+                    if ((0, _isInternal.default)(url)) return [
                         2,
                         {
                             format: (0, _packageType.default)(url)
@@ -237,7 +229,7 @@ function __transformSource() {
                     loaded = _state.sent();
                     filePath = (0, _url.fileURLToPath)(url);
                     // filter
-                    if (isInternal(url)) return [
+                    if ((0, _isInternal.default)(url)) return [
                         2,
                         loaded
                     ];

@@ -18,7 +18,6 @@ function _interop_require_default(obj) {
 }
 function createMatcher(config) {
     var configPath = _pathposix.default.dirname((0, _slash.default)(config.path));
-    // console.log('createMatcher', configPath, config.path)
     function matchFn(condition) {
         var pattern = (0, _slash.default)(condition);
         if (!_pathposix.default.isAbsolute(pattern) && !pattern.startsWith("*")) pattern = _pathposix.default.join(configPath, pattern);

@@ -52,6 +52,7 @@ function register(options, hookOpts) {
     }, hookOpts || {}));
 }
 function compile(contents, filePath) {
+    console.log(filePath)
     // filter
     if (isInternal(filePath)) return contents;
     if (filePath.endsWith(".d.ts")) return " ";

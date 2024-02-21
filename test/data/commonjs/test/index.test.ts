@@ -4,6 +4,7 @@ require('core-js/actual/map');
 console.log(1, process.argv);
 
 try {
+  console.log(12);
   var string = require('./lib/string.cjs');
   console.log(2);
   var App = require('./lib/react.tsx');

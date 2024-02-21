@@ -16,7 +16,7 @@ function _interop_require_default(obj) {
 }
 function loadTSConfig(path) {
     var config = _gettsconfigcompat.default.getTsconfig(path);
-    if (!config) {
+    if (!config || !config.path) {
         console.log("tsconfig.json not found at: ".concat(path));
         config = {};
     }

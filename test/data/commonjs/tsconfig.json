@@ -12,5 +12,5 @@
     "allowJs": true,
     "jsx": "react"
   },
-  "include": ["module", "commonjs"]
+  "include": ["test"]
 }

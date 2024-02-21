@@ -30,7 +30,7 @@ function _object_spread(target) {
 require("./polyfills.js");
 var processCompat = typeof process === "undefined" ? require("process") : process;
 var major = +processCompat.versions.node.split(".")[0];
-var importArgs = 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("ts-swc-loaders", pathToFileURL("./"));';
+var _importArgs = 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("ts-swc-loaders", pathToFileURL("./"));';
 module.exports = function spawnParams(type, options) {
     if (type === "commonjs") return {
         args: [
@@ -39,19 +39,14 @@ module.exports = function spawnParams(type, options) {
         ],
         options: options
     };
-    if (major >= 18) return {
-        args: [
-            "--no-warnings=ExperimentalWarning",
-            "--import",
-            importArgs
-        ],
-        options: options
-    };
+    // https://nodejs.org/api/module.html#moduleregisterspecifier-parenturl-options
+    // v20.8.0
+    // if (major >= 20) return { args: ['--no-warnings=ExperimentalWarning', '--import', importArgs], options };
     // args
     var args = major > 4 ? [
         "--no-warnings=ExperimentalWarning"
     ] : [];
-    // if (major <= 16) args.push('--experimental-modules');
+    if (major <= 16) args.push("--experimental-modules");
     // options
     var env = options.env || processCompat.env;
     options = _object_spread({}, options || {});

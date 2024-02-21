@@ -32,12 +32,13 @@ var path = require("path");
 var spawn = require("cross-spawn-cb");
 var pathKey = require("env-path-key");
 var prepend = require("path-string-prepend");
-var once = require("call-once-fn");
 var spawnParams = require("./index.js").spawnParams;
+var which = require("which");
 var major = +process.versions.node.split(".")[0];
 var type = major < 12 ? "commonjs" : "module";
-module.exports = function cli(args, options) {
-    var cwd = process.cwd();
+module.exports = function cli(args, options, cb) {
+    options = options || {};
+    var cwd = options.cwd || process.cwd();
     var env = _object_spread({}, process.env);
     var PATH_KEY = pathKey();
     env[PATH_KEY] = prepend(env[PATH_KEY] || "", path.resolve(__dirname, "..", "..", "..", "..", "node_modules", ".bin"));
@@ -46,24 +47,34 @@ module.exports = function cli(args, options) {
         stdio: "inherit",
         cwd: cwd,
         env: env
-    }, options || {}));
-    var callback = once(function(err) {
+    }, options));
+    // biome-ignore lint/performance/noDelete: <explanation>
+    if (options.encoding) delete params.options.stdio;
+    function callback(err, res) {
+        if (cb) return cb(err, res);
         if (err) {
             console.log(err.message);
             return exit(err.code || -1);
         }
         exit(0);
-    });
-    if (params.options.NODE_OPTIONS || params.args[0] === "--require") {
-        spawn(args[0], params.args.concat(args.slice(1)), params.options, callback);
-    } else {
-        require("which")(args[0], {
-            path: env[PATH_KEY]
-        }).then(function(cmd) {
-            spawn("node", params.args.concat([
-                cmd
-            ]).concat(args.slice(1)), params.options, callback);
-        }).catch(callback);
     }
+    // look up the full path
+    which(args[0], {
+        path: env[PATH_KEY]
+    }, function(_err, cmd) {
+        // not found, use the original
+        if (!cmd) cmd = args[0];
+        // spawn on windows
+        var cmdExt = path.extname(cmd);
+        if (path.extname(args[0]) !== cmdExt) return spawn(cmd, params.args.concat(args.slice(1)), params.options, callback);
+        // relative, use the original
+        if (args[0][0] === ".") cmd = args[0];
+        // node <= 0.12 didn't take the --require option
+        if (major < 12) return spawn(cmd, params.args.concat(args.slice(1)), params.options, callback);
+        // send to node
+        spawn(process.execPath, params.args.concat([
+            cmd
+        ]).concat(args.slice(1)), params.options, callback);
+    });
 };
 /* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }

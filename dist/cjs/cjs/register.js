@@ -44,20 +44,20 @@ function register(options, hookOpts) {
     }, hookOpts || {}));
 }
 function compile(contents, filePath) {
-    if (filePath.indexOf("index.test.ts") >= 0) console.log(1, filePath);
+    if (filePath.indexOf("index.test.ts") >= 0) console.log("compile", 1, filePath);
     try {
         // filter
         if ((0, _isInternalcjs.default)(filePath)) {
-            if (filePath.indexOf("index.test.ts") >= 0) console.log(22, filePath);
+            if (filePath.indexOf("index.test.ts") >= 0) console.log("compile", 22, filePath);
             return contents;
         }
     } catch (err) {
         console.log(err);
         return;
     }
-    if (filePath.indexOf("index.test.ts") >= 0) console.log(2, filePath);
+    if (filePath.indexOf("index.test.ts") >= 0) console.log("compile", 2, filePath);
     if (filePath.endsWith(".d.ts")) return " ";
-    if (filePath.indexOf("index.test.ts") >= 0) console.log(3, filePath);
+    if (filePath.indexOf("index.test.ts") >= 0) console.log("compile", 3, filePath);
     if (_extensions.default.indexOf(_path.default.extname(filePath)) < 0) return contents || " ";
     if (!match(filePath)) return contents || " ";
     var data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {

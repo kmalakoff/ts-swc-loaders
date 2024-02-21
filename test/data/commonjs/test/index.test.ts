@@ -1,6 +1,8 @@
 require('core-js/actual/symbol/for');
 require('core-js/actual/map');
 
+console.log(process.argv);
+
 var App = require('./lib/react.tsx');
 var string = require('./lib/string.cjs');
 

@@ -21,20 +21,20 @@ export function register(options, hookOpts) {
 }
 
 export function compile(contents, filePath) {
-  if (filePath.indexOf('index.test.ts') >= 0) console.log(1, filePath);
+  if (filePath.indexOf('index.test.ts') >= 0) console.log('compile', 1, filePath);
   try {
   // filter
   if (isInternal(filePath)) {
-    if (filePath.indexOf('index.test.ts') >= 0) console.log(22, filePath);
+    if (filePath.indexOf('index.test.ts') >= 0) console.log('compile', 22, filePath);
     return contents;
   }
   } catch (err) {
     console.log(err);
     return;
   }
-  if (filePath.indexOf('index.test.ts') >= 0) console.log(2, filePath);
+  if (filePath.indexOf('index.test.ts') >= 0) console.log('compile', 2, filePath);
   if (filePath.endsWith('.d.ts')) return ' ';
-  if (filePath.indexOf('index.test.ts') >= 0) console.log(3, filePath);
+  if (filePath.indexOf('index.test.ts') >= 0) console.log('compile', 3, filePath);
   if (extensions.indexOf(path.extname(filePath)) < 0) return contents || ' ';
   if (!match(filePath)) return contents || ' ';
 

@@ -23,12 +23,13 @@ const args = spawnParams(type, { cwd: DATA_DIR, encoding: 'utf8' });
 
 describe.skip('module', () => {
   it('node', (done) => {
-    spawn(process.execPath, args.args.concat(['./test/index.test.ts', 'arg']), args.options, (err, res) => {
+    spawn(process.execPath, args.args.concat(['./test/index.test.ts']), args.options, (err, res) => {
+      // console.log(err, res)
       assert.ok(
         cr(err ? err.stdout : res.stdout)
           .split('\n')
           .slice(-2)[0]
-          .indexOf('success:') === 0
+          .indexOf('ran successfully') === 0
       );
       done();
     });

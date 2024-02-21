@@ -38,8 +38,10 @@
     "depcheck": "depcheck",
     "deploy": "tsds deploy",
     "format": "biome check --apply-unsafe src/ test/",
-    "test": "tsds link && ts-swc mocha-compat test/unit/**/*.test.cjs --no-timeouts && nvu latest mocha test/unit/**/*.test.mjs --no-timeouts && tsds unlink",
-    "test:engines": "tsds link && nvu engines ts-swc mocha-compat test/unit/**/*.test.cjs --no-timeouts && nvu '>=12' mocha test/unit/**/*.test.mjs --no-timeouts && tsds unlink",
+    "test": "tsds link && ts-swc mocha-compat test/unit/**/*.test.cjs --no-timeouts && tsds unlink",
+    "test:engines": "tsds link && nvu engines ts-swc mocha-compat test/unit/**/*.test.cjs --no-timeouts && tsds unlink",
+    "test-bak": "tsds link && ts-swc mocha-compat test/unit/**/*.test.cjs --no-timeouts && nvu latest mocha test/unit/**/*.test.mjs --no-timeouts && tsds unlink",
+    "test:engines-bak": "tsds link && nvu engines ts-swc mocha-compat test/unit/**/*.test.cjs --no-timeouts && nvu '>=12' mocha test/unit/**/*.test.mjs --no-timeouts && tsds unlink",
     "version": "tsds version"
   },
   "dependencies": {
@@ -74,7 +76,7 @@
     "mocha": "^10.3.0",
     "mocha-compat": "^3.5.5",
     "react": "^18.2.0",
-    "ts-dev-stack": "^0.15.0"
+    "ts-dev-stack": "^0.15.1"
   },
   "engines": {
     "node": ">=0.8"

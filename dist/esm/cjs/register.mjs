@@ -1,6 +1,6 @@
-import '../polyfills.cjs';
 import path from 'path';
 import pirates from 'pirates';
+import '../polyfills.cjs';
 import Cache from '../Cache.mjs';
 import createMatcher from '../createMatcher.mjs';
 import extensions from '../extensions.mjs';
@@ -21,7 +21,10 @@ export function register(options, hookOpts) {
 export function compile(contents, filePath) {
     if (filePath.indexOf('index.test.ts') >= 0) console.log(1, filePath);
     // filter
-    if (isInternal(filePath)) return contents;
+    if (isInternal(filePath)) {
+        if (filePath.indexOf('index.test.ts') >= 0) console.log(22, filePath);
+        return contents;
+    }
     if (filePath.indexOf('index.test.ts') >= 0) console.log(2, filePath);
     if (filePath.endsWith('.d.ts')) return ' ';
     if (filePath.indexOf('index.test.ts') >= 0) console.log(3, filePath);

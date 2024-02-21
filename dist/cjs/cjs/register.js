@@ -16,9 +16,9 @@ _export(exports, {
         return register;
     }
 });
-require("../polyfills.js");
 var _path = /*#__PURE__*/ _interop_require_default(require("path"));
 var _pirates = /*#__PURE__*/ _interop_require_default(require("pirates"));
+require("../polyfills.js");
 var _Cache = /*#__PURE__*/ _interop_require_default(require("../Cache.js"));
 var _createMatcher = /*#__PURE__*/ _interop_require_default(require("../createMatcher.js"));
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
@@ -46,7 +46,10 @@ function register(options, hookOpts) {
 function compile(contents, filePath) {
     if (filePath.indexOf("index.test.ts") >= 0) console.log(1, filePath);
     // filter
-    if ((0, _isInternalcjs.default)(filePath)) return contents;
+    if ((0, _isInternalcjs.default)(filePath)) {
+        if (filePath.indexOf("index.test.ts") >= 0) console.log(22, filePath);
+        return contents;
+    }
     if (filePath.indexOf("index.test.ts") >= 0) console.log(2, filePath);
     if (filePath.endsWith(".d.ts")) return " ";
     if (filePath.indexOf("index.test.ts") >= 0) console.log(3, filePath);

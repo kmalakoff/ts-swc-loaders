@@ -7,7 +7,7 @@ import extensions from '../extensions.mjs';
 import loadTSConfig from '../loadTSConfig.mjs';
 import packageType from '../packageType.mjs';
 import transformSync from '../transformSync.cjs';
-import isInternal from './isInternal.mjs'
+import isInternal from './isInternal.mjs';
 
 const EXT_TO_FORMAT = {
   '.json': 'json',

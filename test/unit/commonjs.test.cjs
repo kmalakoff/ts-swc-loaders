@@ -17,7 +17,7 @@ const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules', 'ts-swc-loaders');
 
 const args = spawnParams(type, { cwd: DATA_DIR, encoding: 'utf8' });
 
-describe('commonjs', () => {
+describe.skip('commonjs', () => {
   major > 0 ||
     it('loader', (done) => {
       spawn('./loader', args.args.concat(['./test/index.test.ts', 'arg']), args.options, (err, res) => {

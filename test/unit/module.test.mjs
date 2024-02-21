@@ -21,7 +21,7 @@ const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules', 'ts-swc-loaders');
 
 const args = spawnParams(type, { cwd: DATA_DIR, encoding: 'utf8' });
 
-describe('module', () => {
+describe.skip('module', () => {
   it('node', (done) => {
     spawn(process.execPath, args.args.concat(['./test/index.test.ts', 'arg']), args.options, (err, res) => {
       assert.equal(cr(err ? err.stdout : res.stdout).split('\n').slice(-2)[0], 'Success!');

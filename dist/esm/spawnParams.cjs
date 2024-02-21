@@ -1,7 +1,7 @@
 require('./polyfills.cjs');
 const processCompat = typeof process === 'undefined' ? require('process') : process;
 const major = +processCompat.versions.node.split('.')[0];
-const _importArgs = 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("ts-swc-loaders", pathToFileURL("./"));';
+// const _importArgs = 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("ts-swc-loaders", pathToFileURL("./"));';
 module.exports = function spawnParams(type, options) {
     if (type === 'commonjs') return {
         args: [
@@ -17,7 +17,7 @@ module.exports = function spawnParams(type, options) {
     const args = major > 4 ? [
         '--no-warnings=ExperimentalWarning'
     ] : [];
-    if (major <= 16) args.push('--experimental-modules');
+    // if (major <= 16) args.push('--experimental-modules');
     // options
     const env = options.env || processCompat.env;
     options = {

@@ -1,11 +1,13 @@
 import process from 'process';
 
-import assert from 'assert';
 // @ts-ignore
 import App from './lib/react.tsx';
 import string from './lib/string.cjs';
 
-assert.ok(App);
-assert.equal(string, 'string');
+if (!App) throw new Error('App not loaded');
+if (string !== 'string') throw new Error('String not equal to string')
 
 console.log(`success: ${process.argv[process.argv.length-1]}`);
+console.log(`success: ${process.argv}`);
+
+process.exit(0);

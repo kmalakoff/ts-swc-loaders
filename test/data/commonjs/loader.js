@@ -1,5 +1,7 @@
 var getopts = require('getopts-compat');
 
+console.log(process.argv)
+
 var index = process.argv.indexOf(__filename);
 if (index>0) process.argv = process.argv.slice(index+1);
 index = process.argv.indexOf(__filename.substring(0, __filename.lastIndexOf('.')));

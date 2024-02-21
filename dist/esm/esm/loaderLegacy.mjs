@@ -6,11 +6,7 @@ import extensions from '../extensions.mjs';
 import loadTSConfig from '../loadTSConfig.mjs';
 import packageType from '../packageType.mjs';
 import transformSync from '../transformSync.cjs';
-const INTERNAL_PATHS = [
-    new URL('..', import.meta.url).href,
-    new URL('../../node_modules', import.meta.url).href
-];
-const isInternal = (x)=>INTERNAL_PATHS.some((y)=>x.startsWith(y));
+import isInternal from './isInternal.mjs';
 const EXT_TO_FORMAT = {
     '.json': 'json',
     '.mjs': 'module',

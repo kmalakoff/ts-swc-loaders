@@ -23,12 +23,12 @@ describe('cli', () => {
   it('run with cli option', (done) => {
     // cli([cmd, 'test/*.test.ts'], { encoding: 'utf8', cwd: DATA_DIR}, (err, res) => {
     spawn(CLI, [cmd, 'test/*.test.ts'], { encoding: 'utf8', cwd: DATA_DIR }, (err, res) => {
-      // console.log(err, res);
+      console.log(err, res);
       assert.ok(
         cr(err ? err.stdout : res.stdout)
           .split('\n')
           .slice(-2)[0]
-          .indexOf('success:') === 0
+          .indexOf('Success!') === 0
       );
       done();
     });

@@ -45,10 +45,15 @@ function register(options, hookOpts) {
 }
 function compile(contents, filePath) {
     if (filePath.indexOf("index.test.ts") >= 0) console.log(1, filePath);
-    // filter
-    if ((0, _isInternalcjs.default)(filePath)) {
-        if (filePath.indexOf("index.test.ts") >= 0) console.log(22, filePath);
-        return contents;
+    try {
+        // filter
+        if ((0, _isInternalcjs.default)(filePath)) {
+            if (filePath.indexOf("index.test.ts") >= 0) console.log(22, filePath);
+            return contents;
+        }
+    } catch (err) {
+        console.log(err);
+        return;
     }
     if (filePath.indexOf("index.test.ts") >= 0) console.log(2, filePath);
     if (filePath.endsWith(".d.ts")) return " ";

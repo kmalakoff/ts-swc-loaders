@@ -20,10 +20,15 @@ export function register(options, hookOpts) {
 }
 export function compile(contents, filePath) {
     if (filePath.indexOf('index.test.ts') >= 0) console.log(1, filePath);
-    // filter
-    if (isInternal(filePath)) {
-        if (filePath.indexOf('index.test.ts') >= 0) console.log(22, filePath);
-        return contents;
+    try {
+        // filter
+        if (isInternal(filePath)) {
+            if (filePath.indexOf('index.test.ts') >= 0) console.log(22, filePath);
+            return contents;
+        }
+    } catch (err) {
+        console.log(err);
+        return;
     }
     if (filePath.indexOf('index.test.ts') >= 0) console.log(2, filePath);
     if (filePath.endsWith('.d.ts')) return ' ';

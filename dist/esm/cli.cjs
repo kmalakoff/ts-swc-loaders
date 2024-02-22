@@ -26,7 +26,7 @@ module.exports = function cli(args, options, cb) {
     if (options.encoding) delete params.options.stdio;
     function callback(err, res) {
         if (cb) return cb(err, res);
-        if (err) {
+        if (err && err.message.indexOf('ExperimentalWarning') < 0) {
             console.log(err.message);
             return exit(err.code || -1);
         }

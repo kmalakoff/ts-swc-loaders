@@ -6,13 +6,7 @@ import createMatcher from '../createMatcher.mjs';
 import extensions from '../extensions.mjs';
 import loadTSConfig from '../loadTSConfig.mjs';
 import transformSync from '../transformSync.cjs';
-const INTERNAL_PATHS = [
-    path.resolve(__dirname, '..'),
-    path.resolve(__dirname, '..', '..', 'node_modules')
-];
-function isInternal(x) {
-    return INTERNAL_PATHS.some((y)=>x.startsWith(y));
-}
+import isInternal from './isInternal.cjs';
 const cache = new Cache();
 const config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));
 config.config.compilerOptions.module = 'CommonJS';

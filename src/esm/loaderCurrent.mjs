@@ -13,7 +13,6 @@ import transformSync from '../transformSync.cjs';
 const major = +process.versions.node.split('.')[0];
 const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
 
-const moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
 const indexExtensions = extensions.map((x) => `index${x}`);
 
 const cache = new Cache();
@@ -25,14 +24,6 @@ export async function resolve(specifier, context, defaultResolve) {
   const parentURL = context.parentURL && path.isAbsolute(context.parentURL) ? pathToFileURL(context.parentURL) : context.parentURL; // windows
   const url = parentURL ? new URL(specifier, parentURL).href : new URL(specifier).href;
 
-  // resolve from extension or as a module
-  if (path.extname(specifier) || moduleRegEx.test(specifier)) {
-    const data = await defaultResolve(specifier, context, defaultResolve);
-    if (!data.format) data.format = packageType(url);
-    if (specifier.endsWith('/node_modules/yargs/yargs')) data.format = 'commonjs'; // args bin is cjs in a module
-    return data;
-  }
-
   // directory
   if (specifier.endsWith('/')) {
     const items = fs.readdirSync(specifier);
@@ -43,7 +34,11 @@ export async function resolve(specifier, context, defaultResolve) {
     }
   }
 
-  throw new Error(`Cannot resolve: ${specifier}`);
+  // default
+  const data = await defaultResolve(specifier, context, defaultResolve);
+  if (!data.format) data.format = packageType(url);
+  if (specifier.endsWith('/node_modules/yargs/yargs')) data.format = 'commonjs'; // args bin is cjs in a module
+  return data;
 }
 
 export async function load(url, context, defaultLoad) {

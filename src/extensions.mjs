@@ -1,1 +1,1 @@
-export default ['.js', '.jsx', '.es6', '.es', '.cjs', '.mjs', '.ts', '.tsx', '.json'];
+export default ['.js', '.jsx', '.cjs', '.mjs', '.ts', '.tsx', '.json', '.es6', '.es', ];

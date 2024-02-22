@@ -13,6 +13,7 @@ import transformSync from '../transformSync.cjs';
 const major = +process.versions.node.split('.')[0];
 const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
 
+const moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
 const indexExtensions = extensions.map((x) => `index${x}`);
 
 const cache = new Cache();
@@ -34,7 +35,18 @@ export async function resolve(specifier, context, defaultResolve) {
     }
   }
 
-  // default
+  // no extension and not a module, guess an extension
+  else if (!path.extname(specifier) && !moduleRegEx.test(specifier)) {
+    for (const ext of extensions) {
+      try {
+        return await resolve(specifier + ext, context, defaultResolve);
+      } catch (_err) {
+        // skip
+      }
+    }
+  }
+
+  // default loader
   const data = await defaultResolve(specifier, context, defaultResolve);
   if (!data.format) data.format = packageType(url);
   if (specifier.endsWith('/node_modules/yargs/yargs')) data.format = 'commonjs'; // args bin is cjs in a module

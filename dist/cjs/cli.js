@@ -54,7 +54,7 @@ module.exports = function cli(args, options, cb) {
         if (cb) return cb(err, res);
         if (err && err.message.indexOf("ExperimentalWarning") < 0) {
             console.log(err.message);
-            return exit(err.code || -1);
+        // return exit(err.code || -1);
         }
         exit(0);
     }

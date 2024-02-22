@@ -24,11 +24,11 @@ describe('cli', () => {
     // cli([cmd, 'test/*.test.ts'], { encoding: 'utf8', cwd: DATA_DIR}, (err, res) => {
     spawn(CLI, [cmd, 'test/*.test.ts'], { encoding: 'utf8', cwd: DATA_DIR }, (err, res) => {
       // console.log(err, res);
-      assert.ok(
+      assert.equal(
         cr(err ? err.stdout : res.stdout)
           .split('\n')
-          .slice(-2)[0]
-          .indexOf('success:') === 0
+          .slice(-2)[0],
+        'Success!'
       );
       done();
     });

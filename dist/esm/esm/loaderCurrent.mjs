@@ -10,7 +10,6 @@ import packageType from '../packageType.mjs';
 import transformSync from '../transformSync.cjs';
 const major = +process.versions.node.split('.')[0];
 const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
-const moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
 const indexExtensions = extensions.map((x)=>`index${x}`);
 const cache = new Cache();
 const config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));
@@ -19,13 +18,6 @@ export async function resolve(specifier1, context, defaultResolve) {
     if (specifier1.startsWith('node:')) specifier1 = specifier1.slice(5); // node built-in
     const parentURL = context.parentURL && path.isAbsolute(context.parentURL) ? pathToFileURL(context.parentURL) : context.parentURL; // windows
     const url = parentURL ? new URL(specifier1, parentURL).href : new URL(specifier1).href;
-    // resolve from extension or as a module
-    if (path.extname(specifier1) || moduleRegEx.test(specifier1)) {
-        const data = await defaultResolve(specifier1, context, defaultResolve);
-        if (!data.format) data.format = packageType(url);
-        if (specifier1.endsWith('/node_modules/yargs/yargs')) data.format = 'commonjs'; // args bin is cjs in a module
-        return data;
-    }
     // directory
     if (specifier1.endsWith('/')) {
         const items = fs.readdirSync(specifier1);
@@ -35,7 +27,11 @@ export async function resolve(specifier1, context, defaultResolve) {
             }
         }
     }
-    throw new Error(`Cannot resolve: ${specifier1}`);
+    // default
+    const data = await defaultResolve(specifier1, context, defaultResolve);
+    if (!data.format) data.format = packageType(url);
+    if (specifier1.endsWith('/node_modules/yargs/yargs')) data.format = 'commonjs'; // args bin is cjs in a module
+    return data;
 }
 export async function load(url, context, defaultLoad) {
     if (url.startsWith('node:')) return await defaultLoad(url, context, defaultLoad);

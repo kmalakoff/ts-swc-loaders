@@ -3,7 +3,7 @@ require('core-js/actual/map');
 
 const exit = require('exit');
 
-var App = require('./lib/react.tsx');
+var App = require('./lib/App.tsx');
 var string = require('./lib/string.cjs');
 
 if (!App.default) throw new Error('App not loaded');

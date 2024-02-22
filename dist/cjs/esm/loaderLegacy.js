@@ -163,17 +163,15 @@ var EXT_TO_FORMAT = {
 var cache = new _Cache.default();
 var config = (0, _loadTSConfig.default)(_path.default.resolve(process.cwd(), "tsconfig.json"));
 var match = (0, _createMatcher.default)(config);
-function _getFormat(url, context, defaultGetFormat) {
+function _getFormat(url, context, next) {
     return __getFormat.apply(this, arguments);
 }
 function __getFormat() {
-    __getFormat = _async_to_generator(function(url, context, defaultGetFormat) {
-        var parentURL, format;
+    __getFormat = _async_to_generator(function(url, context, next) {
+        var format;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
-                    parentURL = context.parentURL && _path.default.isAbsolute(context.parentURL) ? (0, _url.pathToFileURL)(context.parentURL) : context.parentURL; // windows
-                    url = parentURL ? new _url.URL(specifier, parentURL).href : url;
                     // file
                     if (url.startsWith("file://")) {
                         format = EXT_TO_FORMAT[_path.default.extname(url)];
@@ -188,7 +186,7 @@ function __getFormat() {
                     }
                     return [
                         4,
-                        defaultGetFormat(url, context, defaultGetFormat)
+                        next(url, context)
                     ];
                 case 1:
                     // relative
@@ -201,21 +199,19 @@ function __getFormat() {
     });
     return __getFormat.apply(this, arguments);
 }
-function _transformSource(source, context, defaultTransformSource) {
+function _transformSource(source, context, next) {
     return __transformSource.apply(this, arguments);
 }
 function __transformSource() {
-    __transformSource = _async_to_generator(function(source, context, defaultTransformSource) {
-        var url, parentURL, loaded, filePath, contents, data;
+    __transformSource = _async_to_generator(function(source, context, next) {
+        var url, loaded, filePath, contents, data;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
                     url = context.url;
-                    parentURL = context.parentURL && _path.default.isAbsolute(context.parentURL) ? (0, _url.pathToFileURL)(context.parentURL) : context.parentURL; // windows
-                    url = parentURL ? new _url.URL(specifier, parentURL).href : url;
                     return [
                         4,
-                        defaultTransformSource(source, context, defaultTransformSource)
+                        next(source, context)
                     ];
                 case 1:
                     loaded = _state.sent();

@@ -1,5 +1,5 @@
 import path from 'path';
-import { URL, fileURLToPath, pathToFileURL } from 'url';
+import { fileURLToPath } from 'url';
 import Cache from '../Cache.mjs';
 import createMatcher from '../createMatcher.mjs';
 import extensions from '../extensions.mjs';
@@ -16,9 +16,7 @@ const EXT_TO_FORMAT = {
 const cache = new Cache();
 const config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));
 const match = createMatcher(config);
-async function _getFormat(url, context, defaultGetFormat) {
-    const parentURL = context.parentURL && path.isAbsolute(context.parentURL) ? pathToFileURL(context.parentURL) : context.parentURL; // windows
-    url = parentURL ? new URL(specifier, parentURL).href : url;
+async function _getFormat(url, context, next) {
     // file
     if (url.startsWith('file://')) {
         let format = EXT_TO_FORMAT[path.extname(url)];
@@ -29,13 +27,11 @@ async function _getFormat(url, context, defaultGetFormat) {
         };
     }
     // relative
-    return await defaultGetFormat(url, context, defaultGetFormat);
+    return await next(url, context);
 }
-async function _transformSource(source, context, defaultTransformSource) {
-    let { url } = context;
-    const parentURL = context.parentURL && path.isAbsolute(context.parentURL) ? pathToFileURL(context.parentURL) : context.parentURL; // windows
-    url = parentURL ? new URL(specifier, parentURL).href : url;
-    const loaded = await defaultTransformSource(source, context, defaultTransformSource);
+async function _transformSource(source, context, next) {
+    const { url } = context;
+    const loaded = await next(source, context);
     const filePath = fileURLToPath(url);
     // filter
     if (!match(filePath)) return loaded;

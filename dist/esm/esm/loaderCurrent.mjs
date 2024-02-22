@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-import { URL, fileURLToPath, pathToFileURL } from 'url';
-import process from 'process';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+import { fileURLToPath } from 'node:url';
 import Cache from '../Cache.mjs';
 import createMatcher from '../createMatcher.mjs';
 import extensions from '../extensions.mjs';
@@ -15,44 +15,44 @@ const indexExtensions = extensions.map((x)=>`index${x}`);
 const cache = new Cache();
 const config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));
 const match = createMatcher(config);
-export async function resolve(specifier1, context, defaultResolve) {
-    if (specifier1.startsWith('node:')) specifier1 = specifier1.slice(5); // node built-in
-    const parentURL = context.parentURL && path.isAbsolute(context.parentURL) ? pathToFileURL(context.parentURL) : context.parentURL; // windows
-    const url = parentURL ? new URL(specifier1, parentURL).href : new URL(specifier1).href;
+export async function resolve(specifier, context, next) {
+    // if (isBuiltin(specifier)) return next(specifier, context); // TODO: optimize, but not available on older node
     // directory
-    if (specifier1.endsWith('/')) {
-        const items = fs.readdirSync(specifier1);
+    if (specifier.endsWith('/')) {
+        const items = await fs.readdir(specifier);
         for (const item of items){
             if (indexExtensions.indexOf(item) >= 0) {
-                return await resolve(specifier1 + item, context, defaultResolve);
+                return await resolve(specifier + item, context, next);
             }
         }
-    } else if (!path.extname(specifier1) && !moduleRegEx.test(specifier1)) {
+    } else if (!path.extname(specifier) && !moduleRegEx.test(specifier)) {
+        // console.log(specifier, context.parentURL);
+        // const items = await fs.readdir(specifier); // TODO: search the directory
         for (const ext of extensions){
             try {
-                return await resolve(specifier1 + ext, context, defaultResolve);
+                return await resolve(specifier + ext, context, next);
             } catch (_err) {
             // skip
             }
         }
     }
-    // default loader
-    const data = await defaultResolve(specifier1, context, defaultResolve);
-    if (!data.format) data.format = packageType(url);
-    if (specifier1.endsWith('/node_modules/yargs/yargs')) data.format = 'commonjs'; // args bin is cjs in a module
-    return data;
+    const data = await next(specifier, context);
+    if (!data.format) data.format = packageType(data.url);
+    if (specifier.endsWith('/node_modules/yargs/yargs')) data.format = 'commonjs'; // args bin is cjs in a module
+    return {
+        ...data,
+        shortCircuit: true
+    };
 }
-export async function load(url, context, defaultLoad) {
-    if (url.startsWith('node:')) return await defaultLoad(url, context, defaultLoad);
+export async function load(url, context, next) {
+    if (url.startsWith('node:')) return await next(url, context, next);
     if (url.endsWith('.json')) context[importJSONKey] = Object.assign(context[importJSONKey] || {}, {
         type: 'json'
     });
-    const parentURL = context.parentURL && path.isAbsolute(context.parentURL) ? pathToFileURL(context.parentURL) : context.parentURL; // windows
-    url = parentURL ? new URL(specifier, parentURL).href : url;
-    const loaded = await defaultLoad(url, context, defaultLoad);
+    const loaded = await next(url, context);
     const filePath = fileURLToPath(url);
     const hasSource = loaded.source;
-    if (!hasSource) loaded.source = fs.readFileSync(filePath);
+    if (!hasSource) loaded.source = await fs.readFile(filePath);
     // filter
     if (!match(filePath)) return loaded;
     if (url.endsWith('.d.ts')) return {
@@ -67,6 +67,7 @@ export async function load(url, context, defaultLoad) {
     return {
         ...loaded,
         format: hasSource ? 'module' : 'commonjs',
+        shortCircuit: true,
         source: data.code
     };
 }

@@ -16,10 +16,10 @@ _export(exports, {
         return resolve;
     }
 });
-var _fs = /*#__PURE__*/ _interop_require_default(require("fs"));
-var _path = /*#__PURE__*/ _interop_require_default(require("path"));
-var _url = require("url");
-var _process = /*#__PURE__*/ _interop_require_default(require("process"));
+var _nodefs = require("node:fs");
+var _nodepath = /*#__PURE__*/ _interop_require_default(require("node:path"));
+var _nodeprocess = /*#__PURE__*/ _interop_require_default(require("node:process"));
+var _nodeurl = require("node:url");
 var _Cache = /*#__PURE__*/ _interop_require_default(require("../Cache.js"));
 var _createMatcher = /*#__PURE__*/ _interop_require_default(require("../createMatcher.js"));
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
@@ -207,82 +207,84 @@ function _ts_generator(thisArg, body) {
         };
     }
 }
-var major = +_process.default.versions.node.split(".")[0];
+var major = +_nodeprocess.default.versions.node.split(".")[0];
 var importJSONKey = major >= 18 ? "importAttributes" : "importAssertions";
 var moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
 var indexExtensions = _extensions.default.map(function(x) {
     return "index".concat(x);
 });
 var cache = new _Cache.default();
-var config = (0, _loadTSConfig.default)(_path.default.resolve(_process.default.cwd(), "tsconfig.json"));
+var config = (0, _loadTSConfig.default)(_nodepath.default.resolve(_nodeprocess.default.cwd(), "tsconfig.json"));
 var match = (0, _createMatcher.default)(config);
-function resolve(specifier1, context, defaultResolve) {
+function resolve(specifier, context, next) {
     return _resolve.apply(this, arguments);
 }
 function _resolve() {
-    _resolve = _async_to_generator(function(specifier1, context, defaultResolve) {
-        var parentURL, url, items, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, item, err, _iteratorNormalCompletion1, _didIteratorError1, _iteratorError1, _iterator1, _step1, ext, _err, err, data;
+    _resolve = _async_to_generator(function(specifier, context, next) {
+        var items, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, item, err, _iteratorNormalCompletion1, _didIteratorError1, _iteratorError1, _iterator1, _step1, ext, _err, err, data;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
-                    if (specifier1.startsWith("node:")) specifier1 = specifier1.slice(5); // node built-in
-                    parentURL = context.parentURL && _path.default.isAbsolute(context.parentURL) ? (0, _url.pathToFileURL)(context.parentURL) : context.parentURL; // windows
-                    url = parentURL ? new _url.URL(specifier1, parentURL).href : new _url.URL(specifier1).href;
-                    if (!specifier1.endsWith("/")) return [
+                    if (!specifier.endsWith("/")) return [
                         3,
-                        9
+                        10
                     ];
-                    items = _fs.default.readdirSync(specifier1);
-                    _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
-                    _state.label = 1;
+                    return [
+                        4,
+                        _nodefs.promises.readdir(specifier)
+                    ];
                 case 1:
-                    _state.trys.push([
-                        1,
-                        6,
-                        7,
-                        8
-                    ]);
-                    _iterator = items[Symbol.iterator]();
+                    items = _state.sent();
+                    _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
                     _state.label = 2;
                 case 2:
+                    _state.trys.push([
+                        2,
+                        7,
+                        8,
+                        9
+                    ]);
+                    _iterator = items[Symbol.iterator]();
+                    _state.label = 3;
+                case 3:
                     if (!!(_iteratorNormalCompletion = (_step = _iterator.next()).done)) return [
                         3,
-                        5
+                        6
                     ];
                     item = _step.value;
                     if (!(indexExtensions.indexOf(item) >= 0)) return [
                         3,
-                        4
+                        5
                     ];
                     return [
                         4,
-                        resolve(specifier1 + item, context, defaultResolve)
+                        resolve(specifier + item, context, next)
                     ];
-                case 3:
+                case 4:
                     return [
                         2,
                         _state.sent()
                     ];
-                case 4:
+                case 5:
                     _iteratorNormalCompletion = true;
                     return [
                         3,
-                        2
-                    ];
-                case 5:
-                    return [
-                        3,
-                        8
+                        3
                     ];
                 case 6:
+                    return [
+                        3,
+                        9
+                    ];
+                case 7:
                     err = _state.sent();
                     _didIteratorError = true;
                     _iteratorError = err;
                     return [
                         3,
-                        8
+                        9
                     ];
-                case 7:
+                case 8:
                     try {
                         if (!_iteratorNormalCompletion && _iterator.return != null) {
                             _iterator.return();
@@ -295,76 +297,76 @@ function _resolve() {
                     return [
                         7
                     ];
-                case 8:
+                case 9:
                     return [
                         3,
-                        19
+                        20
                     ];
-                case 9:
-                    if (!(!_path.default.extname(specifier1) && !moduleRegEx.test(specifier1))) return [
+                case 10:
+                    if (!(!_nodepath.default.extname(specifier) && !moduleRegEx.test(specifier))) return [
                         3,
-                        19
+                        20
                     ];
                     _iteratorNormalCompletion1 = true, _didIteratorError1 = false, _iteratorError1 = undefined;
-                    _state.label = 10;
-                case 10:
-                    _state.trys.push([
-                        10,
-                        17,
-                        18,
-                        19
-                    ]);
-                    _iterator1 = _extensions.default[Symbol.iterator]();
                     _state.label = 11;
                 case 11:
-                    if (!!(_iteratorNormalCompletion1 = (_step1 = _iterator1.next()).done)) return [
-                        3,
-                        16
-                    ];
-                    ext = _step1.value;
+                    _state.trys.push([
+                        11,
+                        18,
+                        19,
+                        20
+                    ]);
+                    _iterator1 = _extensions.default[Symbol.iterator]();
                     _state.label = 12;
                 case 12:
+                    if (!!(_iteratorNormalCompletion1 = (_step1 = _iterator1.next()).done)) return [
+                        3,
+                        17
+                    ];
+                    ext = _step1.value;
+                    _state.label = 13;
+                case 13:
                     _state.trys.push([
-                        12,
-                        14,
+                        13,
+                        15,
                         ,
-                        15
+                        16
                     ]);
                     return [
                         4,
-                        resolve(specifier1 + ext, context, defaultResolve)
+                        resolve(specifier + ext, context, next)
                     ];
-                case 13:
+                case 14:
                     return [
                         2,
                         _state.sent()
                     ];
-                case 14:
+                case 15:
                     _err = _state.sent();
                     return [
                         3,
-                        15
+                        16
                     ];
-                case 15:
+                case 16:
                     _iteratorNormalCompletion1 = true;
                     return [
                         3,
-                        11
-                    ];
-                case 16:
-                    return [
-                        3,
-                        19
+                        12
                     ];
                 case 17:
+                    return [
+                        3,
+                        20
+                    ];
+                case 18:
                     err = _state.sent();
                     _didIteratorError1 = true;
                     _iteratorError1 = err;
                     return [
                         3,
-                        19
+                        20
                     ];
-                case 18:
+                case 19:
                     try {
                         if (!_iteratorNormalCompletion1 && _iterator1.return != null) {
                             _iterator1.return();
@@ -377,30 +379,32 @@ function _resolve() {
                     return [
                         7
                     ];
-                case 19:
+                case 20:
                     return [
                         4,
-                        defaultResolve(specifier1, context, defaultResolve)
+                        next(specifier, context)
                     ];
-                case 20:
+                case 21:
                     data = _state.sent();
-                    if (!data.format) data.format = (0, _packageType.default)(url);
-                    if (specifier1.endsWith("/node_modules/yargs/yargs")) data.format = "commonjs"; // args bin is cjs in a module
+                    if (!data.format) data.format = (0, _packageType.default)(data.url);
+                    if (specifier.endsWith("/node_modules/yargs/yargs")) data.format = "commonjs"; // args bin is cjs in a module
                     return [
                         2,
-                        data
+                        _object_spread_props(_object_spread({}, data), {
+                            shortCircuit: true
+                        })
                     ];
             }
         });
     });
     return _resolve.apply(this, arguments);
 }
-function load(url, context, defaultLoad) {
+function load(url, context, next) {
     return _load.apply(this, arguments);
 }
 function _load() {
-    _load = _async_to_generator(function(url, context, defaultLoad) {
-        var parentURL, loaded, filePath, hasSource, contents, data;
+    _load = _async_to_generator(function(url, context, next) {
+        var loaded, filePath, hasSource, contents, data;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -410,7 +414,7 @@ function _load() {
                     ];
                     return [
                         4,
-                        defaultLoad(url, context, defaultLoad)
+                        next(url, context, next)
                     ];
                 case 1:
                     return [
@@ -421,17 +425,26 @@ function _load() {
                     if (url.endsWith(".json")) context[importJSONKey] = Object.assign(context[importJSONKey] || {}, {
                         type: "json"
                     });
-                    parentURL = context.parentURL && _path.default.isAbsolute(context.parentURL) ? (0, _url.pathToFileURL)(context.parentURL) : context.parentURL; // windows
-                    url = parentURL ? new _url.URL(specifier, parentURL).href : url;
                     return [
                         4,
-                        defaultLoad(url, context, defaultLoad)
+                        next(url, context)
                     ];
                 case 3:
                     loaded = _state.sent();
-                    filePath = (0, _url.fileURLToPath)(url);
+                    filePath = (0, _nodeurl.fileURLToPath)(url);
                     hasSource = loaded.source;
-                    if (!hasSource) loaded.source = _fs.default.readFileSync(filePath);
+                    if (!!hasSource) return [
+                        3,
+                        5
+                    ];
+                    return [
+                        4,
+                        _nodefs.promises.readFile(filePath)
+                    ];
+                case 4:
+                    loaded.source = _state.sent();
+                    _state.label = 5;
+                case 5:
                     // filter
                     if (!match(filePath)) return [
                         2,
@@ -444,7 +457,7 @@ function _load() {
                             source: ""
                         })
                     ];
-                    if (_extensions.default.indexOf(_path.default.extname(filePath)) < 0) return [
+                    if (_extensions.default.indexOf(_nodepath.default.extname(filePath)) < 0) return [
                         2,
                         loaded
                     ];
@@ -457,6 +470,7 @@ function _load() {
                         2,
                         _object_spread_props(_object_spread({}, loaded), {
                             format: hasSource ? "module" : "commonjs",
+                            shortCircuit: true,
                             source: data.code
                         })
                     ];

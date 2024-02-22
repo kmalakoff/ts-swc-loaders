@@ -1,4 +1,4 @@
-import process from 'process';
+import exit from 'exit';
 
 // @ts-ignore
 import App from './lib/react.tsx';
@@ -7,7 +7,6 @@ import string from './lib/string.cjs';
 if (!App) throw new Error('App not loaded');
 if (string !== 'string') throw new Error('String not equal to string')
 
-console.log(`success: ${process.argv[process.argv.length-1]}`);
-console.log(`success: ${process.argv}`);
+console.log('Success!');
 
-process.exit(0);
+exit(0); // ensure stdout is drained

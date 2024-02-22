@@ -21,7 +21,12 @@ describe.skip('commonjs', () => {
   major > 0 ||
     it('loader', (done) => {
       spawn('./loader', args.args.concat(['./test/index.test.ts', 'arg']), args.options, (err, res) => {
-        assert.equal(cr(err ? err.stdout : res.stdout).split('\n').slice(-2)[0], 'Success!');
+        assert.equal(
+          cr(err ? err.stdout : res.stdout)
+            .split('\n')
+            .slice(-2)[0],
+          'Success!'
+        );
         done();
       });
     });
@@ -29,7 +34,12 @@ describe.skip('commonjs', () => {
   major <= 0 ||
     it('node', (done) => {
       spawn(process.execPath, args.args.concat(['./test/index.test.ts', 'arg']), args.options, (err, res) => {
-        assert.equal(cr(err ? err.stdout : res.stdout).split('\n').slice(-2)[0], 'Success!');
+        assert.equal(
+          cr(err ? err.stdout : res.stdout)
+            .split('\n')
+            .slice(-2)[0],
+          'Success!'
+        );
         done();
       });
     });

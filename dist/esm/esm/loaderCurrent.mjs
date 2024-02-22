@@ -8,7 +8,6 @@ import extensions from '../extensions.mjs';
 import loadTSConfig from '../loadTSConfig.mjs';
 import packageType from '../packageType.mjs';
 import transformSync from '../transformSync.cjs';
-import isInternal from './isInternal.mjs';
 const major = +process.versions.node.split('.')[0];
 const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
 const moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
@@ -35,14 +34,6 @@ export async function resolve(specifier1, context, defaultResolve) {
                 return await resolve(specifier1 + item, context, defaultResolve);
             }
         }
-    } else {
-        for (const ext of extensions){
-            try {
-                return await resolve(specifier1 + ext, context, defaultResolve);
-            } catch (_err) {
-            // skip
-            }
-        }
     }
     throw new Error(`Cannot resolve: ${specifier1}`);
 }
@@ -58,14 +49,13 @@ export async function load(url, context, defaultLoad) {
     const hasSource = loaded.source;
     if (!hasSource) loaded.source = fs.readFileSync(filePath);
     // filter
-    if (isInternal(url)) return loaded;
+    if (!match(filePath)) return loaded;
     if (url.endsWith('.d.ts')) return {
         ...loaded,
         format: 'module',
         source: ''
     };
     if (extensions.indexOf(path.extname(filePath)) < 0) return loaded;
-    if (!match(filePath)) return loaded;
     // transform
     const contents = loaded.source.toString();
     const data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, ()=>transformSync(contents, filePath, config));

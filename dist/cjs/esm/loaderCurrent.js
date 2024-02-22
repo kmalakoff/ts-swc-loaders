@@ -26,7 +26,6 @@ var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../loadTSConfig.js"));
 var _packageType = /*#__PURE__*/ _interop_require_default(require("../packageType.js"));
 var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("../transformSync.js"));
-var _isInternal = /*#__PURE__*/ _interop_require_default(require("./isInternal.js"));
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
@@ -222,7 +221,7 @@ function resolve(specifier1, context, defaultResolve) {
 }
 function _resolve() {
     _resolve = _async_to_generator(function(specifier1, context, defaultResolve) {
-        var parentURL, url, data, items, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, item, err, _iteratorNormalCompletion1, _didIteratorError1, _iteratorError1, _iterator1, _step1, ext, _err, err;
+        var parentURL, url, data, items, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, item, err;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -248,7 +247,7 @@ function _resolve() {
                 case 2:
                     if (!specifier1.endsWith("/")) return [
                         3,
-                        11
+                        10
                     ];
                     items = _fs.default.readdirSync(specifier1);
                     _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
@@ -314,84 +313,6 @@ function _resolve() {
                         7
                     ];
                 case 10:
-                    return [
-                        3,
-                        21
-                    ];
-                case 11:
-                    _iteratorNormalCompletion1 = true, _didIteratorError1 = false, _iteratorError1 = undefined;
-                    _state.label = 12;
-                case 12:
-                    _state.trys.push([
-                        12,
-                        19,
-                        20,
-                        21
-                    ]);
-                    _iterator1 = _extensions.default[Symbol.iterator]();
-                    _state.label = 13;
-                case 13:
-                    if (!!(_iteratorNormalCompletion1 = (_step1 = _iterator1.next()).done)) return [
-                        3,
-                        18
-                    ];
-                    ext = _step1.value;
-                    _state.label = 14;
-                case 14:
-                    _state.trys.push([
-                        14,
-                        16,
-                        ,
-                        17
-                    ]);
-                    return [
-                        4,
-                        resolve(specifier1 + ext, context, defaultResolve)
-                    ];
-                case 15:
-                    return [
-                        2,
-                        _state.sent()
-                    ];
-                case 16:
-                    _err = _state.sent();
-                    return [
-                        3,
-                        17
-                    ];
-                case 17:
-                    _iteratorNormalCompletion1 = true;
-                    return [
-                        3,
-                        13
-                    ];
-                case 18:
-                    return [
-                        3,
-                        21
-                    ];
-                case 19:
-                    err = _state.sent();
-                    _didIteratorError1 = true;
-                    _iteratorError1 = err;
-                    return [
-                        3,
-                        21
-                    ];
-                case 20:
-                    try {
-                        if (!_iteratorNormalCompletion1 && _iterator1.return != null) {
-                            _iterator1.return();
-                        }
-                    } finally{
-                        if (_didIteratorError1) {
-                            throw _iteratorError1;
-                        }
-                    }
-                    return [
-                        7
-                    ];
-                case 21:
                     throw new Error("Cannot resolve: ".concat(specifier1));
             }
         });
@@ -436,7 +357,7 @@ function _load() {
                     hasSource = loaded.source;
                     if (!hasSource) loaded.source = _fs.default.readFileSync(filePath);
                     // filter
-                    if ((0, _isInternal.default)(url)) return [
+                    if (!match(filePath)) return [
                         2,
                         loaded
                     ];
@@ -448,10 +369,6 @@ function _load() {
                         })
                     ];
                     if (_extensions.default.indexOf(_path.default.extname(filePath)) < 0) return [
-                        2,
-                        loaded
-                    ];
-                    if (!match(filePath)) return [
                         2,
                         loaded
                     ];

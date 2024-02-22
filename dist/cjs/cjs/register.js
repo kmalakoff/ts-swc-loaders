@@ -24,7 +24,6 @@ var _createMatcher = /*#__PURE__*/ _interop_require_default(require("../createMa
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../loadTSConfig.js"));
 var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("../transformSync.js"));
-var _isInternalcjs = /*#__PURE__*/ _interop_require_default(require("./isInternal.js"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -45,10 +44,9 @@ function register(options, hookOpts) {
 }
 function compile(contents, filePath) {
     // filter
-    if ((0, _isInternalcjs.default)(filePath)) return contents;
+    if (!match(filePath)) return contents || " ";
     if (filePath.endsWith(".d.ts")) return " ";
     if (_extensions.default.indexOf(_path.default.extname(filePath)) < 0) return contents || " ";
-    if (!match(filePath)) return contents || " ";
     var data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
         return (0, _transformSynccjs.default)(contents, filePath, config);
     });

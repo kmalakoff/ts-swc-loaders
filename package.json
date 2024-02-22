@@ -1,6 +1,6 @@
 {
   "name": "ts-swc-loaders",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "Typescript loaders for swc",
   "keywords": [
     "typescript",
@@ -43,7 +43,7 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "@swc/core": "^1.4.2",
+    "@swc/core": "1.4.1",
     "core-js": "^3.36.0",
     "cross-spawn-cb": "^0.6.18",
     "env-path-key": "^0.3.0",

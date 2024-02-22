@@ -9,12 +9,10 @@ import extensions from '../extensions.mjs';
 import loadTSConfig from '../loadTSConfig.mjs';
 import packageType from '../packageType.mjs';
 import transformSync from '../transformSync.cjs';
+import isInternal from './isInternal.mjs';
 
 const major = +process.versions.node.split('.')[0];
 const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
-
-const INTERNAL_PATHS = [new URL('..', import.meta.url).href, new URL('../../node_modules', import.meta.url).href];
-const isInternal = (x) => INTERNAL_PATHS.some((y) => x.startsWith(y));
 
 const moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
 const indexExtensions = extensions.map((x) => `index${x}`);

@@ -209,6 +209,7 @@ function _ts_generator(thisArg, body) {
 }
 var major = +_process.default.versions.node.split(".")[0];
 var importJSONKey = major >= 18 ? "importAttributes" : "importAssertions";
+var moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
 var indexExtensions = _extensions.default.map(function(x) {
     return "index".concat(x);
 });
@@ -220,7 +221,7 @@ function resolve(specifier1, context, defaultResolve) {
 }
 function _resolve() {
     _resolve = _async_to_generator(function(specifier1, context, defaultResolve) {
-        var parentURL, url, items, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, item, err, data;
+        var parentURL, url, items, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, item, err, _iteratorNormalCompletion1, _didIteratorError1, _iteratorError1, _iterator1, _step1, ext, _err, err, data;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -229,7 +230,7 @@ function _resolve() {
                     url = parentURL ? new _url.URL(specifier1, parentURL).href : new _url.URL(specifier1).href;
                     if (!specifier1.endsWith("/")) return [
                         3,
-                        8
+                        9
                     ];
                     items = _fs.default.readdirSync(specifier1);
                     _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
@@ -296,10 +297,92 @@ function _resolve() {
                     ];
                 case 8:
                     return [
+                        3,
+                        19
+                    ];
+                case 9:
+                    if (!(!_path.default.extname(specifier1) && !moduleRegEx.test(specifier1))) return [
+                        3,
+                        19
+                    ];
+                    _iteratorNormalCompletion1 = true, _didIteratorError1 = false, _iteratorError1 = undefined;
+                    _state.label = 10;
+                case 10:
+                    _state.trys.push([
+                        10,
+                        17,
+                        18,
+                        19
+                    ]);
+                    _iterator1 = _extensions.default[Symbol.iterator]();
+                    _state.label = 11;
+                case 11:
+                    if (!!(_iteratorNormalCompletion1 = (_step1 = _iterator1.next()).done)) return [
+                        3,
+                        16
+                    ];
+                    ext = _step1.value;
+                    _state.label = 12;
+                case 12:
+                    _state.trys.push([
+                        12,
+                        14,
+                        ,
+                        15
+                    ]);
+                    return [
+                        4,
+                        resolve(specifier1 + ext, context, defaultResolve)
+                    ];
+                case 13:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+                case 14:
+                    _err = _state.sent();
+                    return [
+                        3,
+                        15
+                    ];
+                case 15:
+                    _iteratorNormalCompletion1 = true;
+                    return [
+                        3,
+                        11
+                    ];
+                case 16:
+                    return [
+                        3,
+                        19
+                    ];
+                case 17:
+                    err = _state.sent();
+                    _didIteratorError1 = true;
+                    _iteratorError1 = err;
+                    return [
+                        3,
+                        19
+                    ];
+                case 18:
+                    try {
+                        if (!_iteratorNormalCompletion1 && _iterator1.return != null) {
+                            _iterator1.return();
+                        }
+                    } finally{
+                        if (_didIteratorError1) {
+                            throw _iteratorError1;
+                        }
+                    }
+                    return [
+                        7
+                    ];
+                case 19:
+                    return [
                         4,
                         defaultResolve(specifier1, context, defaultResolve)
                     ];
-                case 9:
+                case 20:
                     data = _state.sent();
                     if (!data.format) data.format = (0, _packageType.default)(url);
                     if (specifier1.endsWith("/node_modules/yargs/yargs")) data.format = "commonjs"; // args bin is cjs in a module

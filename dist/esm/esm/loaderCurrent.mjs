@@ -10,6 +10,7 @@ import packageType from '../packageType.mjs';
 import transformSync from '../transformSync.cjs';
 const major = +process.versions.node.split('.')[0];
 const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
+const moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
 const indexExtensions = extensions.map((x)=>`index${x}`);
 const cache = new Cache();
 const config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));
@@ -26,8 +27,16 @@ export async function resolve(specifier1, context, defaultResolve) {
                 return await resolve(specifier1 + item, context, defaultResolve);
             }
         }
+    } else if (!path.extname(specifier1) && !moduleRegEx.test(specifier1)) {
+        for (const ext of extensions){
+            try {
+                return await resolve(specifier1 + ext, context, defaultResolve);
+            } catch (_err) {
+            // skip
+            }
+        }
     }
-    // default
+    // default loader
     const data = await defaultResolve(specifier1, context, defaultResolve);
     if (!data.format) data.format = packageType(url);
     if (specifier1.endsWith('/node_modules/yargs/yargs')) data.format = 'commonjs'; // args bin is cjs in a module

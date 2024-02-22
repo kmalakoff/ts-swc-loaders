@@ -1,1 +1,1 @@
-{"version":3,"sources":["extensions.mjs"],"sourcesContent":["export default ['.js', '.jsx', '.es6', '.es', '.cjs', '.mjs', '.ts', '.tsx', '.json'];\n"],"names":[],"mappings":"AAAA,eAAe;IAAC;IAAO;IAAQ;IAAQ;IAAO;IAAQ;IAAQ;IAAO;IAAQ;CAAQ,CAAC"}
+{"version":3,"sources":["extensions.mjs"],"sourcesContent":["export default ['.js', '.jsx', '.cjs', '.mjs', '.ts', '.tsx', '.json', '.es6', '.es', ];\n"],"names":[],"mappings":"AAAA,eAAe;IAAC;IAAO;IAAQ;IAAQ;IAAQ;IAAO;IAAQ;IAAS;IAAQ;CAAQ,CAAC"}

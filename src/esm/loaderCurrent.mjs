@@ -9,7 +9,6 @@ import extensions from '../extensions.mjs';
 import loadTSConfig from '../loadTSConfig.mjs';
 import packageType from '../packageType.mjs';
 import transformSync from '../transformSync.cjs';
-import isInternal from './isInternal.mjs';
 
 const major = +process.versions.node.split('.')[0];
 const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
@@ -44,17 +43,6 @@ export async function resolve(specifier, context, defaultResolve) {
     }
   }
 
-  // guess extension
-  else {
-    for (const ext of extensions) {
-      try {
-        return await resolve(specifier + ext, context, defaultResolve);
-      } catch (_err) {
-        // skip
-      }
-    }
-  }
-
   throw new Error(`Cannot resolve: ${specifier}`);
 }
 
@@ -71,10 +59,9 @@ export async function load(url, context, defaultLoad) {
   if (!hasSource) loaded.source = fs.readFileSync(filePath);
 
   // filter
-  if (isInternal(url)) return loaded;
+  if (!match(filePath)) return loaded;
   if (url.endsWith('.d.ts')) return { ...loaded, format: 'module', source: '' };
   if (extensions.indexOf(path.extname(filePath)) < 0) return loaded;
-  if (!match(filePath)) return loaded;
 
   // transform
   const contents = loaded.source.toString();

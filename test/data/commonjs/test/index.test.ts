@@ -2,12 +2,17 @@ require('core-js/actual/symbol/for');
 require('core-js/actual/map');
 
 const exit = require('exit');
+const assert = require('assert');
 
-var App = require('./lib/App.tsx');
-var string = require('./lib/string.cjs');
+const App = require('./lib/App.tsx');
+const string = require('./lib/string.cjs');
+const stringNoExtension = require('./lib/string');
+const guess = require('./lib/guess');
 
-if (!App.default) throw new Error('App not loaded');
-if (string !== 'string') throw new Error('String not equal to string')
+assert.ok(App, 'App not loaded');
+assert.equal(string, 'string', 'String not equal to string');
+assert.equal(stringNoExtension, 'string', 'stringNoExtension not equal to string');
+assert.equal(guess, 'guess', 'guess not equal to guess');
 
 console.log('Success!');
 

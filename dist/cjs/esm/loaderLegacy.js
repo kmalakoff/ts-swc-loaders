@@ -17,13 +17,13 @@ _export(exports, {
     }
 });
 var _path = /*#__PURE__*/ _interop_require_default(require("path"));
-var _url = require("url");
 var _Cache = /*#__PURE__*/ _interop_require_default(require("../Cache.js"));
 var _createMatcher = /*#__PURE__*/ _interop_require_default(require("../createMatcher.js"));
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../loadTSConfig.js"));
-var _packageType = /*#__PURE__*/ _interop_require_default(require("../packageType.js"));
 var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("../transformSync.js"));
+var _packageType = /*#__PURE__*/ _interop_require_default(require("./packageType.js"));
+var _toPath = /*#__PURE__*/ _interop_require_default(require("./toPath.js"));
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
@@ -168,31 +168,64 @@ function _getFormat(url, context, next) {
 }
 function __getFormat() {
     __getFormat = _async_to_generator(function(url, context, next) {
-        var format;
+        var filePath, data;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
-                    // file
-                    if (url.startsWith("file://")) {
-                        format = EXT_TO_FORMAT[_path.default.extname(url)];
-                        if (!format) format = (0, _packageType.default)(url);
-                        if (url.endsWith("/node_modules/yargs/yargs")) format = "commonjs"; // args bin is cjs in a module
-                        return [
-                            2,
-                            {
-                                format: format
-                            }
-                        ];
-                    }
+                    if (!!url.startsWith("file://")) return [
+                        3,
+                        2
+                    ];
                     return [
                         4,
                         next(url, context)
                     ];
                 case 1:
-                    // relative
                     return [
                         2,
                         _state.sent()
+                    ];
+                case 2:
+                    filePath = (0, _toPath.default)(url, context);
+                    if (!!match(filePath)) return [
+                        3,
+                        4
+                    ];
+                    if (!_path.default.extname(filePath)) return [
+                        2,
+                        {
+                            format: "commonjs"
+                        }
+                    ]; // args bin is cjs in a module
+                    return [
+                        4,
+                        next(url, context)
+                    ];
+                case 3:
+                    return [
+                        2,
+                        _state.sent()
+                    ];
+                case 4:
+                    // file
+                    data = {
+                        format: EXT_TO_FORMAT[_path.default.extname(url)]
+                    };
+                    if (!!data.format) return [
+                        3,
+                        6
+                    ];
+                    return [
+                        4,
+                        (0, _packageType.default)(filePath)
+                    ];
+                case 5:
+                    data.format = _state.sent();
+                    _state.label = 6;
+                case 6:
+                    return [
+                        2,
+                        data
                     ];
             }
         });
@@ -204,24 +237,23 @@ function _transformSource(source, context, next) {
 }
 function __transformSource() {
     __transformSource = _async_to_generator(function(source, context, next) {
-        var url, loaded, filePath, contents, data;
+        var loaded, filePath, contents, data;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
-                    url = context.url;
                     return [
                         4,
                         next(source, context)
                     ];
                 case 1:
                     loaded = _state.sent();
-                    filePath = (0, _url.fileURLToPath)(url);
-                    // filter
+                    filePath = (0, _toPath.default)(context.url);
+                    // filtered
                     if (!match(filePath)) return [
                         2,
                         loaded
                     ];
-                    if (url.endsWith(".d.ts")) return [
+                    if (filePath.endsWith(".d.ts")) return [
                         2,
                         {
                             source: ""

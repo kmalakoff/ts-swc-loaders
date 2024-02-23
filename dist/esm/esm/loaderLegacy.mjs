@@ -1,11 +1,11 @@
 import path from 'path';
-import { fileURLToPath } from 'url';
 import Cache from '../Cache.mjs';
 import createMatcher from '../createMatcher.mjs';
 import extensions from '../extensions.mjs';
 import loadTSConfig from '../loadTSConfig.mjs';
-import packageType from '../packageType.mjs';
 import transformSync from '../transformSync.cjs';
+import packageType from './packageType.mjs';
+import toPath from './toPath.mjs';
 const EXT_TO_FORMAT = {
     '.json': 'json',
     '.mjs': 'module',
@@ -17,25 +17,28 @@ const cache = new Cache();
 const config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));
 const match = createMatcher(config);
 async function _getFormat(url, context, next) {
-    // file
-    if (url.startsWith('file://')) {
-        let format = EXT_TO_FORMAT[path.extname(url)];
-        if (!format) format = packageType(url);
-        if (url.endsWith('/node_modules/yargs/yargs')) format = 'commonjs'; // args bin is cjs in a module
-        return {
-            format
-        };
+    if (!url.startsWith('file://')) return await next(url, context);
+    const filePath = toPath(url, context);
+    // filtered
+    if (!match(filePath)) {
+        if (!path.extname(filePath)) return {
+            format: 'commonjs'
+        }; // args bin is cjs in a module
+        return await next(url, context);
     }
-    // relative
-    return await next(url, context);
+    // file
+    const data = {
+        format: EXT_TO_FORMAT[path.extname(url)]
+    };
+    if (!data.format) data.format = await packageType(filePath);
+    return data;
 }
 async function _transformSource(source, context, next) {
-    const { url } = context;
     const loaded = await next(source, context);
-    const filePath = fileURLToPath(url);
-    // filter
+    const filePath = toPath(context.url);
+    // filtered
     if (!match(filePath)) return loaded;
-    if (url.endsWith('.d.ts')) return {
+    if (filePath.endsWith('.d.ts')) return {
         source: ''
     };
     if (extensions.indexOf(path.extname(filePath)) < 0) return loaded;

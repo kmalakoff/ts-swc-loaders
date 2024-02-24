@@ -17,7 +17,7 @@ function _interop_require_default(obj) {
 }
 function isEntry(filePath, pkg, key) {
     if (pkg.json[key] === undefined) return false;
-    var modulePath = _path.default.resolve(_path.default.dirname(pkg.path), pkg.json[key]);
+    var modulePath = _path.default.resolve(pkg.dir, pkg.json[key]);
     if (filePath === modulePath) return true;
     var moduleDir = _path.default.dirname(modulePath);
     if (filePath.startsWith(moduleDir)) return true;
@@ -29,6 +29,8 @@ function fileType(filePath) {
     if (isEntry(filePath, pkg, "module")) return "module";
     if (isEntry(filePath, pkg, "main")) return "commonjs";
     if (pkg.json.type) return pkg.json.type;
-    return pkg.json.module ? "module" : "commonjs";
+    if (pkg.json.module) return "module";
+    if (pkg.json.main) return "commonjs";
+    return "commonjs";
 }
 /* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }

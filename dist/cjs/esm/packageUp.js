@@ -29,16 +29,15 @@ function getPackage(packagePath) {
     }
 }
 function packageUp(filePath) {
-    var packageDir = filePath;
-    while(packageDir){
-        if (packageDir.endsWith("node_modules")) break;
-        var packagePath = _path.default.join(packageDir, "package.json");
-        var json = getPackage(packagePath);
+    var dir = filePath;
+    while(dir){
+        if (dir.endsWith("node_modules")) break;
+        var json = getPackage(_path.default.join(dir, "package.json"));
         if (json) return {
             json: json,
-            path: packagePath
+            dir: dir
         };
-        packageDir = _path.default.dirname(packageDir);
+        dir = _path.default.dirname(dir);
     }
     return null;
 }

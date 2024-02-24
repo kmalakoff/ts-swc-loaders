@@ -15,11 +15,11 @@ export default function createMatcher(config) {
     return function matcher(filePath) {
         if (filePath.endsWith('.json')) return false;
         filePath = slash(filePath);
-        for(let j = 0; j < includes.length; ++j){
-            if (includes[j](filePath)) return true;
-        }
         for(let i = 0; i < excludes.length; ++i){
             if (excludes[i](filePath)) return false;
+        }
+        for(let j = 0; j < includes.length; ++j){
+            if (includes[j](filePath)) return true;
         }
         return !includes.length;
     };

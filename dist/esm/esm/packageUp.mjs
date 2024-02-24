@@ -14,16 +14,15 @@ function getPackage(packagePath) {
     }
 }
 export default function packageUp(filePath) {
-    let packageDir = filePath;
-    while(packageDir){
-        if (packageDir.endsWith('node_modules')) break;
-        const packagePath = path.join(packageDir, 'package.json');
-        const json = getPackage(packagePath);
+    let dir = filePath;
+    while(dir){
+        if (dir.endsWith('node_modules')) break;
+        const json = getPackage(path.join(dir, 'package.json'));
         if (json) return {
             json,
-            path: packagePath
+            dir
         };
-        packageDir = path.dirname(packageDir);
+        dir = path.dirname(dir);
     }
     return null;
 }

@@ -60,25 +60,25 @@ export async function load(url, context, next) {
     if (url.endsWith('.json')) context[importJSONKey] = Object.assign(context[importJSONKey] || {}, {
         type: 'json'
     });
-    const loaded = await next(url, context);
-    const filePath = toPath(loaded.responseURL || url, context);
+    const data = await next(url, context);
+    const filePath = toPath(data.responseURL || url, context);
     const ext = path.extname(filePath);
-    if (!loaded.source && loaded.type === 'module') loaded.source = await fs.readFile(filePath);
+    if (!data.source && data.type === 'module') data.source = await fs.readFile(filePath);
     // filtered
-    if (!match(filePath)) return loaded;
+    if (!match(filePath)) return data;
     if (typeFileRegEx.test(filePath)) return {
-        ...loaded,
+        ...data,
         format: 'module',
         source: ''
     };
-    if (extensions.indexOf(ext) < 0) return loaded;
+    if (extensions.indexOf(ext) < 0) return data;
     // transform
-    if (!loaded.source) loaded.source = await fs.readFile(filePath);
-    const contents = loaded.source.toString();
-    const data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, ()=>transformSync(contents, filePath, config));
+    if (!data.source) data.source = await fs.readFile(filePath);
+    const contents = data.source.toString();
+    const compiled = cache.getOrUpdate(cache.cachePath(filePath, config), contents, ()=>transformSync(contents, filePath, config));
     return {
-        ...loaded,
-        source: data.code,
+        ...data,
+        source: compiled.code,
         shortCircuit: true
     };
 }

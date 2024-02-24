@@ -46,9 +46,9 @@ async function _transformSource(source, context, next) {
     };
     if (extensions.indexOf(ext) < 0) return loaded;
     const contents = loaded.source.toString();
-    const data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, ()=>transformSync(contents, filePath, config));
+    const compiled = cache.getOrUpdate(cache.cachePath(filePath, config), contents, ()=>transformSync(contents, filePath, config));
     return {
-        source: data.code
+        source: compiled.code
     };
 }
 const major = +process.versions.node.split('.')[0];

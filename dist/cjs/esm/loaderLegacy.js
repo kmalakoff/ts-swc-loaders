@@ -230,7 +230,7 @@ function _transformSource(source, context, next) {
 }
 function __transformSource() {
     __transformSource = _async_to_generator(function(source, context, next) {
-        var loaded, filePath, ext, contents, data;
+        var loaded, filePath, ext, contents, compiled;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -262,13 +262,13 @@ function __transformSource() {
                         loaded
                     ];
                     contents = loaded.source.toString();
-                    data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
+                    compiled = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
                         return (0, _transformSynccjs.default)(contents, filePath, config);
                     });
                     return [
                         2,
                         {
-                            source: data.code
+                            source: compiled.code
                         }
                     ];
             }

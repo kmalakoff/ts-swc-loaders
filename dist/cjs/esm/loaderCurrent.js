@@ -358,7 +358,7 @@ function load(url, context, next) {
 }
 function _load() {
     _load = _async_to_generator(function(url, context, next) {
-        var loaded, filePath, ext, contents, data;
+        var data, filePath, ext, contents, compiled;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -374,10 +374,10 @@ function _load() {
                         next(url, context)
                     ];
                 case 1:
-                    loaded = _state.sent();
-                    filePath = (0, _toPath.default)(loaded.responseURL || url, context);
+                    data = _state.sent();
+                    filePath = (0, _toPath.default)(data.responseURL || url, context);
                     ext = _nodepath.default.extname(filePath);
-                    if (!(!loaded.source && loaded.type === "module")) return [
+                    if (!(!data.source && data.type === "module")) return [
                         3,
                         3
                     ];
@@ -386,26 +386,26 @@ function _load() {
                         _nodefs.promises.readFile(filePath)
                     ];
                 case 2:
-                    loaded.source = _state.sent();
+                    data.source = _state.sent();
                     _state.label = 3;
                 case 3:
                     // filtered
                     if (!match(filePath)) return [
                         2,
-                        loaded
+                        data
                     ];
                     if (typeFileRegEx.test(filePath)) return [
                         2,
-                        _object_spread_props(_object_spread({}, loaded), {
+                        _object_spread_props(_object_spread({}, data), {
                             format: "module",
                             source: ""
                         })
                     ];
                     if (_extensions.default.indexOf(ext) < 0) return [
                         2,
-                        loaded
+                        data
                     ];
-                    if (!!loaded.source) return [
+                    if (!!data.source) return [
                         3,
                         5
                     ];
@@ -414,17 +414,17 @@ function _load() {
                         _nodefs.promises.readFile(filePath)
                     ];
                 case 4:
-                    loaded.source = _state.sent();
+                    data.source = _state.sent();
                     _state.label = 5;
                 case 5:
-                    contents = loaded.source.toString();
-                    data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
+                    contents = data.source.toString();
+                    compiled = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
                         return (0, _transformSynccjs.default)(contents, filePath, config);
                     });
                     return [
                         2,
-                        _object_spread_props(_object_spread({}, loaded), {
-                            source: data.code,
+                        _object_spread_props(_object_spread({}, data), {
+                            source: compiled.code,
                             shortCircuit: true
                         })
                     ];

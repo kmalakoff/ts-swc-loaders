@@ -17,13 +17,12 @@ function getPackage(packagePath) {
 }
 
 export default function packageUp(filePath) {
-  let packageDir = filePath;
-  while (packageDir) {
-    if (packageDir.endsWith('node_modules')) break;
-    const packagePath = path.join(packageDir, 'package.json');
-    const json = getPackage(packagePath);
-    if (json) return { json, path: packagePath };
-    packageDir = path.dirname(packageDir);
+  let dir = filePath;
+  while (dir) {
+    if (dir.endsWith('node_modules')) break;
+    const json = getPackage(path.join(dir, 'package.json'));
+    if (json) return { json, dir };
+    dir = path.dirname(dir);
   }
   return null;
 }

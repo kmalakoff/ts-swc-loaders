@@ -19,12 +19,15 @@ _export(exports, {
 var _nodefs = require("node:fs");
 var _nodepath = /*#__PURE__*/ _interop_require_default(require("node:path"));
 var _nodeprocess = /*#__PURE__*/ _interop_require_default(require("node:process"));
+var _nodeurl = require("node:url");
+var _isbuiltinmodule = /*#__PURE__*/ _interop_require_default(require("is-builtin-module"));
 var _Cache = /*#__PURE__*/ _interop_require_default(require("../Cache.js"));
 var _createMatcher = /*#__PURE__*/ _interop_require_default(require("../createMatcher.js"));
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../loadTSConfig.js"));
 var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("../transformSync.js"));
-var _packageType = /*#__PURE__*/ _interop_require_default(require("./packageType.js"));
+var _extToFormat = /*#__PURE__*/ _interop_require_default(require("./extToFormat.js"));
+var _fileType = /*#__PURE__*/ _interop_require_default(require("./fileType.js"));
 var _toPath = /*#__PURE__*/ _interop_require_default(require("./toPath.js"));
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
@@ -209,157 +212,138 @@ function _ts_generator(thisArg, body) {
 }
 var major = +_nodeprocess.default.versions.node.split(".")[0];
 var importJSONKey = major >= 18 ? "importAttributes" : "importAssertions";
-var moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
-var indexExtensions = _extensions.default.map(function(x) {
-    return "index".concat(x);
-});
 var cache = new _Cache.default();
 var config = (0, _loadTSConfig.default)(_nodepath.default.resolve(_nodeprocess.default.cwd(), "tsconfig.json"));
 var match = (0, _createMatcher.default)(config);
+var moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
+var typeFileRegEx = /^[^.]+\.d\.(.*)$/;
+var indexExtensions = _extensions.default.map(function(x) {
+    return "index".concat(x);
+});
 function resolve(specifier, context, next) {
     return _resolve.apply(this, arguments);
 }
 function _resolve() {
     _resolve = _async_to_generator(function(specifier, context, next) {
-        var filePath, data, items, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, item, err, fileName, items1, found, data1;
+        var filePath, ext, stats, _err, data, items, item, fileName, items1, found, data1;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
-                    if (specifier.startsWith("node:")) return [
+                    if ((0, _isbuiltinmodule.default)(specifier)) return [
                         2,
                         next(specifier, context)
-                    ]; // TODO: optimize, but isBuiltin not available on older node
+                    ];
                     filePath = (0, _toPath.default)(specifier, context);
+                    ext = _nodepath.default.extname(filePath);
+                    _state.label = 1;
+                case 1:
+                    _state.trys.push([
+                        1,
+                        3,
+                        ,
+                        4
+                    ]);
+                    return [
+                        4,
+                        _nodefs.promises.stat(filePath)
+                    ];
+                case 2:
+                    stats = _state.sent();
+                    return [
+                        3,
+                        4
+                    ];
+                case 3:
+                    _err = _state.sent();
+                    return [
+                        3,
+                        4
+                    ];
+                case 4:
                     if (!!match(filePath)) return [
                         3,
-                        2
+                        6
                     ];
                     return [
                         4,
                         next(specifier, context)
                     ];
-                case 1:
+                case 5:
                     data = _state.sent();
                     if (!data.format) data.format = "commonjs";
-                    if (_nodepath.default.isAbsolute(filePath) && !_nodepath.default.extname(filePath)) data.format = "commonjs"; // args bin is cjs in a module
+                    if (_nodepath.default.isAbsolute(filePath) && !ext) data.format = "commonjs"; // args bin is cjs in a module
                     return [
                         2,
                         data
                     ];
-                case 2:
-                    if (!specifier.endsWith("/")) return [
+                case 6:
+                    if (!(specifier.endsWith("/") || stats && stats.isDirectory())) return [
                         3,
-                        12
+                        10
                     ];
                     return [
                         4,
                         _nodefs.promises.readdir(filePath)
                     ];
-                case 3:
+                case 7:
                     items = _state.sent();
-                    _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
-                    _state.label = 4;
-                case 4:
-                    _state.trys.push([
-                        4,
-                        9,
-                        10,
-                        11
-                    ]);
-                    _iterator = items[Symbol.iterator]();
-                    _state.label = 5;
-                case 5:
-                    if (!!(_iteratorNormalCompletion = (_step = _iterator.next()).done)) return [
+                    item = items.find(function(x) {
+                        return indexExtensions.indexOf(x) >= 0;
+                    });
+                    if (!item) return [
                         3,
-                        8
-                    ];
-                    item = _step.value;
-                    if (!(indexExtensions.indexOf(item) >= 0)) return [
-                        3,
-                        7
+                        9
                     ];
                     return [
                         4,
-                        resolve(specifier + item, context, next)
+                        resolve("".concat(specifier).concat(specifier.endsWith("/") ? "" : "/").concat(item), context, next)
                     ];
-                case 6:
+                case 8:
                     return [
                         2,
                         _state.sent()
                     ];
-                case 7:
-                    _iteratorNormalCompletion = true;
-                    return [
-                        3,
-                        5
-                    ];
-                case 8:
-                    return [
-                        3,
-                        11
-                    ];
                 case 9:
-                    err = _state.sent();
-                    _didIteratorError = true;
-                    _iteratorError = err;
                     return [
                         3,
-                        11
+                        13
                     ];
                 case 10:
-                    try {
-                        if (!_iteratorNormalCompletion && _iterator.return != null) {
-                            _iterator.return();
-                        }
-                    } finally{
-                        if (_didIteratorError) {
-                            throw _iteratorError;
-                        }
-                    }
-                    return [
-                        7
-                    ];
-                case 11:
-                    return [
+                    if (!(!ext && !moduleRegEx.test(specifier) || !stats)) return [
                         3,
-                        15
+                        13
                     ];
-                case 12:
-                    if (!(!_nodepath.default.extname(specifier) && !moduleRegEx.test(specifier))) return [
-                        3,
-                        15
-                    ];
-                    fileName = _nodepath.default.basename(filePath);
+                    fileName = _nodepath.default.basename(filePath).replace(/(\.[^/.]+)+$/, "");
                     return [
                         4,
                         _nodefs.promises.readdir(_nodepath.default.dirname(filePath))
                     ];
-                case 13:
+                case 11:
                     items1 = _state.sent();
                     found = items1.find(function(x) {
-                        return x.startsWith(fileName) && _extensions.default.indexOf(_nodepath.default.extname(x)) >= 0;
+                        return x.startsWith(fileName) && !typeFileRegEx.test(x) && _extensions.default.indexOf(_nodepath.default.extname(x)) >= 0;
                     });
                     if (!found) return [
                         3,
-                        15
+                        13
                     ];
                     return [
                         4,
                         resolve(specifier + _nodepath.default.extname(found), context, next)
                     ];
-                case 14:
+                case 12:
                     return [
                         2,
                         _state.sent()
                     ];
-                case 15:
-                    return [
-                        4,
-                        next(specifier, context)
-                    ];
-                case 16:
-                    data1 = _state.sent();
-                    if (!data1.format) data1.format = (0, _packageType.default)(filePath);
+                case 13:
+                    // use default resolve and infer from package type
+                    data1 = {
+                        url: (0, _nodeurl.pathToFileURL)(filePath).href,
+                        format: (0, _extToFormat.default)(ext),
+                        shortCircuit: true
+                    };
+                    if (!data1.format) data1.format = (0, _fileType.default)(filePath);
                     return [
                         2,
                         data1
@@ -374,24 +358,14 @@ function load(url, context, next) {
 }
 function _load() {
     _load = _async_to_generator(function(url, context, next) {
-        var loaded, filePath, hasSource, contents, data;
+        var loaded, filePath, ext, contents, data;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
-                    if (!url.startsWith("node:")) return [
-                        3,
-                        2
-                    ];
-                    return [
-                        4,
-                        next(url, context, next)
-                    ];
-                case 1:
-                    return [
+                    if ((0, _isbuiltinmodule.default)(url)) return [
                         2,
-                        _state.sent()
+                        next(url, context)
                     ];
-                case 2:
                     if (url.endsWith(".json")) context[importJSONKey] = Object.assign(context[importJSONKey] || {}, {
                         type: "json"
                     });
@@ -399,39 +373,38 @@ function _load() {
                         4,
                         next(url, context)
                     ];
-                case 3:
+                case 1:
                     loaded = _state.sent();
-                    filePath = (0, _toPath.default)(url, context);
-                    hasSource = loaded.source;
-                    if (!!hasSource) return [
-                        3,
-                        5
-                    ];
-                    return [
-                        4,
-                        _nodefs.promises.readFile(filePath)
-                    ];
-                case 4:
-                    loaded.source = _state.sent();
-                    _state.label = 5;
-                case 5:
+                    filePath = (0, _toPath.default)(loaded.responseURL || url, context);
+                    ext = _nodepath.default.extname(filePath);
                     // filtered
                     if (!match(filePath)) return [
                         2,
                         loaded
                     ];
-                    if (url.endsWith(".d.ts")) return [
+                    if (typeFileRegEx.test(filePath)) return [
                         2,
                         _object_spread_props(_object_spread({}, loaded), {
                             format: "module",
                             source: ""
                         })
                     ];
-                    if (_extensions.default.indexOf(_nodepath.default.extname(filePath)) < 0) return [
+                    if (_extensions.default.indexOf(ext) < 0) return [
                         2,
                         loaded
                     ];
-                    // transform
+                    if (!!loaded.source) return [
+                        3,
+                        3
+                    ];
+                    return [
+                        4,
+                        _nodefs.promises.readFile(filePath)
+                    ];
+                case 2:
+                    loaded.source = _state.sent();
+                    _state.label = 3;
+                case 3:
                     contents = loaded.source.toString();
                     data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
                         return (0, _transformSynccjs.default)(contents, filePath, config);
@@ -439,7 +412,6 @@ function _load() {
                     return [
                         2,
                         _object_spread_props(_object_spread({}, loaded), {
-                            format: hasSource ? "module" : "commonjs",
                             source: data.code,
                             shortCircuit: true
                         })

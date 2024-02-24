@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 const packageJSONCache = new Map();
-function readPackageJson(packagePath) {
+function getPackage(packagePath) {
     const existing = packageJSONCache.get(packagePath);
     if (existing !== undefined) return existing;
     try {
@@ -13,19 +13,17 @@ function readPackageJson(packagePath) {
         return null;
     }
 }
-function getPackageScopeConfig(filePath) {
+export default function packageUp(filePath) {
     let packageDir = filePath;
     while(packageDir){
         if (packageDir.endsWith('node_modules')) break;
-        const packageConfig = readPackageJson(path.join(packageDir, 'package.json'));
-        if (packageConfig) return packageConfig;
-        const prev = packageDir;
+        const packagePath = path.join(packageDir, 'package.json');
+        const json = getPackage(packagePath);
+        if (json) return {
+            json,
+            path: packagePath
+        };
         packageDir = path.dirname(packageDir);
-        if (packageDir === '' || packageDir === prev) break;
     }
-    return {};
-}
-export default function packageType(filePath) {
-    const pkg = getPackageScopeConfig(filePath);
-    return pkg.type || 'commonjs';
+    return null;
 }

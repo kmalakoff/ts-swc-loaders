@@ -17,12 +17,14 @@ _export(exports, {
     }
 });
 var _path = /*#__PURE__*/ _interop_require_default(require("path"));
+var _isbuiltinmodule = /*#__PURE__*/ _interop_require_default(require("is-builtin-module"));
 var _Cache = /*#__PURE__*/ _interop_require_default(require("../Cache.js"));
 var _createMatcher = /*#__PURE__*/ _interop_require_default(require("../createMatcher.js"));
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../loadTSConfig.js"));
 var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("../transformSync.js"));
-var _packageType = /*#__PURE__*/ _interop_require_default(require("./packageType.js"));
+var _extToFormat = /*#__PURE__*/ _interop_require_default(require("./extToFormat.js"));
+var _fileType = /*#__PURE__*/ _interop_require_default(require("./fileType.js"));
 var _toPath = /*#__PURE__*/ _interop_require_default(require("./toPath.js"));
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
@@ -153,25 +155,23 @@ function _ts_generator(thisArg, body) {
         };
     }
 }
-var EXT_TO_FORMAT = {
-    ".json": "json",
-    ".mjs": "module",
-    ".mts": "module",
-    ".cjs": "commonjs",
-    ".cts": "commonjs"
-};
 var cache = new _Cache.default();
 var config = (0, _loadTSConfig.default)(_path.default.resolve(process.cwd(), "tsconfig.json"));
 var match = (0, _createMatcher.default)(config);
+var typeFileRegEx = /^[^.]+\.d\.(.*)$/;
 function _getFormat(url, context, next) {
     return __getFormat.apply(this, arguments);
 }
 function __getFormat() {
     __getFormat = _async_to_generator(function(url, context, next) {
-        var filePath, data;
+        var filePath, ext, data;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
+                    if ((0, _isbuiltinmodule.default)(url)) return [
+                        2,
+                        next(url, context)
+                    ];
                     if (!!url.startsWith("file://")) return [
                         3,
                         2
@@ -187,11 +187,12 @@ function __getFormat() {
                     ];
                 case 2:
                     filePath = (0, _toPath.default)(url, context);
+                    ext = _path.default.extname(filePath);
                     if (!!match(filePath)) return [
                         3,
                         4
                     ];
-                    if (!_path.default.extname(filePath)) return [
+                    if (!ext) return [
                         2,
                         {
                             format: "commonjs"
@@ -209,20 +210,12 @@ function __getFormat() {
                 case 4:
                     // file
                     data = {
-                        format: EXT_TO_FORMAT[_path.default.extname(url)]
+                        format: (0, _extToFormat.default)(ext)
                     };
-                    if (!!data.format) return [
-                        3,
-                        6
-                    ];
-                    return [
-                        4,
-                        (0, _packageType.default)(filePath)
-                    ];
-                case 5:
-                    data.format = _state.sent();
-                    _state.label = 6;
-                case 6:
+                    if (!data.format || [
+                        ".js",
+                        ".jsx"
+                    ].indexOf(ext) >= 0) data.format = (0, _fileType.default)(filePath);
                     return [
                         2,
                         data
@@ -237,10 +230,14 @@ function _transformSource(source, context, next) {
 }
 function __transformSource() {
     __transformSource = _async_to_generator(function(source, context, next) {
-        var loaded, filePath, contents, data;
+        var loaded, filePath, ext, contents, data;
         return _ts_generator(this, function(_state) {
             switch(_state.label){
                 case 0:
+                    if ((0, _isbuiltinmodule.default)(context.url)) return [
+                        2,
+                        next(source, context)
+                    ];
                     return [
                         4,
                         next(source, context)
@@ -248,18 +245,19 @@ function __transformSource() {
                 case 1:
                     loaded = _state.sent();
                     filePath = (0, _toPath.default)(context.url);
+                    ext = _path.default.extname(filePath);
                     // filtered
                     if (!match(filePath)) return [
                         2,
                         loaded
                     ];
-                    if (filePath.endsWith(".d.ts")) return [
+                    if (typeFileRegEx.test(filePath)) return [
                         2,
                         {
                             source: ""
                         }
                     ];
-                    if (_extensions.default.indexOf(_path.default.extname(filePath)) < 0) return [
+                    if (_extensions.default.indexOf(ext) < 0) return [
                         2,
                         loaded
                     ];

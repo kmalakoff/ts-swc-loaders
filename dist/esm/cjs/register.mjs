@@ -11,6 +11,7 @@ const config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));
 config.config.compilerOptions.module = 'CommonJS';
 config.config.compilerOptions.target = 'ES5';
 const match = createMatcher(config);
+const typeFileRegEx = /^[^.]+\.d\.(.*)$/;
 export function register(options, hookOpts) {
     options = options || {};
     return pirates.addHook((code, filePath)=>compile(code, filePath, options), Object.assign({
@@ -18,10 +19,11 @@ export function register(options, hookOpts) {
     }, hookOpts || {}));
 }
 export function compile(contents, filePath) {
+    const ext = path.extname(filePath);
     // filter
     if (!match(filePath)) return contents || ' ';
-    if (filePath.endsWith('.d.ts')) return ' ';
-    if (extensions.indexOf(path.extname(filePath)) < 0) return contents || ' ';
+    if (typeFileRegEx.test(filePath)) return ' ';
+    if (extensions.indexOf(ext) < 0) return contents || ' ';
     const data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, ()=>transformSync(contents, filePath, config));
     return data.code;
 }

@@ -34,6 +34,7 @@ var config = (0, _loadTSConfig.default)(_path.default.resolve(process.cwd(), "ts
 config.config.compilerOptions.module = "CommonJS";
 config.config.compilerOptions.target = "ES5";
 var match = (0, _createMatcher.default)(config);
+var typeFileRegEx = /^[^.]+\.d\.(.*)$/;
 function register(options, hookOpts) {
     options = options || {};
     return _pirates.default.addHook(function(code, filePath) {
@@ -43,10 +44,11 @@ function register(options, hookOpts) {
     }, hookOpts || {}));
 }
 function compile(contents, filePath) {
+    var ext = _path.default.extname(filePath);
     // filter
     if (!match(filePath)) return contents || " ";
-    if (filePath.endsWith(".d.ts")) return " ";
-    if (_extensions.default.indexOf(_path.default.extname(filePath)) < 0) return contents || " ";
+    if (typeFileRegEx.test(filePath)) return " ";
+    if (_extensions.default.indexOf(ext) < 0) return contents || " ";
     var data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
         return (0, _transformSynccjs.default)(contents, filePath, config);
     });

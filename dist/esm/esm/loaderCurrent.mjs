@@ -63,6 +63,7 @@ export async function load(url, context, next) {
     const loaded = await next(url, context);
     const filePath = toPath(loaded.responseURL || url, context);
     const ext = path.extname(filePath);
+    if (!loaded.source && loaded.type === 'module') loaded.source = await fs.readFile(filePath);
     // filtered
     if (!match(filePath)) return loaded;
     if (typeFileRegEx.test(filePath)) return {

@@ -377,6 +377,18 @@ function _load() {
                     loaded = _state.sent();
                     filePath = (0, _toPath.default)(loaded.responseURL || url, context);
                     ext = _nodepath.default.extname(filePath);
+                    if (!(!loaded.source && loaded.type === "module")) return [
+                        3,
+                        3
+                    ];
+                    return [
+                        4,
+                        _nodefs.promises.readFile(filePath)
+                    ];
+                case 2:
+                    loaded.source = _state.sent();
+                    _state.label = 3;
+                case 3:
                     // filtered
                     if (!match(filePath)) return [
                         2,
@@ -395,16 +407,16 @@ function _load() {
                     ];
                     if (!!loaded.source) return [
                         3,
-                        3
+                        5
                     ];
                     return [
                         4,
                         _nodefs.promises.readFile(filePath)
                     ];
-                case 2:
+                case 4:
                     loaded.source = _state.sent();
-                    _state.label = 3;
-                case 3:
+                    _state.label = 5;
+                case 5:
                     contents = loaded.source.toString();
                     data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
                         return (0, _transformSynccjs.default)(contents, filePath, config);

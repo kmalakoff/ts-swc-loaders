@@ -14,6 +14,7 @@ updates:
       - dependency-name: 'which'
       - dependency-name: '@swc/core'
       - dependency-name: 'regenerator-runtime'
+      - dependency-name: 'is-builtin-module'      
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:

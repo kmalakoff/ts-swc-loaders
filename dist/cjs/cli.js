@@ -27,24 +27,24 @@ function _object_spread(target) {
     }
     return target;
 }
-var exit = require("exit");
-var path = require("path");
-var spawn = require("cross-spawn-cb");
-var pathKey = require("env-path-key");
-var prepend = require("path-string-prepend");
-var spawnParams = require("./index.js").spawnParams;
-var which = require("which");
-var major = +process.versions.node.split(".")[0];
-var type = major < 12 ? "commonjs" : "module";
+var exit = require('exit');
+var path = require('path');
+var spawn = require('cross-spawn-cb');
+var pathKey = require('env-path-key');
+var prepend = require('path-string-prepend');
+var spawnParams = require('./index.js').spawnParams;
+var which = require('which');
+var major = +process.versions.node.split('.')[0];
+var type = major < 12 ? 'commonjs' : 'module';
 module.exports = function cli(args, options, cb) {
     options = options || {};
     var cwd = options.cwd || process.cwd();
     var env = _object_spread({}, process.env);
     var PATH_KEY = pathKey();
-    env[PATH_KEY] = prepend(env[PATH_KEY] || "", path.resolve(__dirname, "..", "..", "..", "..", "node_modules", ".bin"));
-    env[PATH_KEY] = prepend(env[PATH_KEY] || "", path.resolve(process.cwd(), "node_modules", ".bin"));
+    env[PATH_KEY] = prepend(env[PATH_KEY] || '', path.resolve(__dirname, '..', '..', '..', '..', 'node_modules', '.bin'));
+    env[PATH_KEY] = prepend(env[PATH_KEY] || '', path.resolve(process.cwd(), 'node_modules', '.bin'));
     var params = spawnParams(type, _object_spread({
-        stdio: "inherit",
+        stdio: 'inherit',
         cwd: cwd,
         env: env
     }, options));
@@ -52,7 +52,7 @@ module.exports = function cli(args, options, cb) {
     if (options.encoding) delete params.options.stdio;
     function callback(err, res) {
         if (cb) return cb(err, res);
-        if (err && err.message.indexOf("ExperimentalWarning") < 0) {
+        if (err && err.message.indexOf('ExperimentalWarning') < 0) {
             console.log(err.message);
             return exit(err.code || -1);
         }
@@ -68,7 +68,7 @@ module.exports = function cli(args, options, cb) {
         var cmdExt = path.extname(cmd);
         if (path.extname(args[0]) !== cmdExt) return spawn(cmd, params.args.concat(args.slice(1)), params.options, callback);
         // relative, use the original
-        if (args[0][0] === ".") cmd = args[0];
+        if (args[0][0] === '.') cmd = args[0];
         // node <= 0.12 didn't take the --require option
         if (major < 12) return spawn(cmd, params.args.concat(args.slice(1)), params.options, callback);
         // send to node

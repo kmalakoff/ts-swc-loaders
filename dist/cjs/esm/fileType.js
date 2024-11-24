@@ -25,12 +25,12 @@ function isEntry(filePath, pkg, key) {
 }
 function fileType(filePath) {
     var pkg = (0, _packageUp.default)(filePath);
-    if (!pkg) return "commonjs";
-    if (isEntry(filePath, pkg, "module")) return "module";
-    if (isEntry(filePath, pkg, "main")) return "commonjs";
+    if (!pkg) return 'commonjs';
+    if (isEntry(filePath, pkg, 'module')) return 'module';
+    if (isEntry(filePath, pkg, 'main')) return 'commonjs';
     if (pkg.json.type) return pkg.json.type;
-    if (pkg.json.module) return "module";
-    if (pkg.json.main) return "commonjs";
-    return "commonjs";
+    if (pkg.json.module) return 'module';
+    if (pkg.json.main) return 'commonjs';
+    return 'commonjs';
 }
 /* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }

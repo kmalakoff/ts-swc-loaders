@@ -30,9 +30,9 @@ function _interop_require_default(obj) {
     };
 }
 var cache = new _Cache.default();
-var config = (0, _loadTSConfig.default)(_path.default.resolve(process.cwd(), "tsconfig.json"));
-config.config.compilerOptions.module = "CommonJS";
-config.config.compilerOptions.target = "ES5";
+var config = (0, _loadTSConfig.default)(_path.default.resolve(process.cwd(), 'tsconfig.json'));
+config.config.compilerOptions.module = 'CommonJS';
+config.config.compilerOptions.target = 'ES5';
 var match = (0, _createMatcher.default)(config);
 var typeFileRegEx = /^[^.]+\.d\.(.*)$/;
 function register(options, hookOpts) {
@@ -46,9 +46,9 @@ function register(options, hookOpts) {
 function compile(contents, filePath) {
     var ext = _path.default.extname(filePath);
     // filter
-    if (!match(filePath)) return contents || " ";
-    if (typeFileRegEx.test(filePath)) return " ";
-    if (_extensions.default.indexOf(ext) < 0) return contents || " ";
+    if (!match(filePath)) return contents || ' ';
+    if (typeFileRegEx.test(filePath)) return ' ';
+    if (_extensions.default.indexOf(ext) < 0) return contents || ' ';
     var data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
         return (0, _transformSynccjs.default)(contents, filePath, config);
     });

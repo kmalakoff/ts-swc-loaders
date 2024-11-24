@@ -156,7 +156,7 @@ function _ts_generator(thisArg, body) {
     }
 }
 var cache = new _Cache.default();
-var config = (0, _loadTSConfig.default)(_path.default.resolve(process.cwd(), "tsconfig.json"));
+var config = (0, _loadTSConfig.default)(_path.default.resolve(process.cwd(), 'tsconfig.json'));
 var match = (0, _createMatcher.default)(config);
 var typeFileRegEx = /^[^.]+\.d\.(.*)$/;
 function _getFormat(url, context, next) {
@@ -172,7 +172,7 @@ function __getFormat() {
                         2,
                         next(url, context)
                     ];
-                    if (!!url.startsWith("file://")) return [
+                    if (!!url.startsWith('file://')) return [
                         3,
                         2
                     ];
@@ -195,7 +195,7 @@ function __getFormat() {
                     if (!ext) return [
                         2,
                         {
-                            format: "commonjs"
+                            format: 'commonjs'
                         }
                     ]; // args bin is cjs in a module
                     return [
@@ -213,8 +213,8 @@ function __getFormat() {
                         format: (0, _extToFormat.default)(ext)
                     };
                     if (!data.format || [
-                        ".js",
-                        ".jsx"
+                        '.js',
+                        '.jsx'
                     ].indexOf(ext) >= 0) data.format = (0, _fileType.default)(filePath);
                     return [
                         2,
@@ -254,7 +254,7 @@ function __transformSource() {
                     if (typeFileRegEx.test(filePath)) return [
                         2,
                         {
-                            source: ""
+                            source: ''
                         }
                     ];
                     if (_extensions.default.indexOf(ext) < 0) return [
@@ -276,7 +276,7 @@ function __transformSource() {
     });
     return __transformSource.apply(this, arguments);
 }
-var major = +process.versions.node.split(".")[0];
+var major = +process.versions.node.split('.')[0];
 var getFormat = major < 16 ? _getFormat : undefined;
 var transformSource = major < 16 ? _transformSource : undefined;
 /* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }

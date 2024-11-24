@@ -20,9 +20,9 @@ function _interop_require_default(obj) {
 }
 var moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
 function toPath(x, context) {
-    if (x.startsWith("file://")) return (0, _nodeurl.fileURLToPath)(x);
+    if (x.startsWith('file://')) return (0, _nodeurl.fileURLToPath)(x);
     if (_nodepath.default.isAbsolute(x)) return x;
-    if (x[0] === ".") {
+    if (x[0] === '.') {
         // biome-ignore lint/complexity/useOptionalChain: <explanation>
         var parentPath = context && context.parentURL ? _nodepath.default.dirname(toPath(context.parentURL)) : _nodeprocess.default.cwd();
         return _nodepath.default.resolve(parentPath, x);
@@ -34,10 +34,10 @@ function toPath(x, context) {
         var main = _resolve.default.sync(x, {
             basedir: parentPath1,
             extensions: [
-                ".js",
-                ".json",
-                ".node",
-                ".mjs"
+                '.js',
+                '.json',
+                '.node',
+                '.mjs'
             ],
             packageFilter: function packageFilter(json, dir) {
                 pkg = {
@@ -53,7 +53,7 @@ function toPath(x, context) {
         var modulePath = _nodepath.default.resolve(pkg.dir, pkg.json.module);
         var mainPath = _nodepath.default.resolve(pkg.dir, pkg.json.main);
         var moduleResolved = _nodepath.default.resolve(modulePath, _nodepath.default.relative(mainPath, main));
-        return moduleResolved.indexOf(x.replace(pkg.json.name, "")) < 0 || !_nodefs.default.existsSync(moduleResolved) ? main : moduleResolved;
+        return moduleResolved.indexOf(x.replace(pkg.json.name, '')) < 0 || !_nodefs.default.existsSync(moduleResolved) ? main : moduleResolved;
     }
     return x;
 }

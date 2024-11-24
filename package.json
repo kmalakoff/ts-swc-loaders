@@ -76,7 +76,7 @@
     "mocha": "^10.8.2",
     "mocha-compat": "^3.5.5",
     "react": "^18.3.1",
-    "ts-dev-stack": "^0.15.8"
+    "ts-dev-stack": "^0.16.0"
   },
   "engines": {
     "node": ">=0.8"

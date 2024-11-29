@@ -24,12 +24,8 @@ const args = spawnParams(type, { cwd: DATA_DIR, encoding: 'utf8' });
 describe.skip('module', () => {
   it('node', (done) => {
     spawn(process.execPath, args.args.concat(['./test/index.test.ts', 'arg']), args.options, (err, res) => {
-      assert.equal(
-        cr(err ? err.stdout : res.stdout)
-          .split('\n')
-          .slice(-2)[0],
-        'Success!'
-      );
+      assert.ok(!err, err ? err.message : '');
+      assert.equal(cr(res.stdout).split('\n').slice(-2)[0], 'Success!');
       done();
     });
   });

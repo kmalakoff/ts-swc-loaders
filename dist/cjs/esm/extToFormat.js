@@ -9,11 +9,11 @@ Object.defineProperty(exports, "default", {
     }
 });
 var EXT_TO_FORMAT = {
-    ".json": "json",
-    ".mjs": "module",
-    ".mts": "module",
-    ".cjs": "commonjs",
-    ".cts": "commonjs"
+    '.json': 'json',
+    '.mjs': 'module',
+    '.mts': 'module',
+    '.cjs': 'commonjs',
+    '.cts': 'commonjs'
 };
 function extToFormat(ext) {
     return EXT_TO_FORMAT[ext];

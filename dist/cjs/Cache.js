@@ -57,7 +57,7 @@ var Cache = /*#__PURE__*/ function() {
         options = options || {};
         this.cwd = process.cwd();
         this.cwdHash = (0, _shorthash.default)(process.cwd());
-        this.root = options.root || _path.default.join(tmpdir(), "ts-swc-loaders");
+        this.root = options.root || _path.default.join(tmpdir(), 'ts-swc-loaders');
         this.maxAge = options.maxAge || 1 * MS_TO_DAYS;
     }
     _create_class(Cache, [
@@ -82,7 +82,7 @@ var Cache = /*#__PURE__*/ function() {
             key: "getRecord",
             value: function getRecord(cachePath) {
                 try {
-                    var record = JSON.parse(_fs.default.readFileSync(cachePath, "utf8"));
+                    var record = JSON.parse(_fs.default.readFileSync(cachePath, 'utf8'));
                     var time = timeMS();
                     if (time - record.time > this.maxAge) {
                         unlinkSafe(cachePath);
@@ -118,7 +118,7 @@ var Cache = /*#__PURE__*/ function() {
                     hash: options.hash
                 };
                 _mkdirp.default.sync(_path.default.dirname(cachePath));
-                _fs.default.writeFileSync(cachePath, JSON.stringify(record), "utf8");
+                _fs.default.writeFileSync(cachePath, JSON.stringify(record), 'utf8');
             }
         }
     ]);

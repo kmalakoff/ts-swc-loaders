@@ -20,7 +20,7 @@ function loadTSConfig(path) {
         console.log("tsconfig.json not found at: ".concat(path));
         config = {};
     }
-    config.path = config.path || "";
+    config.path = config.path || '';
     config.config = config.config || {};
     config.config.compilerOptions = config.config.compilerOptions || {};
     config.config.include = config.config.include || [];

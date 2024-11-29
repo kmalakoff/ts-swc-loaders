@@ -20,7 +20,7 @@ function getPackage(packagePath) {
     var existing = packageJSONCache.get(packagePath);
     if (existing !== undefined) return existing;
     try {
-        var packageJson = JSON.parse(_fs.default.readFileSync(packagePath, "utf8"));
+        var packageJson = JSON.parse(_fs.default.readFileSync(packagePath, 'utf8'));
         packageJSONCache.set(packagePath, packageJson);
         return packageJson;
     } catch (_err) {
@@ -31,8 +31,8 @@ function getPackage(packagePath) {
 function packageUp(filePath) {
     var dir = filePath;
     while(dir){
-        if (dir.endsWith("node_modules")) break;
-        var json = getPackage(_path.default.join(dir, "package.json"));
+        if (dir.endsWith('node_modules')) break;
+        var json = getPackage(_path.default.join(dir, 'package.json'));
         if (json) return {
             json: json,
             dir: dir

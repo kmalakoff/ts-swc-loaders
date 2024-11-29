@@ -27,15 +27,15 @@ function _object_spread(target) {
     }
     return target;
 }
-require("./polyfills.js");
-var processCompat = typeof process === "undefined" ? require("process") : process;
-var major = +processCompat.versions.node.split(".")[0];
+require('./polyfills.js');
+var processCompat = typeof process === 'undefined' ? require('process') : process;
+var major = +processCompat.versions.node.split('.')[0];
 // const _importArgs = 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("ts-swc-loaders", pathToFileURL("./"));';
 module.exports = function spawnParams(type, options) {
-    if (type === "commonjs") return {
+    if (type === 'commonjs') return {
         args: [
-            "--require",
-            "ts-swc-loaders"
+            '--require',
+            'ts-swc-loaders'
         ],
         options: options
     };
@@ -44,14 +44,14 @@ module.exports = function spawnParams(type, options) {
     // if (major >= 20) return { args: ['--no-warnings=ExperimentalWarning', '--import', importArgs], options };
     // args
     var args = major > 4 ? [
-        "--no-warnings=ExperimentalWarning"
+        '--no-warnings=ExperimentalWarning'
     ] : [];
     // if (major <= 16) args.push('--experimental-modules');
     // options
     var env = options.env || processCompat.env;
     options = _object_spread({}, options || {});
     options.env = _object_spread({}, env);
-    options.env.NODE_OPTIONS = "--loader ts-swc-loaders".concat(env.NODE_OPTIONS ? " ".concat(options.env.NODE_OPTIONS) : "");
+    options.env.NODE_OPTIONS = "--loader ts-swc-loaders".concat(env.NODE_OPTIONS ? " ".concat(options.env.NODE_OPTIONS) : '');
     return {
         args: args,
         options: options

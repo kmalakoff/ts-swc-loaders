@@ -210,10 +210,10 @@ function _ts_generator(thisArg, body) {
         };
     }
 }
-var major = +_nodeprocess.default.versions.node.split(".")[0];
-var importJSONKey = major >= 18 ? "importAttributes" : "importAssertions";
+var major = +_nodeprocess.default.versions.node.split('.')[0];
+var importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
 var cache = new _Cache.default();
-var config = (0, _loadTSConfig.default)(_nodepath.default.resolve(_nodeprocess.default.cwd(), "tsconfig.json"));
+var config = (0, _loadTSConfig.default)(_nodepath.default.resolve(_nodeprocess.default.cwd(), 'tsconfig.json'));
 var match = (0, _createMatcher.default)(config);
 var moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
 var typeFileRegEx = /^[^.]+\.d\.(.*)$/;
@@ -270,14 +270,14 @@ function _resolve() {
                     ];
                 case 5:
                     data = _state.sent();
-                    if (!data.format) data.format = "commonjs";
-                    if (_nodepath.default.isAbsolute(filePath) && !ext) data.format = "commonjs"; // args bin is cjs in a module
+                    if (!data.format) data.format = 'commonjs';
+                    if (_nodepath.default.isAbsolute(filePath) && !ext) data.format = 'commonjs'; // args bin is cjs in a module
                     return [
                         2,
                         data
                     ];
                 case 6:
-                    if (!(specifier.endsWith("/") || stats && stats.isDirectory())) return [
+                    if (!(specifier.endsWith('/') || stats && stats.isDirectory())) return [
                         3,
                         10
                     ];
@@ -296,7 +296,7 @@ function _resolve() {
                     ];
                     return [
                         4,
-                        resolve("".concat(specifier).concat(specifier.endsWith("/") ? "" : "/").concat(item), context, next)
+                        resolve("".concat(specifier).concat(specifier.endsWith('/') ? '' : '/').concat(item), context, next)
                     ];
                 case 8:
                     return [
@@ -313,7 +313,7 @@ function _resolve() {
                         3,
                         13
                     ];
-                    fileName = _nodepath.default.basename(filePath).replace(/(\.[^/.]+)+$/, "");
+                    fileName = _nodepath.default.basename(filePath).replace(/(\.[^/.]+)+$/, '');
                     return [
                         4,
                         _nodefs.promises.readdir(_nodepath.default.dirname(filePath))
@@ -366,8 +366,8 @@ function _load() {
                         2,
                         next(url, context)
                     ];
-                    if (url.endsWith(".json")) context[importJSONKey] = Object.assign(context[importJSONKey] || {}, {
-                        type: "json"
+                    if (url.endsWith('.json')) context[importJSONKey] = Object.assign(context[importJSONKey] || {}, {
+                        type: 'json'
                     });
                     return [
                         4,
@@ -377,7 +377,7 @@ function _load() {
                     data = _state.sent();
                     filePath = (0, _toPath.default)(data.responseURL || url, context);
                     ext = _nodepath.default.extname(filePath);
-                    if (!(!data.source && data.type === "module")) return [
+                    if (!(!data.source && data.type === 'module')) return [
                         3,
                         3
                     ];
@@ -397,8 +397,8 @@ function _load() {
                     if (typeFileRegEx.test(filePath)) return [
                         2,
                         _object_spread_props(_object_spread({}, data), {
-                            format: "module",
-                            source: ""
+                            format: 'module',
+                            source: ''
                         })
                     ];
                     if (_extensions.default.indexOf(ext) < 0) return [

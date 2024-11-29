@@ -3,16 +3,14 @@ updates:
   - package-ecosystem: npm
     directory: '/'
     schedule:
-      interval: daily
+      interval: weekly
     ignore:
       - dependency-name: 'mkdirp'
       - dependency-name: 'pirates'
       - dependency-name: 'minimatch'
-      - dependency-name: 'rimraf'
       - dependency-name: 'slash'
       - dependency-name: 'ts-node'
       - dependency-name: 'which'
-      - dependency-name: '@swc/core'
       - dependency-name: 'regenerator-runtime'
       - dependency-name: 'is-builtin-module'      
   - package-ecosystem: 'github-actions'

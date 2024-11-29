@@ -1,4 +1,4 @@
 {
   "upgrade": true,
-  "reject": ["mkdirp", "minimatch", "pirates", "rimraf", "slash", "ts-node", "which", "@swc/core", "is-builtin-module"]
+  "reject": ["mkdirp", "minimatch", "pirates", "slash", "ts-node", "which", "is-builtin-module"]
 }

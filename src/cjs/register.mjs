@@ -9,7 +9,7 @@ import Cache from '../lib/Cache.mjs';
 import loadTSConfig from '../lib/loadTSConfig.mjs';
 
 const cache = new Cache();
-const config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));
+const config = loadTSConfig(process.cwd());
 config.config.compilerOptions.module = 'CommonJS';
 config.config.compilerOptions.target = 'ES5';
 const match = createMatcher(config);

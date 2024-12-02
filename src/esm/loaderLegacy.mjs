@@ -10,7 +10,7 @@ import fileType from './fileType.mjs';
 import toPath from './toPath.mjs';
 
 const cache = new Cache();
-const config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));
+const config = loadTSConfig(process.cwd());
 const match = createMatcher(config);
 
 const typeFileRegEx = /^[^.]+\.d\.(.*)$/;

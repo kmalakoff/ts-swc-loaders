@@ -21,7 +21,7 @@ const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules', 'ts-swc-loaders');
 
 const args = spawnParams(type, { cwd: DATA_DIR, encoding: 'utf8' });
 
-describe.skip('module', () => {
+describe('module', () => {
   it('node', (done) => {
     spawn(process.execPath, args.args.concat(['./test/index.test.ts', 'arg']), args.options, (err, res) => {
       assert.ok(!err, err ? err.message : '');
@@ -30,10 +30,6 @@ describe.skip('module', () => {
     });
   });
 
-  before((cb) => {
-    devStack.link([], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }, cb);
-  });
-  after((cb) => {
-    devStack.unlink([], { installPath: DATA_MODULE_DIR }, cb);
-  });
+  before(devStack.link.bind(null, [], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }));
+  after(devStack.unlink.bind(null, [], { installPath: DATA_MODULE_DIR }));
 });

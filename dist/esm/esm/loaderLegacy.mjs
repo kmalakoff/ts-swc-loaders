@@ -1,10 +1,9 @@
 import path from 'path';
 import isBuiltinModule from 'is-builtin-module';
-import Cache from '../Cache.mjs';
-import createMatcher from '../createMatcher.mjs';
+import { createMatcher, transformSync } from 'ts-swc-transform';
+import Cache from '../lib/Cache.mjs';
 import extensions from '../extensions.mjs';
-import loadTSConfig from '../loadTSConfig.mjs';
-import transformSync from '../transformSync.cjs';
+import loadTSConfig from '../lib/loadTSConfig.mjs';
 import extToFormat from './extToFormat.mjs';
 import fileType from './fileType.mjs';
 import toPath from './toPath.mjs';

@@ -3,12 +3,11 @@ import path from 'node:path';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
 import isBuiltinModule from 'is-builtin-module';
+import { createMatcher, transformSync } from 'ts-swc-transform';
 
-import Cache from '../Cache.mjs';
-import createMatcher from '../createMatcher.mjs';
 import extensions from '../extensions.mjs';
-import loadTSConfig from '../loadTSConfig.mjs';
-import transformSync from '../transformSync.cjs';
+import Cache from '../lib/Cache.mjs';
+import loadTSConfig from '../lib/loadTSConfig.mjs';
 import extToFormat from './extToFormat.mjs';
 import fileType from './fileType.mjs';
 import toPath from './toPath.mjs';

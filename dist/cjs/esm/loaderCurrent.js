@@ -21,11 +21,10 @@ var _nodepath = /*#__PURE__*/ _interop_require_default(require("node:path"));
 var _nodeprocess = /*#__PURE__*/ _interop_require_default(require("node:process"));
 var _nodeurl = require("node:url");
 var _isbuiltinmodule = /*#__PURE__*/ _interop_require_default(require("is-builtin-module"));
-var _Cache = /*#__PURE__*/ _interop_require_default(require("../Cache.js"));
-var _createMatcher = /*#__PURE__*/ _interop_require_default(require("../createMatcher.js"));
+var _tsswctransform = require("ts-swc-transform");
+var _Cache = /*#__PURE__*/ _interop_require_default(require("../lib/Cache.js"));
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
-var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../loadTSConfig.js"));
-var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("../transformSync.js"));
+var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../lib/loadTSConfig.js"));
 var _extToFormat = /*#__PURE__*/ _interop_require_default(require("./extToFormat.js"));
 var _fileType = /*#__PURE__*/ _interop_require_default(require("./fileType.js"));
 var _toPath = /*#__PURE__*/ _interop_require_default(require("./toPath.js"));
@@ -214,7 +213,7 @@ var major = +_nodeprocess.default.versions.node.split('.')[0];
 var importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
 var cache = new _Cache.default();
 var config = (0, _loadTSConfig.default)(_nodepath.default.resolve(_nodeprocess.default.cwd(), 'tsconfig.json'));
-var match = (0, _createMatcher.default)(config);
+var match = (0, _tsswctransform.createMatcher)(config);
 var moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
 var typeFileRegEx = /^[^.]+\.d\.(.*)$/;
 var indexExtensions = _extensions.default.map(function(x) {
@@ -419,7 +418,7 @@ function _load() {
                 case 5:
                     contents = data.source.toString();
                     compiled = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
-                        return (0, _transformSynccjs.default)(contents, filePath, config);
+                        return (0, _tsswctransform.transformSync)(contents, filePath, config);
                     });
                     return [
                         2,
@@ -433,4 +432,4 @@ function _load() {
     });
     return _load.apply(this, arguments);
 }
-/* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }
+/* CJS INTEROP */ if (exports.__esModule && exports.default) { try { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) { exports.default[key] = exports[key]; }; module.exports = exports.default; } catch (_) {} }

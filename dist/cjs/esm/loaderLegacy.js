@@ -18,11 +18,10 @@ _export(exports, {
 });
 var _path = /*#__PURE__*/ _interop_require_default(require("path"));
 var _isbuiltinmodule = /*#__PURE__*/ _interop_require_default(require("is-builtin-module"));
-var _Cache = /*#__PURE__*/ _interop_require_default(require("../Cache.js"));
-var _createMatcher = /*#__PURE__*/ _interop_require_default(require("../createMatcher.js"));
+var _tsswctransform = require("ts-swc-transform");
+var _Cache = /*#__PURE__*/ _interop_require_default(require("../lib/Cache.js"));
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
-var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../loadTSConfig.js"));
-var _transformSynccjs = /*#__PURE__*/ _interop_require_default(require("../transformSync.js"));
+var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../lib/loadTSConfig.js"));
 var _extToFormat = /*#__PURE__*/ _interop_require_default(require("./extToFormat.js"));
 var _fileType = /*#__PURE__*/ _interop_require_default(require("./fileType.js"));
 var _toPath = /*#__PURE__*/ _interop_require_default(require("./toPath.js"));
@@ -157,7 +156,7 @@ function _ts_generator(thisArg, body) {
 }
 var cache = new _Cache.default();
 var config = (0, _loadTSConfig.default)(_path.default.resolve(process.cwd(), 'tsconfig.json'));
-var match = (0, _createMatcher.default)(config);
+var match = (0, _tsswctransform.createMatcher)(config);
 var typeFileRegEx = /^[^.]+\.d\.(.*)$/;
 function _getFormat(url, context, next) {
     return __getFormat.apply(this, arguments);
@@ -263,7 +262,7 @@ function __transformSource() {
                     ];
                     contents = loaded.source.toString();
                     compiled = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
-                        return (0, _transformSynccjs.default)(contents, filePath, config);
+                        return (0, _tsswctransform.transformSync)(contents, filePath, config);
                     });
                     return [
                         2,
@@ -279,4 +278,4 @@ function __transformSource() {
 var major = +process.versions.node.split('.')[0];
 var getFormat = major < 16 ? _getFormat : undefined;
 var transformSource = major < 16 ? _transformSource : undefined;
-/* CJS INTEROP */ if (exports.__esModule && exports.default) { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) exports.default[key] = exports[key]; module.exports = exports.default; }
+/* CJS INTEROP */ if (exports.__esModule && exports.default) { try { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) { exports.default[key] = exports[key]; }; module.exports = exports.default; } catch (_) {} }

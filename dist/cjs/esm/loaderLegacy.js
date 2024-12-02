@@ -278,4 +278,4 @@ function __transformSource() {
 var major = +process.versions.node.split('.')[0];
 var getFormat = major < 16 ? _getFormat : undefined;
 var transformSource = major < 16 ? _transformSource : undefined;
-/* CJS INTEROP */ if (exports.__esModule && exports.default) { try { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) { exports.default[key] = exports[key]; }; module.exports = exports.default; } catch (_) {} }
+/* CJS INTEROP */ if (exports.__esModule && exports.default) { try { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) { exports.default[key] = exports[key]; } } catch (_) {}; module.exports = exports.default; }

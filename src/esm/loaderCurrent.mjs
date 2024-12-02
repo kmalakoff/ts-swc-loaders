@@ -16,7 +16,7 @@ const major = +process.versions.node.split('.')[0];
 const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
 
 const cache = new Cache();
-const config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));
+const config = loadTSConfig(process.cwd());
 const match = createMatcher(config);
 
 const moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;

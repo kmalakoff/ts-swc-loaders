@@ -2,11 +2,11 @@ import path from 'path';
 import pirates from 'pirates';
 import '../polyfills.cjs';
 
-import Cache from '../Cache.js';
-import createMatcher from '../createMatcher.mjs';
+import { createMatcher, transformSync } from 'ts-swc-transform';
+
 import extensions from '../extensions.mjs';
-import loadTSConfig from '../loadTSConfig.mjs';
-import transformSync from '../transformSync.cjs';
+import Cache from '../lib/Cache.mjs';
+import loadTSConfig from '../lib/loadTSConfig.mjs';
 
 const cache = new Cache();
 const config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));

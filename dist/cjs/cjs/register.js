@@ -20,8 +20,8 @@ var _path = /*#__PURE__*/ _interop_require_default(require("path"));
 var _pirates = /*#__PURE__*/ _interop_require_default(require("pirates"));
 require("../polyfills.js");
 var _tsswctransform = require("ts-swc-transform");
-var _Cache = /*#__PURE__*/ _interop_require_default(require("../lib/Cache.js"));
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
+var _Cache = /*#__PURE__*/ _interop_require_default(require("../lib/Cache.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../lib/loadTSConfig.js"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
@@ -29,7 +29,7 @@ function _interop_require_default(obj) {
     };
 }
 var cache = new _Cache.default();
-var config = (0, _loadTSConfig.default)(_path.default.resolve(process.cwd(), 'tsconfig.json'));
+var config = (0, _loadTSConfig.default)(process.cwd());
 config.config.compilerOptions.module = 'CommonJS';
 config.config.compilerOptions.target = 'ES5';
 var match = (0, _tsswctransform.createMatcher)(config);

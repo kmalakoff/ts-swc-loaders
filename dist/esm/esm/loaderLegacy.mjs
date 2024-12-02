@@ -1,14 +1,14 @@
 import path from 'path';
 import isBuiltinModule from 'is-builtin-module';
 import { createMatcher, transformSync } from 'ts-swc-transform';
-import Cache from '../lib/Cache.mjs';
 import extensions from '../extensions.mjs';
+import Cache from '../lib/Cache.mjs';
 import loadTSConfig from '../lib/loadTSConfig.mjs';
 import extToFormat from './extToFormat.mjs';
 import fileType from './fileType.mjs';
 import toPath from './toPath.mjs';
 const cache = new Cache();
-const config = loadTSConfig(path.resolve(process.cwd(), 'tsconfig.json'));
+const config = loadTSConfig(process.cwd());
 const match = createMatcher(config);
 const typeFileRegEx = /^[^.]+\.d\.(.*)$/;
 async function _getFormat(url, context, next) {

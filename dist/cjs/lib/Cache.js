@@ -19,20 +19,6 @@ function _class_call_check(instance, Constructor) {
         throw new TypeError("Cannot call a class as a function");
     }
 }
-function _defineProperties(target, props) {
-    for(var i = 0; i < props.length; i++){
-        var descriptor = props[i];
-        descriptor.enumerable = descriptor.enumerable || false;
-        descriptor.configurable = true;
-        if ("value" in descriptor) descriptor.writable = true;
-        Object.defineProperty(target, descriptor.key, descriptor);
-    }
-}
-function _create_class(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
-    return Constructor;
-}
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -60,68 +46,52 @@ var Cache = /*#__PURE__*/ function() {
         this.root = options.root || _path.default.join(tmpdir(), 'ts-swc-loaders');
         this.maxAge = options.maxAge || 1 * MS_TO_DAYS;
     }
-    _create_class(Cache, [
-        {
-            key: "cachePath",
-            value: function cachePath(filePath, options) {
-                var relFilePath = _path.default.relative(this.cwd, filePath);
-                var basename = _path.default.basename(relFilePath);
-                var dirHash = (0, _shorthash.default)(_path.default.dirname(relFilePath));
-                if (options) basename += "-".concat((0, _shorthash.default)(JSON.stringify(options || {})));
-                return _path.default.join(this.root, this.cwdHash, dirHash, "".concat(basename, ".json"));
+    var _proto = Cache.prototype;
+    _proto.cachePath = function cachePath(filePath, options) {
+        var relFilePath = _path.default.relative(this.cwd, filePath);
+        var basename = _path.default.basename(relFilePath);
+        var dirHash = (0, _shorthash.default)(_path.default.dirname(relFilePath));
+        if (options) basename += "-".concat((0, _shorthash.default)(JSON.stringify(options || {})));
+        return _path.default.join(this.root, this.cwdHash, dirHash, "".concat(basename, ".json"));
+    };
+    _proto.get = function get(cachePath) {
+        var record = this.getRecord(cachePath);
+        return record ? record.data : null;
+    };
+    _proto.getRecord = function getRecord(cachePath) {
+        try {
+            var record = JSON.parse(_fs.default.readFileSync(cachePath, 'utf8'));
+            var time = timeMS();
+            if (time - record.time > this.maxAge) {
+                unlinkSafe(cachePath);
+                return null;
             }
-        },
-        {
-            key: "get",
-            value: function get(cachePath) {
-                var record = this.getRecord(cachePath);
-                return record ? record.data : null;
-            }
-        },
-        {
-            key: "getRecord",
-            value: function getRecord(cachePath) {
-                try {
-                    var record = JSON.parse(_fs.default.readFileSync(cachePath, 'utf8'));
-                    var time = timeMS();
-                    if (time - record.time > this.maxAge) {
-                        unlinkSafe(cachePath);
-                        return null;
-                    }
-                    return record;
-                } catch (_err) {
-                    return null;
-                }
-            }
-        },
-        {
-            key: "getOrUpdate",
-            value: function getOrUpdate(cachePath, contents, fn) {
-                var hash = (0, _shorthash.default)(contents);
-                var record = this.getRecord(cachePath);
-                if (record && record.hash === hash) return record.data;
-                // miss
-                var data = fn(contents);
-                this.set(cachePath, data, {
-                    hash: hash
-                });
-                return data;
-            }
-        },
-        {
-            key: "set",
-            value: function set(cachePath, data, options) {
-                options = options || {};
-                var record = {
-                    data: data,
-                    time: options.time || timeMS(),
-                    hash: options.hash
-                };
-                _mkdirp.default.sync(_path.default.dirname(cachePath));
-                _fs.default.writeFileSync(cachePath, JSON.stringify(record), 'utf8');
-            }
+            return record;
+        } catch (_err) {
+            return null;
         }
-    ]);
+    };
+    _proto.getOrUpdate = function getOrUpdate(cachePath, contents, fn) {
+        var hash = (0, _shorthash.default)(contents);
+        var record = this.getRecord(cachePath);
+        if (record && record.hash === hash) return record.data;
+        // miss
+        var data = fn(contents);
+        this.set(cachePath, data, {
+            hash: hash
+        });
+        return data;
+    };
+    _proto.set = function set(cachePath, data, options) {
+        options = options || {};
+        var record = {
+            data: data,
+            time: options.time || timeMS(),
+            hash: options.hash
+        };
+        _mkdirp.default.sync(_path.default.dirname(cachePath));
+        _fs.default.writeFileSync(cachePath, JSON.stringify(record), 'utf8');
+    };
     return Cache;
 }();
 /* CJS INTEROP */ if (exports.__esModule && exports.default) { try { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) { exports.default[key] = exports[key]; }; module.exports = exports.default; } catch (_) {} }

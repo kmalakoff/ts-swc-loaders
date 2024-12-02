@@ -19,8 +19,8 @@ _export(exports, {
 var _path = /*#__PURE__*/ _interop_require_default(require("path"));
 var _isbuiltinmodule = /*#__PURE__*/ _interop_require_default(require("is-builtin-module"));
 var _tsswctransform = require("ts-swc-transform");
-var _Cache = /*#__PURE__*/ _interop_require_default(require("../lib/Cache.js"));
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
+var _Cache = /*#__PURE__*/ _interop_require_default(require("../lib/Cache.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../lib/loadTSConfig.js"));
 var _extToFormat = /*#__PURE__*/ _interop_require_default(require("./extToFormat.js"));
 var _fileType = /*#__PURE__*/ _interop_require_default(require("./fileType.js"));
@@ -155,7 +155,7 @@ function _ts_generator(thisArg, body) {
     }
 }
 var cache = new _Cache.default();
-var config = (0, _loadTSConfig.default)(_path.default.resolve(process.cwd(), 'tsconfig.json'));
+var config = (0, _loadTSConfig.default)(process.cwd());
 var match = (0, _tsswctransform.createMatcher)(config);
 var typeFileRegEx = /^[^.]+\.d\.(.*)$/;
 function _getFormat(url, context, next) {

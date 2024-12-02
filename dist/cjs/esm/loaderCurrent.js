@@ -22,8 +22,8 @@ var _nodeprocess = /*#__PURE__*/ _interop_require_default(require("node:process"
 var _nodeurl = require("node:url");
 var _isbuiltinmodule = /*#__PURE__*/ _interop_require_default(require("is-builtin-module"));
 var _tsswctransform = require("ts-swc-transform");
-var _Cache = /*#__PURE__*/ _interop_require_default(require("../lib/Cache.js"));
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
+var _Cache = /*#__PURE__*/ _interop_require_default(require("../lib/Cache.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../lib/loadTSConfig.js"));
 var _extToFormat = /*#__PURE__*/ _interop_require_default(require("./extToFormat.js"));
 var _fileType = /*#__PURE__*/ _interop_require_default(require("./fileType.js"));
@@ -212,7 +212,7 @@ function _ts_generator(thisArg, body) {
 var major = +_nodeprocess.default.versions.node.split('.')[0];
 var importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
 var cache = new _Cache.default();
-var config = (0, _loadTSConfig.default)(_nodepath.default.resolve(_nodeprocess.default.cwd(), 'tsconfig.json'));
+var config = (0, _loadTSConfig.default)(_nodeprocess.default.cwd());
 var match = (0, _tsswctransform.createMatcher)(config);
 var moduleRegEx = /^[^.\/]|^\.[^.\/]|^\.\.[^\/]/;
 var typeFileRegEx = /^[^.]+\.d\.(.*)$/;

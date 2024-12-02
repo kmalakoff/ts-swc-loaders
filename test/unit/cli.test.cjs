@@ -29,10 +29,6 @@ describe('cli', () => {
     });
   });
 
-  before((cb) => {
-    devStack.link([], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }, cb);
-  });
-  after((cb) => {
-    devStack.unlink([], { installPath: DATA_MODULE_DIR }, cb);
-  });
+  before(devStack.link.bind(null, [], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }));
+  after(devStack.unlink.bind(null, [], { installPath: DATA_MODULE_DIR }));
 });

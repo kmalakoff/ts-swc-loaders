@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "core-js": "^3.39.0",
+    "cross-spawn-cb": "^1.1.2",
     "env-path-key": "^1.0.0",
     "exit": "^0.1.2",
     "get-tsconfig-compat": "^0.1.0",
@@ -63,7 +64,6 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.10.1",
     "cr": "^0.1.0",
-    "cross-spawn-cb": "^1.1.2",
     "depcheck": "^1.4.7",
     "getopts-compat": "^2.2.5",
     "mocha": "^11.0.1",

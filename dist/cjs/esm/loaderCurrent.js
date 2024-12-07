@@ -322,7 +322,7 @@ function _resolve() {
                     found = items1.find(function(x) {
                         return x.startsWith(fileName) && !typeFileRegEx.test(x) && _extensions.default.indexOf(_nodepath.default.extname(x)) >= 0;
                     });
-                    if (!found) return [
+                    if (!(found && _nodepath.default.extname(specifier) !== _nodepath.default.extname(found))) return [
                         3,
                         13
                     ];

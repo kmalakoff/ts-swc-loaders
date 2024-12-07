@@ -8,7 +8,6 @@ updates:
       - dependency-name: 'mkdirp'
       - dependency-name: 'pirates'
       - dependency-name: 'minimatch'
-      - dependency-name: 'slash'
       - dependency-name: 'ts-node'
       - dependency-name: 'which'
       - dependency-name: 'regenerator-runtime'

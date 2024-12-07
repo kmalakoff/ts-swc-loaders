@@ -52,7 +52,7 @@ export async function resolve(specifier, context, next) {
     const fileName = path.basename(filePath).replace(/(\.[^/.]+)+$/, '');
     const items = await fs.readdir(path.dirname(filePath));
     const found = items.find((x) => x.startsWith(fileName) && !typeFileRegEx.test(x) && extensions.indexOf(path.extname(x)) >= 0);
-    if (found) return await resolve(specifier + path.extname(found), context, next);
+    if (found && path.extname(specifier) !== path.extname(found)) return await resolve(specifier + path.extname(found), context, next);
   }
 
   // use default resolve and infer from package type

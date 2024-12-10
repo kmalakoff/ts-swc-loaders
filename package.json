@@ -69,7 +69,7 @@
     "mocha": "^11.0.1",
     "mocha-compat": "^3.6.2",
     "react": "^19.0.0",
-    "ts-dev-stack": "^1.0.7"
+    "ts-dev-stack": "^1.2.0"
   },
   "engines": {
     "node": ">=0.8"

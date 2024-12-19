@@ -21,8 +21,8 @@ const match = createMatcher(config);
 
 export async function resolve(specifier, context, next) {
   if (isBuiltinModule(specifier)) return next(specifier, context);
-  const filePath = resolveFileSync(specifier, context);
-  const ext = path.extname(specifier);
+  let filePath = toPath(specifier, context);
+  const ext = path.extname(filePath);
 
   // filtered
   if (!match(filePath)) {
@@ -33,6 +33,7 @@ export async function resolve(specifier, context, next) {
   }
 
   // use default resolve and infer from package type
+  filePath = resolveFileSync(specifier, context);
   const data = {
     url: pathToFileURL(filePath).href,
     format: extToFormat(ext),

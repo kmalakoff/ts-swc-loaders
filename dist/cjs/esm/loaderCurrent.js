@@ -219,25 +219,45 @@ function resolve(specifier, context, next) {
 }
 function _resolve() {
     _resolve = _async_to_generator(function(specifier, context, next) {
-        var filePath, ext, data;
+        var filePath, ext, data, data1;
         return _ts_generator(this, function(_state) {
-            if ((0, _isbuiltinmodule.default)(specifier)) return [
-                2,
-                next(specifier, context)
-            ];
-            filePath = (0, _tsswctransform.resolveFileSync)(specifier, context);
-            ext = _path.default.extname(filePath);
-            // use default resolve and infer from package type
-            data = {
-                url: (0, _url.pathToFileURL)(filePath).href,
-                format: (0, _extToFormat.default)(ext),
-                shortCircuit: true
-            };
-            if (!data.format) data.format = (0, _fileType.default)(filePath);
-            return [
-                2,
-                data
-            ];
+            switch(_state.label){
+                case 0:
+                    if ((0, _isbuiltinmodule.default)(specifier)) return [
+                        2,
+                        next(specifier, context)
+                    ];
+                    filePath = (0, _tsswctransform.resolveFileSync)(specifier, context);
+                    ext = _path.default.extname(specifier);
+                    if (!!match(filePath)) return [
+                        3,
+                        2
+                    ];
+                    return [
+                        4,
+                        next(specifier, context)
+                    ];
+                case 1:
+                    data = _state.sent();
+                    if (!data.format) data.format = 'commonjs';
+                    if (_path.default.isAbsolute(filePath) && !ext) data.format = 'commonjs'; // args bin is cjs in a module
+                    return [
+                        2,
+                        data
+                    ];
+                case 2:
+                    // use default resolve and infer from package type
+                    data1 = {
+                        url: (0, _url.pathToFileURL)(filePath).href,
+                        format: (0, _extToFormat.default)(ext),
+                        shortCircuit: true
+                    };
+                    if (!data1.format) data1.format = (0, _fileType.default)(filePath);
+                    return [
+                        2,
+                        data1
+                    ];
+            }
         });
     });
     return _resolve.apply(this, arguments);

@@ -18,6 +18,7 @@ _export(exports, {
 });
 var _path = /*#__PURE__*/ _interop_require_default(require("path"));
 var _pirates = /*#__PURE__*/ _interop_require_default(require("pirates"));
+var _process = /*#__PURE__*/ _interop_require_default(require("process"));
 require("../polyfills.js");
 var _tsswctransform = require("ts-swc-transform");
 var _constants = require("../constants.js");
@@ -30,7 +31,7 @@ function _interop_require_default(obj) {
     };
 }
 var cache = new _Cache.default();
-var config = (0, _loadTSConfig.default)(process.cwd());
+var config = (0, _loadTSConfig.default)(_process.default.cwd());
 config.config.compilerOptions.module = 'CommonJS';
 config.config.compilerOptions.target = 'ES5';
 var match = (0, _tsswctransform.createMatcher)(config);

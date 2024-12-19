@@ -12,6 +12,7 @@ var _fs = /*#__PURE__*/ _interop_require_default(require("fs"));
 var _os = /*#__PURE__*/ _interop_require_default(require("os"));
 var _path = /*#__PURE__*/ _interop_require_default(require("path"));
 var _osshim = /*#__PURE__*/ _interop_require_default(require("os-shim"));
+var _process = /*#__PURE__*/ _interop_require_default(require("process"));
 var _mkdirp = /*#__PURE__*/ _interop_require_default(require("mkdirp"));
 var _shorthash = /*#__PURE__*/ _interop_require_default(require("short-hash"));
 function _class_call_check(instance, Constructor) {
@@ -41,8 +42,8 @@ var Cache = /*#__PURE__*/ function() {
     function Cache(options) {
         _class_call_check(this, Cache);
         options = options || {};
-        this.cwd = process.cwd();
-        this.cwdHash = (0, _shorthash.default)(process.cwd());
+        this.cwd = _process.default.cwd();
+        this.cwdHash = (0, _shorthash.default)(_process.default.cwd());
         this.root = options.root || _path.default.join(tmpdir(), 'ts-swc-loaders');
         this.maxAge = options.maxAge || 1 * MS_TO_DAYS;
     }

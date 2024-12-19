@@ -1,5 +1,6 @@
 import path from 'path';
 import isBuiltinModule from 'is-builtin-module';
+import process from 'process';
 import { createMatcher, toPath, transformSync } from 'ts-swc-transform';
 
 import { typeFileRegEx } from '../constants.js';

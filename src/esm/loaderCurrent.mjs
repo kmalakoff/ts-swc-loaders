@@ -22,7 +22,15 @@ const match = createMatcher(config);
 export async function resolve(specifier, context, next) {
   if (isBuiltinModule(specifier)) return next(specifier, context);
   const filePath = resolveFileSync(specifier, context);
-  const ext = path.extname(filePath);
+  const ext = path.extname(specifier);
+
+  // filtered
+  if (!match(filePath)) {
+    const data = await next(specifier, context);
+    if (!data.format) data.format = 'commonjs';
+    if (path.isAbsolute(filePath) && !ext) data.format = 'commonjs'; // args bin is cjs in a module
+    return data;
+  }
 
   // use default resolve and infer from package type
   const data = {

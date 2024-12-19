@@ -1,9 +1,8 @@
 import path from 'path';
 import isBuiltinModule from 'is-builtin-module';
-import { createMatcher, toPath, transformSync } from 'ts-swc-transform';
+import { createMatcher, extensions, toPath, transformSync } from 'ts-swc-transform';
 
 import { typeFileRegEx } from '../constants.js';
-import extensions from '../extensions.mjs';
 import Cache from '../lib/Cache.mjs';
 import loadTSConfig from '../lib/loadTSConfig.mjs';
 // @ts-ignore
@@ -42,6 +41,7 @@ async function _transformSource(source, context, next) {
   // filtered
   if (!match(filePath)) return loaded;
   if (typeFileRegEx.test(filePath)) return { source: '' };
+  if (ext === '.json') return loaded;
   if (extensions.indexOf(ext) < 0) return loaded;
 
   const contents = loaded.source.toString();

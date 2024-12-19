@@ -227,8 +227,8 @@ function _resolve() {
                         2,
                         next(specifier, context)
                     ];
-                    filePath = (0, _tsswctransform.resolveFileSync)(specifier, context);
-                    ext = _path.default.extname(specifier);
+                    filePath = (0, _tsswctransform.toPath)(specifier, context);
+                    ext = _path.default.extname(filePath);
                     if (!!match(filePath)) return [
                         3,
                         2
@@ -247,6 +247,7 @@ function _resolve() {
                     ];
                 case 2:
                     // use default resolve and infer from package type
+                    filePath = (0, _tsswctransform.resolveFileSync)(specifier, context);
                     data1 = {
                         url: (0, _url.pathToFileURL)(filePath).href,
                         format: (0, _extToFormat.default)(ext),

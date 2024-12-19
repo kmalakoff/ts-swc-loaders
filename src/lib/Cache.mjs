@@ -2,6 +2,7 @@ import fs from 'fs';
 import os from 'os';
 import path from 'path';
 import osShim from 'os-shim';
+import process from 'process';
 
 import mkdirp from 'mkdirp';
 import shortHash from 'short-hash';

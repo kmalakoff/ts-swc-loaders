@@ -19,12 +19,12 @@ _export(exports, {
 var _path = /*#__PURE__*/ _interop_require_default(require("path"));
 var _isbuiltinmodule = /*#__PURE__*/ _interop_require_default(require("is-builtin-module"));
 var _tsswctransform = require("ts-swc-transform");
+var _constants = require("../constants.js");
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
 var _Cache = /*#__PURE__*/ _interop_require_default(require("../lib/Cache.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../lib/loadTSConfig.js"));
 var _extToFormat = /*#__PURE__*/ _interop_require_default(require("./extToFormat.js"));
 var _fileType = /*#__PURE__*/ _interop_require_default(require("./fileType.js"));
-var _toPath = /*#__PURE__*/ _interop_require_default(require("./toPath.js"));
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
@@ -157,7 +157,6 @@ function _ts_generator(thisArg, body) {
 var cache = new _Cache.default();
 var config = (0, _loadTSConfig.default)(process.cwd());
 var match = (0, _tsswctransform.createMatcher)(config);
-var typeFileRegEx = /^[^.]+\.d\.(.*)$/;
 function _getFormat(url, context, next) {
     return __getFormat.apply(this, arguments);
 }
@@ -185,7 +184,7 @@ function __getFormat() {
                         _state.sent()
                     ];
                 case 2:
-                    filePath = (0, _toPath.default)(url, context);
+                    filePath = (0, _tsswctransform.toPath)(url, context);
                     ext = _path.default.extname(filePath);
                     if (!!match(filePath)) return [
                         3,
@@ -243,14 +242,14 @@ function __transformSource() {
                     ];
                 case 1:
                     loaded = _state.sent();
-                    filePath = (0, _toPath.default)(context.url);
+                    filePath = (0, _tsswctransform.toPath)(context.url);
                     ext = _path.default.extname(filePath);
                     // filtered
                     if (!match(filePath)) return [
                         2,
                         loaded
                     ];
-                    if (typeFileRegEx.test(filePath)) return [
+                    if (_constants.typeFileRegEx.test(filePath)) return [
                         2,
                         {
                             source: ''

@@ -2,6 +2,7 @@ import path from 'path';
 import pirates from 'pirates';
 import '../polyfills.cjs';
 import { createMatcher, transformSync } from 'ts-swc-transform';
+import { typeFileRegEx } from '../constants.mjs';
 import extensions from '../extensions.mjs';
 import Cache from '../lib/Cache.mjs';
 import loadTSConfig from '../lib/loadTSConfig.mjs';
@@ -10,7 +11,6 @@ const config = loadTSConfig(process.cwd());
 config.config.compilerOptions.module = 'CommonJS';
 config.config.compilerOptions.target = 'ES5';
 const match = createMatcher(config);
-const typeFileRegEx = /^[^.]+\.d\.(.*)$/;
 export function register(options, hookOpts) {
     options = options || {};
     return pirates.addHook((code, filePath)=>compile(code, filePath, options), Object.assign({

@@ -1,0 +1,1 @@
+{"version":3,"sources":["constants.ts"],"sourcesContent":["export const typeFileRegEx = /^[^.]+\\.d\\.[cm]?ts$/;\n"],"names":["typeFileRegEx"],"mappings":"AAAA,OAAO,MAAMA,gBAAgB,sBAAsB"}

@@ -2,9 +2,8 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { pathToFileURL } from 'url';
 import isBuiltinModule from 'is-builtin-module';
-import { createMatcher, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
+import { createMatcher, extensions, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
 import { typeFileRegEx } from '../constants.mjs';
-import extensions from '../extensions.mjs';
 import Cache from '../lib/Cache.mjs';
 import loadTSConfig from '../lib/loadTSConfig.mjs';
 import extToFormat from './extToFormat.mjs';
@@ -53,6 +52,7 @@ export async function load(url, context, next) {
         format: 'module',
         source: ''
     };
+    if (ext === '.json') return data;
     if (extensions.indexOf(ext) < 0) return data;
     // transform
     if (!data.source) data.source = await fs.readFile(filePath);

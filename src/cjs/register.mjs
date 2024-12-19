@@ -2,10 +2,9 @@ import path from 'path';
 import pirates from 'pirates';
 import '../polyfills.cjs';
 
-import { createMatcher, transformSync } from 'ts-swc-transform';
+import { createMatcher, extensions, transformSync } from 'ts-swc-transform';
 
 import { typeFileRegEx } from '../constants.js';
-import extensions from '../extensions.mjs';
 import Cache from '../lib/Cache.mjs';
 import loadTSConfig from '../lib/loadTSConfig.mjs';
 
@@ -29,6 +28,7 @@ export function compile(contents, filePath) {
   // filter
   if (!match(filePath)) return contents || ' ';
   if (typeFileRegEx.test(filePath)) return ' ';
+  if (ext === '.json') return contents || ' ';
   if (extensions.indexOf(ext) < 0) return contents || ' ';
 
   const data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, () => transformSync(contents, filePath, config));

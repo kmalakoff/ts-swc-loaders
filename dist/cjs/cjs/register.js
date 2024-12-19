@@ -21,7 +21,6 @@ var _pirates = /*#__PURE__*/ _interop_require_default(require("pirates"));
 require("../polyfills.js");
 var _tsswctransform = require("ts-swc-transform");
 var _constants = require("../constants.js");
-var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
 var _Cache = /*#__PURE__*/ _interop_require_default(require("../lib/Cache.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../lib/loadTSConfig.js"));
 var _processcjs = /*#__PURE__*/ _interop_require_default(require("../lib/process.js"));
@@ -40,7 +39,7 @@ function register(options, hookOpts) {
     return _pirates.default.addHook(function(code, filePath) {
         return compile(code, filePath, options);
     }, Object.assign({
-        exts: _extensions.default
+        exts: _tsswctransform.extensions
     }, hookOpts || {}));
 }
 function compile(contents, filePath) {
@@ -48,7 +47,8 @@ function compile(contents, filePath) {
     // filter
     if (!match(filePath)) return contents || ' ';
     if (_constants.typeFileRegEx.test(filePath)) return ' ';
-    if (_extensions.default.indexOf(ext) < 0) return contents || ' ';
+    if (ext === '.json') return contents || ' ';
+    if (_tsswctransform.extensions.indexOf(ext) < 0) return contents || ' ';
     var data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, function() {
         return (0, _tsswctransform.transformSync)(contents, filePath, config);
     });

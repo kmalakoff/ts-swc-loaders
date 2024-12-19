@@ -1,1 +1,0 @@
-{"version":3,"sources":["extensions.mjs"],"sourcesContent":["export default ['.js', '.jsx', '.cjs', '.mjs', '.ts', '.tsx', '.cts', '.mts', '.json', '.es6', '.es'];\n"],"names":[],"mappings":";;;;+BAAA;;;eAAA;;;IAAA,WAAe;IAAC;IAAO;IAAQ;IAAQ;IAAQ;IAAO;IAAQ;IAAQ;IAAQ;IAAS;IAAQ;CAAM"}

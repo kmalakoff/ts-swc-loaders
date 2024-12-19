@@ -20,7 +20,6 @@ var _path = /*#__PURE__*/ _interop_require_default(require("path"));
 var _isbuiltinmodule = /*#__PURE__*/ _interop_require_default(require("is-builtin-module"));
 var _tsswctransform = require("ts-swc-transform");
 var _constants = require("../constants.js");
-var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
 var _Cache = /*#__PURE__*/ _interop_require_default(require("../lib/Cache.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../lib/loadTSConfig.js"));
 var _processcjs = /*#__PURE__*/ _interop_require_default(require("../lib/process.js"));
@@ -256,7 +255,11 @@ function __transformSource() {
                             source: ''
                         }
                     ];
-                    if (_extensions.default.indexOf(ext) < 0) return [
+                    if (ext === '.json') return [
+                        2,
+                        loaded
+                    ];
+                    if (_tsswctransform.extensions.indexOf(ext) < 0) return [
                         2,
                         loaded
                     ];

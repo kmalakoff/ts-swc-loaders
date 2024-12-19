@@ -2,7 +2,6 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { pathToFileURL } from 'url';
 import isBuiltinModule from 'is-builtin-module';
-import process from 'process';
 import { createMatcher, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
 
 import { typeFileRegEx } from '../constants.js';
@@ -12,6 +11,8 @@ import loadTSConfig from '../lib/loadTSConfig.mjs';
 import extToFormat from './extToFormat.mjs';
 import fileType from './fileType.mjs';
 
+// @ts-ignore
+import process from '../lib/process.cjs';
 const major = +process.versions.node.split('.')[0];
 const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
 

@@ -1,12 +1,13 @@
 import path from 'path';
 import isBuiltinModule from 'is-builtin-module';
-import process from 'process';
 import { createMatcher, toPath, transformSync } from 'ts-swc-transform';
 
 import { typeFileRegEx } from '../constants.js';
 import extensions from '../extensions.mjs';
 import Cache from '../lib/Cache.mjs';
 import loadTSConfig from '../lib/loadTSConfig.mjs';
+// @ts-ignore
+import process from '../lib/process.cjs';
 import extToFormat from './extToFormat.mjs';
 import fileType from './fileType.mjs';
 

@@ -1,12 +1,13 @@
 import path from 'path';
 import pirates from 'pirates';
-import process from 'process';
 import '../polyfills.cjs';
 import { createMatcher, transformSync } from 'ts-swc-transform';
 import { typeFileRegEx } from '../constants.mjs';
 import extensions from '../extensions.mjs';
 import Cache from '../lib/Cache.mjs';
 import loadTSConfig from '../lib/loadTSConfig.mjs';
+// @ts-ignore
+import process from '../lib/process.cjs';
 const cache = new Cache();
 const config = loadTSConfig(process.cwd());
 config.config.compilerOptions.module = 'CommonJS';

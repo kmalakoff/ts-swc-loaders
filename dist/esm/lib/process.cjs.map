@@ -1,0 +1,1 @@
+{"version":3,"sources":["process.cts"],"sourcesContent":["module.exports = process;\n"],"names":["module","exports","process"],"mappings":"AAAAA,OAAOC,OAAO,GAAGC"}

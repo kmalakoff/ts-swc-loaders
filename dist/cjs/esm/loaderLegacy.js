@@ -18,12 +18,12 @@ _export(exports, {
 });
 var _path = /*#__PURE__*/ _interop_require_default(require("path"));
 var _isbuiltinmodule = /*#__PURE__*/ _interop_require_default(require("is-builtin-module"));
-var _process = /*#__PURE__*/ _interop_require_default(require("process"));
 var _tsswctransform = require("ts-swc-transform");
 var _constants = require("../constants.js");
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
 var _Cache = /*#__PURE__*/ _interop_require_default(require("../lib/Cache.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../lib/loadTSConfig.js"));
+var _processcjs = /*#__PURE__*/ _interop_require_default(require("../lib/process.js"));
 var _extToFormat = /*#__PURE__*/ _interop_require_default(require("./extToFormat.js"));
 var _fileType = /*#__PURE__*/ _interop_require_default(require("./fileType.js"));
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
@@ -156,7 +156,7 @@ function _ts_generator(thisArg, body) {
     }
 }
 var cache = new _Cache.default();
-var config = (0, _loadTSConfig.default)(_process.default.cwd());
+var config = (0, _loadTSConfig.default)(_processcjs.default.cwd());
 var match = (0, _tsswctransform.createMatcher)(config);
 function _getFormat(url, context, next) {
     return __getFormat.apply(this, arguments);
@@ -275,7 +275,7 @@ function __transformSource() {
     });
     return __transformSource.apply(this, arguments);
 }
-var major = +_process.default.versions.node.split('.')[0];
+var major = +_processcjs.default.versions.node.split('.')[0];
 var getFormat = major < 16 ? _getFormat : undefined;
 var transformSource = major < 16 ? _transformSource : undefined;
 /* CJS INTEROP */ if (exports.__esModule && exports.default) { try { Object.defineProperty(exports.default, '__esModule', { value: true }); for (var key in exports) { exports.default[key] = exports[key]; } } catch (_) {}; module.exports = exports.default; }

@@ -1,6 +1,6 @@
 export default class Cache {
     constructor(options: any);
-    cwd: string;
+    cwd: any;
     cwdHash: any;
     root: any;
     maxAge: any;

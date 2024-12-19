@@ -20,7 +20,6 @@ var _fs = require("fs");
 var _path = /*#__PURE__*/ _interop_require_default(require("path"));
 var _url = require("url");
 var _isbuiltinmodule = /*#__PURE__*/ _interop_require_default(require("is-builtin-module"));
-var _process = /*#__PURE__*/ _interop_require_default(require("process"));
 var _tsswctransform = require("ts-swc-transform");
 var _constants = require("../constants.js");
 var _extensions = /*#__PURE__*/ _interop_require_default(require("../extensions.js"));
@@ -28,6 +27,7 @@ var _Cache = /*#__PURE__*/ _interop_require_default(require("../lib/Cache.js"));
 var _loadTSConfig = /*#__PURE__*/ _interop_require_default(require("../lib/loadTSConfig.js"));
 var _extToFormat = /*#__PURE__*/ _interop_require_default(require("./extToFormat.js"));
 var _fileType = /*#__PURE__*/ _interop_require_default(require("./fileType.js"));
+var _processcjs = /*#__PURE__*/ _interop_require_default(require("../lib/process.js"));
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
         var info = gen[key](arg);
@@ -209,10 +209,10 @@ function _ts_generator(thisArg, body) {
         };
     }
 }
-var major = +_process.default.versions.node.split('.')[0];
+var major = +_processcjs.default.versions.node.split('.')[0];
 var importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
 var cache = new _Cache.default();
-var config = (0, _loadTSConfig.default)(_process.default.cwd());
+var config = (0, _loadTSConfig.default)(_processcjs.default.cwd());
 var match = (0, _tsswctransform.createMatcher)(config);
 function resolve(specifier, context, next) {
     return _resolve.apply(this, arguments);

@@ -6,6 +6,6 @@ const EXT_TO_FORMAT = {
   '.cts': 'commonjs',
 };
 
-export default function extToFormat(ext) {
+export default function extToFormat(ext: string) {
   return EXT_TO_FORMAT[ext];
 }

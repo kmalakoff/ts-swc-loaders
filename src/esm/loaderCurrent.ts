@@ -5,10 +5,11 @@ import isBuiltinModule from 'is-builtin-module';
 import { createMatcher, extensions, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
 
 import { typeFileRegEx } from '../constants.js';
-import Cache from '../lib/Cache.mjs';
-import loadTSConfig from '../lib/loadTSConfig.mjs';
-import extToFormat from './extToFormat.mjs';
-import fileType from './fileType.mjs';
+import Cache from '../lib/Cache.js';
+import loadTSConfig from '../lib/loadTSConfig.js';
+import type { Context, Loaded, Loader, Resolved, Resolver } from '../types.js';
+import extToFormat from './extToFormat.js';
+import fileType from './fileType.js';
 
 // @ts-ignore
 import process from '../lib/process.cjs';
@@ -19,7 +20,7 @@ const cache = new Cache();
 const config = loadTSConfig(process.cwd());
 const match = createMatcher(config);
 
-export async function resolve(specifier, context, next) {
+export async function resolve(specifier: string, context: Context, next: Resolver): Promise<Resolved> | null {
   if (isBuiltinModule(specifier)) return next(specifier, context);
   let filePath = toPath(specifier, context);
   const ext = path.extname(filePath);
@@ -43,7 +44,7 @@ export async function resolve(specifier, context, next) {
   return data;
 }
 
-export async function load(url, context, next) {
+export async function load(url: string, context: Context, next: Loader): Promise<Loaded> {
   if (isBuiltinModule(url)) return next(url, context);
   if (url.endsWith('.json')) context[importJSONKey] = Object.assign(context[importJSONKey] || {}, { type: 'json' });
 

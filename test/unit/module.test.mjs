@@ -1,18 +1,18 @@
-import process from 'process';
-
+// @ts-ignore
+import process from '../lib/process.cjs';
 // remove NODE_OPTIONS from ts-dev-stack
 // biome-ignore lint/performance/noDelete: <explanation>
 delete process.env.NODE_OPTIONS;
 
 import assert from 'assert';
 import path from 'path';
+import url from 'url';
 import cr from 'cr';
 import spawn from 'cross-spawn-cb';
-import devStack from 'ts-dev-stack';
+import * as devStack from 'ts-dev-stack';
 import { spawnParams } from 'ts-swc-loaders';
 
-import { fileURLToPath } from 'url';
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
+const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 
 const type = 'module';
 const MODULE_DIR = path.resolve(__dirname, '..', '..');

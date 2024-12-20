@@ -1,6 +1,9 @@
 import path from 'path';
-import packageUp from './packageUp.mjs';
-function isEntry(filePath, pkg, key) {
+import packageUp from './packageUp.js';
+
+import type { PackageInfo } from '../types.js';
+
+function isEntry(filePath: string, pkg: PackageInfo, key: string) {
   if (pkg.json[key] === undefined) return false;
   const modulePath = path.resolve(pkg.dir, pkg.json[key]);
   if (filePath === modulePath) return true;
@@ -8,7 +11,8 @@ function isEntry(filePath, pkg, key) {
   if (filePath.startsWith(moduleDir)) return true;
   return false;
 }
-export default function fileType(filePath) {
+
+export default function fileType(filePath: string) {
   const pkg = packageUp(filePath);
   if (!pkg) return 'commonjs';
   if (isEntry(filePath, pkg, 'module')) return 'module';

@@ -3,18 +3,21 @@ import isBuiltinModule from 'is-builtin-module';
 import { createMatcher, extensions, toPath, transformSync } from 'ts-swc-transform';
 
 import { typeFileRegEx } from '../constants.js';
-import Cache from '../lib/Cache.mjs';
-import loadTSConfig from '../lib/loadTSConfig.mjs';
+import Cache from '../lib/Cache.js';
+import loadTSConfig from '../lib/loadTSConfig.js';
+import type { Context, Formatted, Formatter } from '../types.js';
+import extToFormat from './extToFormat.js';
+import fileType from './fileType.js';
+
 // @ts-ignore
 import process from '../lib/process.cjs';
-import extToFormat from './extToFormat.mjs';
-import fileType from './fileType.mjs';
+const major = +process.versions.node.split('.')[0];
 
 const cache = new Cache();
 const config = loadTSConfig(process.cwd());
 const match = createMatcher(config);
 
-async function _getFormat(url, context, next) {
+async function _getFormat(url: string, context: Context, next: Formatter): Promise<Formatted> {
   if (isBuiltinModule(url)) return next(url, context);
   if (!url.startsWith('file://')) return await next(url, context);
   const filePath = toPath(url, context);
@@ -51,8 +54,6 @@ async function _transformSource(source, context, next) {
     source: compiled.code,
   };
 }
-
-const major = +process.versions.node.split('.')[0];
 
 export const getFormat = major < 16 ? _getFormat : undefined;
 export const transformSource = major < 16 ? _transformSource : undefined;

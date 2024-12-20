@@ -21,9 +21,18 @@ function timeMS() {
 }
 const MS_TO_DAYS = 1000 * 60 * 60 * 24;
 
+export interface CacheOptions {
+  root?: string;
+  maxAge?: number;
+}
+
 export default class Cache {
-  constructor(options) {
-    options = options || {};
+  private cwd: string;
+  private cwdHash: string;
+  private root: string;
+  private maxAge: number;
+
+  constructor(options: CacheOptions = {}) {
     this.cwd = process.cwd();
     this.cwdHash = shortHash(process.cwd());
     this.root = options.root || path.join(tmpdir(), 'ts-swc-loaders');

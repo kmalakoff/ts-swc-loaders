@@ -39,11 +39,10 @@ export default class Cache {
     this.maxAge = options.maxAge || 1 * MS_TO_DAYS;
   }
 
-  cachePath(filePath, options) {
+  cachePath(filePath: string, options: object = {}) {
     const relFilePath = path.relative(this.cwd, filePath);
-    let basename = path.basename(relFilePath);
-    const dirHash = shortHash(path.dirname(relFilePath));
-    if (options) basename += `-${shortHash(JSON.stringify(options || {}))}`;
+    const basename = path.basename(relFilePath);
+    const dirHash = `${shortHash(path.dirname(relFilePath))}-${shortHash(JSON.stringify(options))}`;
     return path.join(this.root, this.cwdHash, dirHash, `${basename}.json`);
   }
 

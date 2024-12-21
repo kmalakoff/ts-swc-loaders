@@ -35,6 +35,7 @@ export async function resolve(specifier: string, context: Context, next: Resolve
 
   // use default resolve and infer from package type
   filePath = resolveFileSync(specifier, context);
+  if (!filePath) throw new Error(`${specifier} not found. parentURL: ${context.parentURL}`);
   const data = {
     url: pathToFileURL(filePath).href,
     format: extToFormat(ext),

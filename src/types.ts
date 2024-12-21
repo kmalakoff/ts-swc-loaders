@@ -1,5 +1,4 @@
 import type { Context } from 'ts-swc-transform';
-
 export type { Context } from 'ts-swc-transform';
 
 export interface PackageJSON {

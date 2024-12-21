@@ -1,7 +1,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import mkdirp from 'mkdirp';
+import mkdirp from 'mkdirp-classic';
 import osShim from 'os-shim';
 import shortHash from 'short-hash';
 // @ts-ignore

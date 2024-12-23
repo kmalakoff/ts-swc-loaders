@@ -4,8 +4,6 @@ import path from 'path';
 import mkdirp from 'mkdirp-classic';
 import osShim from 'os-shim';
 import shortHash from 'short-hash';
-// @ts-ignore
-import process from '../lib/process.cjs';
 
 const tmpdir = os.tmpdir || osShim.tmpdir;
 

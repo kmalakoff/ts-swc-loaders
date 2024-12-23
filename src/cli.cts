@@ -5,7 +5,7 @@ const pathKey = require('env-path-key');
 const exit = require('exit');
 const prepend = require('path-string-prepend');
 const which = require('which');
-const { spawnParams } = require('./index.js');
+const spawnParams = require('./spawnParams.js');
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const major = +process.versions.node.split('.')[0];

@@ -8,9 +8,6 @@ import { typeFileRegEx } from '../constants.js';
 import Cache from '../lib/Cache.js';
 import loadTSConfig from '../lib/loadTSConfig.js';
 
-// @ts-ignore
-import process from '../lib/process.cjs';
-
 const cache = new Cache();
 const config = loadTSConfig(process.cwd());
 config.config.compilerOptions.module = 'CommonJS';

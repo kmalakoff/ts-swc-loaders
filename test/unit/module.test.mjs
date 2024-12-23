@@ -1,5 +1,3 @@
-// @ts-ignore
-import process from '../lib/process.cjs';
 // remove NODE_OPTIONS from ts-dev-stack
 // biome-ignore lint/performance/noDelete: <explanation>
 delete process.env.NODE_OPTIONS;

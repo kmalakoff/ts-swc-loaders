@@ -9,8 +9,6 @@ import type { Context, Formatted, Formatter } from '../types.js';
 import extToFormat from './extToFormat.js';
 import fileType from './fileType.js';
 
-// @ts-ignore
-import process from '../lib/process.cjs';
 const major = +process.versions.node.split('.')[0];
 
 const cache = new Cache();

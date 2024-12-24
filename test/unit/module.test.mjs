@@ -7,7 +7,7 @@ import path from 'path';
 import url from 'url';
 import cr from 'cr';
 import spawn from 'cross-spawn-cb';
-import * as devStack from 'ts-dev-stack';
+import { runCommand } from 'ts-dev-stack';
 import { spawnParams } from 'ts-swc-loaders';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
@@ -28,6 +28,6 @@ describe('module', () => {
     });
   });
 
-  before(devStack.link.bind(null, [], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }));
-  after(devStack.unlink.bind(null, [], { installPath: DATA_MODULE_DIR }));
+  before(runCommand.bind(null, 'link', [], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }));
+  after(runCommand.bind(null, 'unlink', [], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }));
 });

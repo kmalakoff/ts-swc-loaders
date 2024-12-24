@@ -1,5 +1,5 @@
-require('core-js/actual/string/ends-with');
-require('core-js/actual/string/starts-with');
-require('core-js/actual/object/assign');
-require('core-js/actual/symbol/for');
-require('core-js/actual/map');
+if (!Object.assign) Object.assign = require('object-assign');
+if (!String.prototype.startsWith) Object.assign = require('string.prototype.startswith');
+if (!String.prototype.endsWith) Object.assign = require('string.prototype.endswith');
+require('es6-map/implement');
+require('es6-symbol/implement');

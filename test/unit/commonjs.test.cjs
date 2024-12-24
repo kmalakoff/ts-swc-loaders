@@ -5,8 +5,8 @@ delete process.env.NODE_OPTIONS;
 const assert = require('assert');
 const path = require('path');
 const spawn = require('cross-spawn-cb');
-const spawnParams = require('ts-swc-loaders').spawnParams;
-const devStack = require('ts-dev-stack');
+const { spawnParams } = require('ts-swc-loaders');
+const { runCommand } = require('ts-dev-stack');
 const cr = require('cr');
 
 const major = +process.versions.node.split('.')[0];
@@ -36,6 +36,6 @@ describe('commonjs', () => {
       });
     });
 
-  before(devStack.link.bind(null, [], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }));
-  after(devStack.unlink.bind(null, [], { installPath: DATA_MODULE_DIR }));
+  before(runCommand.bind(null, 'link', [], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }));
+  after(runCommand.bind(null, 'unlink', [], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }));
 });

@@ -1,4 +1,3 @@
-import './polyfills.cjs';
 import type { SpawnParamsOptions, SpawnParamsResult } from './types.js';
 
 const major = +process.versions.node.split('.')[0];

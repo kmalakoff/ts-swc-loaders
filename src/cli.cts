@@ -19,7 +19,6 @@ module.exports = function cli(args, options, cb) {
   env[PATH_KEY] = prepend(env[PATH_KEY] || '', path.resolve(__dirname, '..', '..', '..', '..', 'node_modules', '.bin'));
   env[PATH_KEY] = prepend(env[PATH_KEY] || '', path.resolve(process.cwd(), 'node_modules', '.bin'));
   const params = spawnParams(type, { stdio: 'inherit', cwd, env, ...options });
-  // biome-ignore lint/performance/noDelete: <explanation>
   if (options.encoding) delete params.options.stdio;
 
   function callback(err, res) {

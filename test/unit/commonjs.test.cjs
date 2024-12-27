@@ -5,14 +5,14 @@ const assert = require('assert');
 const path = require('path');
 const spawn = require('cross-spawn-cb');
 const { spawnParams } = require('ts-swc-loaders');
-const { runCommand } = require('ts-dev-stack');
+const { linkModule, unlinkModule } = require('module-link-unlink');
 const cr = require('cr');
 
 const major = +process.versions.node.split('.')[0];
 const type = 'commonjs';
 const MODULE_DIR = path.resolve(__dirname, '..', '..');
 const DATA_DIR = path.resolve(__dirname, '..', 'data', type);
-const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules', 'ts-swc-loaders');
+const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules');
 
 const args = spawnParams(type, { cwd: DATA_DIR, encoding: 'utf8' });
 
@@ -35,6 +35,6 @@ describe('commonjs', () => {
       });
     });
 
-  before(runCommand.bind(null, 'link', [], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }));
-  after(runCommand.bind(null, 'unlink', [], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }));
+  before(linkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
+  after(unlinkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
 });

@@ -5,9 +5,8 @@ updates:
     schedule:
       interval: weekly
     ignore:
+      - dependency-name: 'mocha'
       - dependency-name: 'pirates'
-      - dependency-name: 'minimatch'
-      - dependency-name: 'ts-node'
       - dependency-name: 'which'
       - dependency-name: 'regenerator-runtime'
       - dependency-name: 'is-builtin-module'      

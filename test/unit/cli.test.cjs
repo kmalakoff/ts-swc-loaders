@@ -4,7 +4,7 @@ delete process.env.NODE_OPTIONS;
 const assert = require('assert');
 const path = require('path');
 const spawn = require('cross-spawn-cb');
-const { runCommand } = require('ts-dev-stack');
+const { linkModule, unlinkModule } = require('module-link-unlink');
 const cr = require('cr');
 
 const CLI = path.resolve(__dirname, '..', '..', 'bin', 'cli.js');
@@ -14,9 +14,9 @@ const major = +process.versions.node.split('.')[0];
 const type = major < 12 ? 'commonjs' : 'module';
 const MODULE_DIR = path.resolve(__dirname, '..', '..');
 const DATA_DIR = path.resolve(__dirname, '..', 'data', type);
-const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules', 'ts-swc-loaders');
+const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules');
 
-const cmd = major < 12 ? 'mocha-compat' : 'mocha';
+const cmd = type === 'commonjs' ? 'mocha-compat' : 'mocha';
 
 describe('cli', () => {
   it('run with cli option', (done) => {
@@ -28,6 +28,6 @@ describe('cli', () => {
     });
   });
 
-  before(runCommand.bind(null, 'link', [], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }));
-  after(runCommand.bind(null, 'unlink', [], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }));
+  before(linkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
+  after(unlinkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
 });

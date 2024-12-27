@@ -1,10 +1,10 @@
 const path = require('path');
 const url = require('url');
 const spawn = require('cross-spawn-cb');
-const pathKey = require('env-path-key');
+const _pathKey = require('env-path-key');
 const exit = require('exit');
-const prepend = require('path-string-prepend');
-const which = require('which');
+const _prepend = require('path-string-prepend');
+const which = require('./lib/which');
 const spawnParams = require('./spawnParams.js');
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
@@ -13,27 +13,25 @@ const type = major < 12 ? 'commonjs' : 'module';
 
 module.exports = function cli(args, options, cb) {
   options = options || {};
-  const cwd = options.cwd || process.cwd();
-  const env = { ...process.env };
-  const PATH_KEY = pathKey();
-  env[PATH_KEY] = prepend(env[PATH_KEY] || '', path.resolve(__dirname, '..', '..', '..', '..', 'node_modules', '.bin'));
-  env[PATH_KEY] = prepend(env[PATH_KEY] || '', path.resolve(process.cwd(), 'node_modules', '.bin'));
-  const params = spawnParams(type, { stdio: 'inherit', cwd, env, ...options });
-  if (options.encoding) delete params.options.stdio;
-
-  function callback(err, res) {
-    if (cb) return cb(err, res);
-    if (err && err.message.indexOf('ExperimentalWarning') < 0) {
-      console.log(err.message);
-      return exit(err.code || -1);
-    }
-    exit(0);
-  }
 
   // look up the full path
-  which(args[0], { path: env[PATH_KEY] }, (_err, cmd) => {
+  which(args[0], options, (_err, cmd) => {
     // not found, use the original
     if (!cmd) cmd = args[0];
+
+    function callback(err, res) {
+      if (cb) return cb(err, res);
+      if (err && err.message.indexOf('ExperimentalWarning') < 0) {
+        console.log(err.message);
+        return exit(err.code || -1);
+      }
+      exit(0);
+    }
+
+    const cwd = options.cwd || process.cwd();
+    const env = options.env || process.env;
+    const params = spawnParams(type, { stdio: 'inherit', cwd, env, ...options });
+    if (options.encoding) delete params.options.stdio;
 
     // spawn on windows
     const cmdExt = path.extname(cmd);

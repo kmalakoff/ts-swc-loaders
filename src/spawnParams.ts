@@ -7,8 +7,8 @@ const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : 
 const root = packageRoot(__dirname);
 
 const loaderCJS = path.join(root, 'dist', 'cjs', 'index.cjs.js');
-const loaderEMS = path.join(root, 'dist', 'esm', 'index.esm.mjs');
-const importArgs = `data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("ts-swc-loaders", pathToFileURL("${loaderEMS}"));`;
+const loaderEMS = !url.pathToFileURL || url.pathToFileURL(path.join(root, 'dist', 'esm', 'index.esm.mjs'));
+const importArgs = `data:text/javascript,import { register } from "node:module"; register("ts-swc-loaders", "${loaderEMS}");`;
 
 import type { SpawnParamsOptions, SpawnParamsResult } from './types.js';
 export default function spawnParams(type: string, options: SpawnParamsOptions | undefined): SpawnParamsResult {

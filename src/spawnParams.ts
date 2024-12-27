@@ -7,8 +7,8 @@ const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : 
 const root = packageRoot(__dirname);
 
 const loaderCJS = path.resolve(root, 'dist', 'cjs', 'index.cjs.js');
-const loaderEMS = !url.pathToFileURL || url.pathToFileURL(path.resolve(root, 'dist', 'esm', 'index.esm.mjs'));
-const importArgs = `data:text/javascript,import { register } from "node:module"; register("ts-swc-loaders", "${loaderEMS}");`;
+const loaderESM = !url.pathToFileURL || url.pathToFileURL(path.resolve(root, 'dist', 'esm', 'index.esm.mjs'));
+// const importArgs = `data:text/javascript,import { register } from "node:module"; register("ts-swc-loaders", "${loaderESM}");`;
 
 import type { SpawnParamsOptions, SpawnParamsResult } from './types.js';
 export default function spawnParams(type: string, options: SpawnParamsOptions | undefined): SpawnParamsResult {
@@ -16,16 +16,16 @@ export default function spawnParams(type: string, options: SpawnParamsOptions | 
 
   // https://nodejs.org/api/module.html#moduleregisterspecifier-parenturl-options
   // v20.8.0
-  if (major >= 18) return { args: ['--no-warnings=ExperimentalWarning', '--import', importArgs], options };
+  // if (major >= 18) return { args: ['--no-warnings=ExperimentalWarning', '--import', importArgs], options };
 
   // args
   const args = major > 4 ? ['--no-warnings=ExperimentalWarning'] : [];
-  if (major <= 16) args.push('--experimental-modules');
+  // if (major <= 16) args.push('--experimental-modules');
 
   // options
   const env = options.env || process.env;
   options = options ? { ...options } : { env };
   options.env = { ...env };
-  options.env.NODE_OPTIONS = `--loader ${loaderEMS}${env.NODE_OPTIONS ? ` ${options.env.NODE_OPTIONS}` : ''}`;
+  options.env.NODE_OPTIONS = `--loader ${loaderESM}${env.NODE_OPTIONS ? ` ${options.env.NODE_OPTIONS}` : ''}`;
   return { args, options };
 }

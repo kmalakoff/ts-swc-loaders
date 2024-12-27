@@ -6,7 +6,7 @@ import path from 'path';
 import url from 'url';
 import cr from 'cr';
 import spawn from 'cross-spawn-cb';
-import { runCommand } from 'ts-dev-stack';
+import { linkModule, unlinkModule } from 'module-link-unlink';
 import { spawnParams } from 'ts-swc-loaders';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
@@ -14,7 +14,7 @@ const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : 
 const type = 'module';
 const MODULE_DIR = path.resolve(__dirname, '..', '..');
 const DATA_DIR = path.resolve(__dirname, '..', 'data', type);
-const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules', 'ts-swc-loaders');
+const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules');
 
 const args = spawnParams(type, { cwd: DATA_DIR, encoding: 'utf8' });
 
@@ -27,6 +27,6 @@ describe('module', () => {
     });
   });
 
-  before(runCommand.bind(null, 'link', [], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }));
-  after(runCommand.bind(null, 'unlink', [], { cwd: MODULE_DIR, installPath: DATA_MODULE_DIR }));
+  before(linkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
+  after(unlinkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
 });

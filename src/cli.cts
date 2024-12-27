@@ -1,13 +1,9 @@
 const path = require('path');
-const url = require('url');
 const spawn = require('cross-spawn-cb');
-const _pathKey = require('env-path-key');
 const exit = require('exit');
-const _prepend = require('path-string-prepend');
 const which = require('./lib/which');
 const spawnParams = require('./spawnParams.js');
 
-const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const major = +process.versions.node.split('.')[0];
 const type = major < 12 ? 'commonjs' : 'module';
 

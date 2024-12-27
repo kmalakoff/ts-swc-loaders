@@ -43,11 +43,12 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "cross-spawn-cb": "^1.4.0",
+    "cross-spawn-cb": "^1.4.1",
     "env-path-key": "^1.0.0",
     "es6-map": "^0.1.5",
     "es6-symbol": "^3.1.4",
     "exit": "^0.1.2",
+    "fs-exists-sync": "^0.1.0",
     "get-tsconfig-compat": "^2.0.1",
     "is-builtin-module": "^3.2.1",
     "mkdirp-classic": "^0.5.3",
@@ -70,12 +71,12 @@
     "cr": "^0.1.0",
     "depcheck": "^1.4.7",
     "getopts-compat": "^2.2.5",
-    "mocha": "^11.0.1",
+    "mocha": "^10.8.2",
     "mocha-compat": "^3.6.2",
+    "module-link-unlink": "^0.1.1",
     "react": "^19.0.0",
-    "ts-dev-stack": "^1.6.0"
+    "ts-swc-loaders": "^1.5.0"
   },
-  "packageManager": "npm@11.0.0+sha512.11dff29565d2297c74e7c594a9762581bde969f0aa5cbe6f5b3644bf008a16c065ece61094d9ffbb81125be38df8e1ba43eb8244b3d30c61eb797e9a2440e3ec",
   "engines": {
     "node": ">=0.8"
   },

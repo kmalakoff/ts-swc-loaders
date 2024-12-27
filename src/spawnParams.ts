@@ -15,7 +15,7 @@ export default function spawnParams(type: string, options: SpawnParamsOptions | 
 
   // options
   const env = options.env || process.env;
-  options = { ...(options || { env }) };
+  options = options ? { ...options } : { env };
   options.env = { ...env };
   options.env.NODE_OPTIONS = `--loader ts-swc-loaders${env.NODE_OPTIONS ? ` ${options.env.NODE_OPTIONS}` : ''}`;
   return { args, options };

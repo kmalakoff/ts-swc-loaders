@@ -43,7 +43,7 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "cross-spawn-cb": "^1.4.2",
+    "cross-spawn-cb": "^1.5.3",
     "env-path-key": "^1.0.0",
     "es6-map": "^0.1.5",
     "es6-symbol": "^3.1.4",
@@ -75,7 +75,7 @@
     "mocha-compat": "^3.6.2",
     "module-link-unlink": "^0.1.1",
     "react": "^19.0.0",
-    "ts-swc-loaders": "^1.5.8"
+    "ts-swc-loaders": "^1.5.9"
   },
   "engines": {
     "node": ">=0.8"

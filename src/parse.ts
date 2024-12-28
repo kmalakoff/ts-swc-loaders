@@ -1,10 +1,10 @@
 import path from 'path';
 import url from 'url';
 import spawn from 'cross-spawn-cb';
-import packageRoot from './lib/packageRoot.js';
+import moduleRoot from 'module-root-sync';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
-const root = packageRoot(__dirname);
+const root = moduleRoot(__dirname);
 const loaderCJS = path.join(root, 'dist', 'cjs', 'index.cjs.js');
 const loaderESMBase = path.join(root, 'dist', 'esm', 'index.esm.mjs');
 const loaderESM = url.pathToFileURL ? url.pathToFileURL(loaderESMBase).toString() : loaderESMBase;

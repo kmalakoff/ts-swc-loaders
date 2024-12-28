@@ -1,21 +1,28 @@
 // remove NODE_OPTIONS from ts-dev-stack
 delete process.env.NODE_OPTIONS;
 
-const assert = require('assert');
-const path = require('path');
-const spawn = require('cross-spawn-cb');
-const { linkModule, unlinkModule } = require('module-link-unlink');
-const cr = require('cr');
+import assert from 'assert';
+import path from 'path';
+import url from 'url';
+import cr from 'cr';
+import spawn from 'cross-spawn-cb';
+import { linkModule, unlinkModule } from 'module-link-unlink';
 
-const { parse } = require('ts-swc-loaders');
+// @ts-ignore
+import { parse } from 'ts-swc-loaders';
 
 const major = +process.versions.node.split('.')[0];
-const type = 'commonjs';
+const type = typeof __filename !== 'undefined' ? 'commonjs' : 'module';
+
+const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const MODULE_DIR = path.resolve(__dirname, '..', '..');
 const DATA_DIR = path.resolve(__dirname, '..', 'data', type);
 const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules');
 
-describe('commonjs', () => {
+describe(`conventions (${type})`, () => {
+  before(linkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
+  after(unlinkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
+
   major > 0 ||
     it('loader', (done) => {
       const parsed = parse(type, './loader.js', ['./test/index.test.ts'], { cwd: DATA_DIR, encoding: 'utf8' });
@@ -35,7 +42,4 @@ describe('commonjs', () => {
         done();
       });
     });
-
-  before(linkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
-  after(unlinkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
 });

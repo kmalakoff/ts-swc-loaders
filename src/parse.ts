@@ -26,7 +26,7 @@ export default function parse(type: string, command: string, args: string[], opt
   // v20.8.0
   // if (major >= 18) return { args: ['--no-warnings=ExperimentalWarning', '--import', importArgs], options };
 
-  if (major <= 16) parsed.args.unshift('--experimental-modules');
+  // if (major <= 16) parsed.args.unshift('--experimental-modules');
   if (major > 4) parsed.args.unshift('--no-warnings=ExperimentalWarning');
   parsed.options.env.NODE_OPTIONS = `--loader ${loaderESM}${options.env.NODE_OPTIONS ? ` ${options.env.NODE_OPTIONS}` : ''}`;
   return parsed;

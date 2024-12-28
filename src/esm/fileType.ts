@@ -1,4 +1,5 @@
 import path from 'path';
+import startsWith from 'starts-with';
 import packageUp from './packageUp.js';
 
 import type { PackageInfo } from '../types.js';
@@ -8,7 +9,7 @@ function isEntry(filePath: string, pkg: PackageInfo, key: string) {
   const modulePath = path.resolve(pkg.dir, pkg.json[key]);
   if (filePath === modulePath) return true;
   const moduleDir = path.dirname(modulePath);
-  if (filePath.startsWith(moduleDir)) return true;
+  if (startsWith(filePath, moduleDir)) return true;
   return false;
 }
 

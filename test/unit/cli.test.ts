@@ -23,8 +23,7 @@ describe('cli', () => {
   after(unlinkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
 
   it('run with cli option', (done) => {
-    spawn(CLI, [command, 'test/*.test.ts'], { cwd: DATA_DIR, encoding: 'utf8' }, (err, res) => {
-      // console.log(err, res);
+    spawn(CLI, [command, '--watch-extensions', 'ts,tsx', '--no-timeouts', 'test/*.test.ts'], { cwd: DATA_DIR, encoding: 'utf8' }, (err, res) => {
       assert.ok(!err, err ? err.message : '');
       assert.equal(cr(res.stdout).split('\n').slice(-2)[0], 'Success!');
       done();

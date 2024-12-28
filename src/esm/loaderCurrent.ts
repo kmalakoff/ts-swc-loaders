@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import { pathToFileURL } from 'url';
+import endsWith from 'ends-with';
 import isBuiltinModule from 'is-builtin-module';
 import { createMatcher, extensions, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
 
@@ -45,7 +46,7 @@ export async function resolve(specifier: string, context: Context, next: Resolve
 
 export async function load(url: string, context: Context, next: Loader): Promise<Loaded> {
   if (isBuiltinModule(url)) return next(url, context);
-  if (url.endsWith('.json')) context[importJSONKey] = Object.assign(context[importJSONKey] || {}, { type: 'json' });
+  if (endsWith(url, '.json')) context[importJSONKey] = { ...(context[importJSONKey] || {}), type: 'json' };
 
   const data = await next(url, context);
   const filePath = toPath(data.responseURL || url, context);

@@ -1,4 +1,3 @@
-const _path = require('path');
 const spawn = require('cross-spawn-cb');
 const exit = require('exit');
 const which = require('./lib/which');
@@ -18,6 +17,7 @@ module.exports = function cli(args, options, callback) {
     const cwd = options.cwd || process.cwd();
     const env = options.env || process.env;
     const parsed = parse(type, command, args.slice(1), { stdio: 'inherit', cwd, env, ...options });
+    console.log([parsed.command].concat(parsed.args).join(' '));
     spawn(parsed.command, parsed.args, parsed.options, (err, res) => {
       if (callback) return callback(err, res);
       if (err && err.message.indexOf('ExperimentalWarning') < 0) {

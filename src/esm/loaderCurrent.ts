@@ -28,7 +28,7 @@ export async function resolve(specifier: string, context: Context, next: Resolve
   if (!match(filePath)) {
     const data = await next(specifier, context);
     if (!data.format) data.format = 'commonjs';
-    if (path.isAbsolute(filePath) && !ext) data.format = 'commonjs'; // args bin is cjs in a module
+    if (path.isAbsolute(filePath) && !ext) data.format = 'commonjs'; // TODO: look up from package.json args bin is cjs in a module
     return data;
   }
 

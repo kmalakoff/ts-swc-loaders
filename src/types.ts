@@ -33,14 +33,11 @@ export interface Formatted {
 }
 export type Formatter = (specifier: string, context: Context) => Promise<Formatted>;
 
-export interface SpawnParamsResult {
-  args: Array<string>;
-  options: object;
-}
+import type { SpawnOptions } from 'child_process';
 
-export interface SpawnParamsOptions {
-  env: NodeJS.ProcessEnv;
-  cwd?: string;
-  encoding?: string;
-  stdio?: string;
+export type { SpawnOptions } from 'child_process';
+export interface ParseResult {
+  command: string;
+  args: string[];
+  options: SpawnOptions;
 }

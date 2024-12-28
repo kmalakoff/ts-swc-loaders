@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import endsWith from 'ends-with';
 import type { PackageInfo, PackageJSON } from '../types.js';
 
 const cache = {};
@@ -21,7 +22,7 @@ function getPackage(packagePath: string): PackageJSON | null {
 export default function packageUp(filePath: string): PackageInfo | null {
   let dir = filePath;
   while (dir) {
-    if (dir.endsWith('node_modules')) break;
+    if (endsWith(dir, 'node_modules')) break;
     const json = getPackage(path.join(dir, 'package.json'));
     if (json) return { json, dir };
     dir = path.dirname(dir);

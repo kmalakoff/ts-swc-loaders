@@ -1,6 +1,5 @@
 import path from 'path';
 import pirates from 'pirates';
-import '../polyfills.cjs';
 
 import { createMatcher, extensions, transformSync } from 'ts-swc-transform';
 

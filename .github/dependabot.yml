@@ -5,7 +5,6 @@ updates:
     schedule:
       interval: weekly
     ignore:
-      - dependency-name: 'mocha'
       - dependency-name: 'pirates'
       - dependency-name: 'which'
       - dependency-name: 'regenerator-runtime'

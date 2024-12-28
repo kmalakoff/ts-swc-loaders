@@ -1,6 +1,6 @@
 const spawn = require('cross-spawn-cb');
 const exit = require('exit');
-const which = require('./lib/which');
+const which = require('module-which');
 const parse = require('./parse.js');
 
 const major = +process.versions.node.split('.')[0];

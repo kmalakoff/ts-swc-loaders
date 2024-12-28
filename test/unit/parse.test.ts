@@ -1,14 +1,18 @@
 // remove NODE_OPTIONS from ts-dev-stack
 delete process.env.NODE_OPTIONS;
 
-const assert = require('assert');
-const path = require('path');
-const spawn = require('cross-spawn-cb');
-const { parse } = require('ts-swc-loaders');
-const cr = require('cr');
+import assert from 'assert';
+import path from 'path';
+import url from 'url';
+import cr from 'cr';
+import spawn from 'cross-spawn-cb';
 
-const major = +process.versions.node.split('.')[0];
-const type = major < 12 ? 'commonjs' : 'module';
+// @ts-ignore
+import { parse } from 'ts-swc-loaders';
+
+const type = typeof __filename !== 'undefined' ? 'commonjs' : 'module';
+
+const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const DATA_DIR = path.resolve(__dirname, '..', 'data', type);
 
 describe('parse', () => {

@@ -69,7 +69,7 @@
     "mocha-compat": "^3.6.2",
     "module-link-unlink": "^0.1.3",
     "react": "^19.0.0",
-    "ts-swc-loaders": "^1.7.2",
+    "ts-swc-loaders": "^1.7.3",
     "tsds-mocha": "^1.8.13"
   },
   "engines": {

@@ -1,16 +1,22 @@
-const spawn = require('cross-spawn-cb');
-const exit = require('exit');
-const which = require('module-which');
-const parse = require('./parse.js');
+import spawn from 'cross-spawn-cb';
+import exit from 'exit';
+import resolveBin from 'resolve-bin';
+import { moduleRegEx } from './constants.js';
+import parse from './parse.js';
 
 const major = +process.versions.node.split('.')[0];
 const type = major < 12 ? 'commonjs' : 'module';
 
-module.exports = function cli(args, options, callback) {
+function which(command, callback) {
+  console.log(command, moduleRegEx.test(command));
+  moduleRegEx.test(command) ? resolveBin(command, callback) : callback(null, command);
+}
+
+export default function cli(args, options, callback) {
   options = options || {};
 
   // look up the full path
-  which(args[0], options, (_err, command) => {
+  which(args[0], (_err, command) => {
     const cwd = options.cwd || process.cwd();
     const env = options.env || process.env;
     const parsed = parse(type, command || args[0], args.slice(1), { stdio: 'inherit', cwd, env, ...options });
@@ -23,4 +29,4 @@ module.exports = function cli(args, options, callback) {
       exit(0);
     });
   });
-};
+}

@@ -11,13 +11,9 @@ module.exports = function cli(args, options, callback) {
 
   // look up the full path
   which(args[0], options, (_err, command) => {
-    // not found, use the original
-    if (!command) command = args[0];
-
     const cwd = options.cwd || process.cwd();
     const env = options.env || process.env;
-    const parsed = parse(type, command, args.slice(1), { stdio: 'inherit', cwd, env, ...options });
-    console.log([parsed.command].concat(parsed.args).join(' '));
+    const parsed = parse(type, command || args[0], args.slice(1), { stdio: 'inherit', cwd, env, ...options });
     spawn(parsed.command, parsed.args, parsed.options, (err, res) => {
       if (callback) return callback(err, res);
       if (err && err.message.indexOf('ExperimentalWarning') < 0) {

@@ -23,7 +23,7 @@ describe(`conventions (${type})`, () => {
   before(linkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
   after(unlinkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
 
-  major > 0 ||
+  if (major <= 0) {
     it('loader', (done) => {
       const parsed = parse(type, './loader.js', ['./test/index.test.ts'], { cwd: DATA_DIR, encoding: 'utf8' });
       spawn(parsed.command, parsed.args, parsed.options, (err, res) => {
@@ -32,8 +32,7 @@ describe(`conventions (${type})`, () => {
         done();
       });
     });
-
-  major <= 0 ||
+  } else {
     it('node', (done) => {
       const parsed = parse(type, process.execPath, ['./test/index.test.ts'], { cwd: DATA_DIR, encoding: 'utf8' });
       spawn(parsed.command, parsed.args, parsed.options, (err, res) => {
@@ -42,4 +41,5 @@ describe(`conventions (${type})`, () => {
         done();
       });
     });
+  }
 });

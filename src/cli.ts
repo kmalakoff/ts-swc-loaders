@@ -8,7 +8,6 @@ const major = +process.versions.node.split('.')[0];
 const type = major < 12 ? 'commonjs' : 'module';
 
 function which(command, callback) {
-  console.log(command, moduleRegEx.test(command));
   moduleRegEx.test(command) ? resolveBin(command, callback) : callback(null, command);
 }
 

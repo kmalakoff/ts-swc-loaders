@@ -2,7 +2,7 @@ import path from 'path';
 import url from 'url';
 import moduleRoot from 'module-root-sync';
 
-const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
+const __dirname = path.dirname(typeof __filename === 'undefined' ? url.fileURLToPath(import.meta.url) : __filename);
 const root = moduleRoot(__dirname);
 const loaderCJS = path.join(root, 'dist', 'cjs', 'index.cjs.js');
 const loaderESMBase = path.join(root, 'dist', 'esm', 'index.esm.mjs');

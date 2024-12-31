@@ -1,13 +1,13 @@
-import exit from 'exit';
 import assert from 'assert';
+import exit from 'exit';
 
 // @ts-ignore
 import App from './lib/App.tsx';
-import string from './lib/string.cjs';
-// @ts-ignore
-import stringNoExtension from './lib/string';
 // @ts-ignore
 import guess from './lib/guess';
+// @ts-ignore
+import stringNoExtension from './lib/string';
+import string from './lib/string.cjs';
 
 assert.ok(App, 'App not loaded');
 assert.equal(string, 'string', 'String not equal to string');

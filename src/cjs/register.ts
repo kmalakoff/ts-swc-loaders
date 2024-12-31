@@ -3,9 +3,9 @@ import pirates from 'pirates';
 
 import { createMatcher, extensions, transformSync } from 'ts-swc-transform';
 
-import { typeFileRegEx } from '../constants.js';
-import Cache from '../lib/Cache.js';
-import loadTSConfig from '../lib/loadTSConfig.js';
+import { typeFileRegEx } from '../constants';
+import Cache from '../lib/Cache';
+import loadTSConfig from '../lib/loadTSConfig';
 
 const cache = new Cache();
 const config = loadTSConfig(process.cwd());

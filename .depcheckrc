@@ -1,1 +1,1 @@
-ignores: ["ts-swc-loaders", "@types/*", "@biomejs/*", "regenerator-runtime", "react", "getopts-compat", "mocha-compat", "core-js"]
+ignores: ["ts-swc-loaders", "@types/*", "@biomejs/*", "regenerator-runtime", "react", "getopts-compat", "tsds-mocha", "core-js"]

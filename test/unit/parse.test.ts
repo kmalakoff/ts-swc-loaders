@@ -26,6 +26,7 @@ describe('parse', () => {
 
       spawn(parsed.command, parsed.args, parsed.options, (err, res) => {
         assert.ok(!err, err ? err.message : '');
+        assert.ok(!err, err ? err.message : '');
         assert.equal(res.status, 0);
         assert.equal(cr(res.stdout).split('\n').slice(-2)[0], 'Success!');
         done();

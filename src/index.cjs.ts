@@ -1,3 +1,3 @@
-export * from './index-base.js';
-import { register } from './cjs/register.js';
+export * from './index-base';
+import { register } from './cjs/register';
 register();

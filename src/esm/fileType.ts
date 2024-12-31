@@ -1,8 +1,8 @@
 import path from 'path';
 import startsWith from 'starts-with';
-import packageUp from './packageUp.js';
+import packageUp from './packageUp';
 
-import type { PackageInfo } from '../types.js';
+import type { PackageInfo } from '../types';
 
 function isEntry(filePath: string, pkg: PackageInfo, key: string) {
   if (pkg.json[key] === undefined) return false;

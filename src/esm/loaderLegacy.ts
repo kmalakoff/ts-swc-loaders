@@ -3,12 +3,12 @@ import isBuiltinModule from 'is-builtin-module';
 import startsWith from 'starts-with';
 import { createMatcher, extensions, toPath, transformSync } from 'ts-swc-transform';
 
-import { typeFileRegEx } from '../constants.js';
-import Cache from '../lib/Cache.js';
-import loadTSConfig from '../lib/loadTSConfig.js';
-import type { Context, Formatted, Formatter } from '../types.js';
-import extToFormat from './extToFormat.js';
-import fileType from './fileType.js';
+import { typeFileRegEx } from '../constants';
+import Cache from '../lib/Cache';
+import loadTSConfig from '../lib/loadTSConfig';
+import type { Context, Formatted, Formatter } from '../types';
+import extToFormat from './extToFormat';
+import fileType from './fileType';
 
 const major = +process.versions.node.split('.')[0];
 

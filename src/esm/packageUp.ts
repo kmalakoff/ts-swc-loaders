@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import endsWith from 'ends-with';
-import type { PackageInfo, PackageJSON } from '../types.js';
+import type { PackageInfo, PackageJSON } from '../types';
 
 const cache = {};
 

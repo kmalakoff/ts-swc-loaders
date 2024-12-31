@@ -5,12 +5,12 @@ import endsWith from 'ends-with';
 import isBuiltinModule from 'is-builtin-module';
 import { createMatcher, extensions, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
 
-import { typeFileRegEx } from '../constants.js';
-import Cache from '../lib/Cache.js';
-import loadTSConfig from '../lib/loadTSConfig.js';
-import type { Context, Loaded, Loader, Resolved, Resolver } from '../types.js';
-import extToFormat from './extToFormat.js';
-import fileType from './fileType.js';
+import { typeFileRegEx } from '../constants';
+import Cache from '../lib/Cache';
+import loadTSConfig from '../lib/loadTSConfig';
+import type { Context, Loaded, Loader, Resolved, Resolver } from '../types';
+import extToFormat from './extToFormat';
+import fileType from './fileType';
 
 const major = +process.versions.node.split('.')[0];
 const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';

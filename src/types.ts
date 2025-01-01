@@ -33,9 +33,8 @@ export interface Formatted {
 }
 export type Formatter = (specifier: string, context: Context) => Promise<Formatted>;
 
-import type { SpawnOptions } from 'child_process';
-
-export type { SpawnOptions } from 'child_process';
+import type cp from 'child_process';
+export type SpawnOptions = cp.SpawnOptions;
 export interface ParseResult {
   command: string;
   args: string[];

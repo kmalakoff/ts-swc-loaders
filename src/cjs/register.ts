@@ -1,7 +1,7 @@
 import path from 'path';
 import pirates from 'pirates';
 
-import { createMatcher, extensions, transformSync } from 'ts-swc-transform';
+import { constants, createMatcher, transformSync } from 'ts-swc-transform';
 
 import { typeFileRegEx } from '../constants';
 import Cache from '../lib/Cache';
@@ -12,6 +12,7 @@ const config = loadTSConfig(process.cwd());
 config.config.compilerOptions.module = 'CommonJS';
 config.config.compilerOptions.target = 'ES5';
 const match = createMatcher(config);
+const { extensions } = constants;
 
 export function register(_ = {}, hookOpts = {}) {
   return pirates.addHook((code, filePath) => compile(code, filePath), { ...hookOpts, exts: extensions });

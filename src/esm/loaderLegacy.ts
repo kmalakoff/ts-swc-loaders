@@ -1,7 +1,7 @@
 import path from 'path';
 import isBuiltinModule from 'is-builtin-module';
 import startsWith from 'starts-with';
-import { createMatcher, extensions, toPath, transformSync } from 'ts-swc-transform';
+import { constants, createMatcher, toPath, transformSync } from 'ts-swc-transform';
 
 import { typeFileRegEx } from '../constants';
 import Cache from '../lib/Cache';
@@ -15,6 +15,7 @@ const major = +process.versions.node.split('.')[0];
 const cache = new Cache();
 const config = loadTSConfig(process.cwd());
 const match = createMatcher(config);
+const { extensions } = constants;
 
 async function _getFormat(url: string, context: Context, next: Formatter): Promise<Formatted> {
   if (isBuiltinModule(url)) return next(url, context);

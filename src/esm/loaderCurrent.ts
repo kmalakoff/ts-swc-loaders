@@ -3,7 +3,7 @@ import path from 'path';
 import { pathToFileURL } from 'url';
 import endsWith from 'ends-with';
 import isBuiltinModule from 'is-builtin-module';
-import { createMatcher, extensions, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
+import { constants, createMatcher, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
 
 import { typeFileRegEx } from '../constants';
 import Cache from '../lib/Cache';
@@ -18,6 +18,7 @@ const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
 const cache = new Cache();
 const config = loadTSConfig(process.cwd());
 const match = createMatcher(config);
+const { extensions } = constants;
 
 export async function resolve(specifier: string, context: Context, next: Resolver): Promise<Resolved> | null {
   if (isBuiltinModule(specifier)) return next(specifier, context);

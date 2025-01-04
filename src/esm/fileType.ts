@@ -6,7 +6,7 @@ import type { PackageInfo } from '../types';
 
 function isEntry(filePath: string, pkg: PackageInfo, key: string) {
   if (pkg.json[key] === undefined) return false;
-  const modulePath = path.resolve(pkg.dir, pkg.json[key]);
+  const modulePath = path.join(pkg.dir, pkg.json[key]);
   if (filePath === modulePath) return true;
   const moduleDir = path.dirname(modulePath);
   if (startsWith(filePath, moduleDir)) return true;

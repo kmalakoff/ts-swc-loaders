@@ -1,11 +1,10 @@
 import path from 'path';
 import url from 'url';
-import moduleRoot from 'module-root-sync';
 
 const __dirname = path.dirname(typeof __filename === 'undefined' ? url.fileURLToPath(import.meta.url) : __filename);
-const root = moduleRoot(__dirname);
-const loaderCJS = path.join(root, 'dist', 'cjs', 'index.cjs.cjs');
-const loaderESMBase = path.join(root, 'dist', 'esm', 'index.esm.mjs');
+const dist = path.join(__dirname, '..');
+const loaderCJS = path.join(dist, 'cjs', 'index.cjs.cjs');
+const loaderESMBase = path.join(dist, 'esm', 'index.esm.mjs');
 const loaderESM = url.pathToFileURL ? url.pathToFileURL(loaderESMBase).toString() : loaderESMBase;
 const js = `data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("${loaderESM}", pathToFileURL("./"));`;
 

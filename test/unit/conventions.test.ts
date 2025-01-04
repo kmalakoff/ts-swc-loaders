@@ -15,8 +15,8 @@ const major = +process.versions.node.split('.')[0];
 const type = typeof __filename !== 'undefined' ? 'commonjs' : 'module';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
-const MODULE_DIR = path.resolve(__dirname, '..', '..');
-const DATA_DIR = path.resolve(__dirname, '..', 'data', type);
+const MODULE_DIR = path.join(__dirname, '..', '..');
+const DATA_DIR = path.join(__dirname, '..', 'data', type);
 const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules');
 
 describe(`conventions (${type})`, () => {

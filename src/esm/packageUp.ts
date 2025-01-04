@@ -1,31 +1,21 @@
 import fs from 'fs';
 import path from 'path';
-import endsWith from 'ends-with';
+import moduleRoot from 'module-root-sync';
 import type { PackageInfo, PackageJSON } from '../types';
 
 const cache = {};
 
-function getPackage(packagePath: string): PackageJSON | null {
-  const existing = cache[packagePath];
-  if (existing !== undefined) return existing;
-
-  try {
-    const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8')) as PackageJSON;
-    cache[packagePath] = packageJson;
-    return packageJson;
-  } catch (_) {
-    cache[packagePath] = null;
-    return null;
-  }
-}
-
 export default function packageUp(filePath: string): PackageInfo | null {
-  let dir = filePath;
-  while (dir) {
-    if (endsWith(dir, 'node_modules')) break;
-    const json = getPackage(path.join(dir, 'package.json'));
-    if (json) return { json, dir };
-    dir = path.dirname(dir);
+  const stat = fs.statSync(filePath);
+  const dir = stat.isDirectory() ? filePath : path.dirname(filePath);
+
+  if (cache[dir] === undefined) {
+    try {
+      const root = moduleRoot(dir);
+      cache[dir] = { dir, json: JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8')) as PackageJSON };
+    } catch (_) {
+      cache[dir] = null;
+    }
   }
-  return null;
+  return cache[dir];
 }

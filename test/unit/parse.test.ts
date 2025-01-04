@@ -13,7 +13,7 @@ import { parse } from 'ts-swc-loaders';
 const type = typeof __filename !== 'undefined' ? 'commonjs' : 'module';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
-const DATA_DIR = path.resolve(__dirname, '..', 'data', type);
+const DATA_DIR = path.join(__dirname, '..', 'data', type);
 
 describe('parse', () => {
   describe('happy path', () => {

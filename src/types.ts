@@ -1,6 +1,10 @@
 import type { Context } from 'ts-swc-transform';
 export type { Context } from 'ts-swc-transform';
 
+export interface CleanOptions {
+  slient?: boolean;
+}
+
 export interface PackageJSON {
   type?: string;
   module?: string;

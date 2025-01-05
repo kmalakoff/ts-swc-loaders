@@ -9,15 +9,14 @@ export default function cli(argv) {
     boolean: ['clean'],
     stopEarly: true,
   });
+  if (options.clean) clean();
 
-  console.log(argv, options._);
   const args = options._;
   if (!args.length) {
     console.log('Missing command. Example usage: ts-swc command arg1, arg2, etc');
-    return exit(-1);
+    return exit(options.clean ? 0 : -1);
   }
 
-  if (options.clean) clean();
   spawn(args[0], args.slice(1), options, (err) => {
     exit(err ? -1 : 0);
   });

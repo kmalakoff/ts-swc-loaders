@@ -69,7 +69,7 @@
     "getopts-compat": "^2.2.5",
     "module-link-unlink": "^0.1.12",
     "react": "^19.0.0",
-    "tsds-mocha": "^1.12.2"
+    "tsds-mocha": "^1.12.3"
   },
   "engines": {
     "node": ">=0.8"

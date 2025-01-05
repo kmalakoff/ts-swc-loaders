@@ -2,7 +2,7 @@ import assert from 'assert';
 import exit from 'exit';
 
 // @ts-ignore
-import App from './lib/App.tsx';
+import App from './lib/App.js';
 // @ts-ignore
 import guess from './lib/guess';
 // @ts-ignore

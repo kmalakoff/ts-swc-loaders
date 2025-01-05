@@ -1,11 +1,8 @@
 import fs from 'fs';
-import os from 'os';
 import path from 'path';
 import mkdirp from 'mkdirp-classic';
-import osShim from 'os-shim';
 import shortHash from 'short-hash';
-
-const tmpdir = os.tmpdir || osShim.tmpdir;
+import { DEFAULT_CACHE_PATH } from '../constants';
 
 function unlinkSafe(filePath) {
   try {
@@ -33,7 +30,7 @@ export default class Cache {
   constructor(options: CacheOptions = {}) {
     this.cwd = process.cwd();
     this.cwdHash = shortHash(process.cwd());
-    this.root = options.root || path.join(tmpdir(), 'ts-swc-loaders');
+    this.root = options.root || DEFAULT_CACHE_PATH;
     this.maxAge = options.maxAge || 1 * MS_TO_DAYS;
   }
 

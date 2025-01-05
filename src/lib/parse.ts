@@ -12,6 +12,7 @@ const js = `data:text/javascript,import { register } from "node:module"; import 
 const major = +process.versions.node.split('.')[0];
 const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
 const NODE = isWindows ? 'node.exe' : 'node';
+const NODE_EXEC_PATH = which.sync(NODE);
 
 import type { ParseResult, SpawnOptions } from '../types';
 
@@ -25,10 +26,10 @@ export default function parse(type: string, command: string, args: string[], opt
     return { command, args, options: { ...options, env } };
   }
   const env = options.env || process.env;
-  const node = env.NODE || env.npm_node_execpath || which.sync(NODE);
+  const execPath = env.NODE || env.npm_node_execpath || NODE_EXEC_PATH;
   const parsed = {
-    command: node,
-    args: path.basename(command) === NODE ? ['--import', js, ...args] : ['--import', js, command, ...args],
+    command: execPath,
+    args: path.basename(command) === execPath ? ['--import', js, ...args] : ['--import', js, command, ...args],
     options,
   };
   return parsed;

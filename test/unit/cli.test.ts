@@ -28,8 +28,11 @@ describe('cli', () => {
 
   it('run with cli option', (done) => {
     spawn(CLI, [command, '--watch-extensions', 'ts,tsx', '--no-timeouts', 'test/*.test-test.ts'], { cwd: DATA_DIR, encoding: 'utf8' }, (err, res) => {
-      assert.ok(!err, err ? err.message : '');
+      console.log(err, res);
+      if (err) return done(err);
+      console.log(1);
       assert.equal(cr(res.stdout).split('\n').slice(-2)[0], 'Success!');
+      console.log(2);
       done();
     });
   });

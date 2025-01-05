@@ -8,6 +8,9 @@ import cr from 'cr';
 import spawn from 'cross-spawn-cb';
 import { linkModule, unlinkModule } from 'module-link-unlink';
 
+// @ts-ignore
+import { clean } from 'ts-swc-loaders';
+
 const major = +process.versions.node.split('.')[0];
 const type = major < 12 ? 'commonjs' : 'module';
 const command = type === 'commonjs' ? 'mocha-compat' : 'mocha';
@@ -21,9 +24,10 @@ const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules');
 describe('cli', () => {
   before(linkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
   after(unlinkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
+  beforeEach(() => clean());
 
   it('run with cli option', (done) => {
-    spawn(CLI, [command, '--watch-extensions', 'ts,tsx', '--no-timeouts', 'test/*.test.ts'], { cwd: DATA_DIR, encoding: 'utf8' }, (err, res) => {
+    spawn(CLI, [command, '--watch-extensions', 'ts,tsx', '--no-timeouts', 'test/*.test-test.ts'], { cwd: DATA_DIR, encoding: 'utf8' }, (err, res) => {
       assert.ok(!err, err ? err.message : '');
       assert.equal(cr(res.stdout).split('\n').slice(-2)[0], 'Success!');
       done();

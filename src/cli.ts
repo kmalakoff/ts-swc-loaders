@@ -1,31 +1,24 @@
-import spawn from 'cross-spawn-cb';
 import exit from 'exit';
-import resolveBin from 'resolve-bin-sync';
-import { moduleRegEx } from './constants';
-import parse from './parse';
+import getopts from 'getopts-compat';
+import clean from './lib/clean';
+import spawn from './lib/spawn';
 
-const major = +process.versions.node.split('.')[0];
-const type = major < 12 ? 'commonjs' : 'module';
+export default function cli(argv) {
+  const options = getopts(argv, {
+    alias: { clean: 'c' },
+    boolean: ['clean'],
+    stopEarly: true,
+  });
 
-function which(command) {
-  try {
-    if (moduleRegEx.test(command)) return resolveBin(command);
-  } catch (_err) {}
-  return command;
-}
+  console.log(argv, options._);
+  const args = options._;
+  if (!args.length) {
+    console.log('Missing command. Example usage: ts-swc command arg1, arg2, etc');
+    return exit(-1);
+  }
 
-export default function cli(args, options, callback) {
-  options = options || {};
-  const cwd = options.cwd || process.cwd();
-  const env = options.env || process.env;
-
-  const parsed = parse(type, which(args[0]), args.slice(1), { stdio: 'inherit', cwd, env, ...options });
-  spawn(parsed.command, parsed.args, parsed.options, (err, res) => {
-    if (callback) return callback(err, res);
-    if (err && err.message.indexOf('ExperimentalWarning') < 0) {
-      console.log(err.message);
-      return exit(-1);
-    }
-    exit(0);
+  if (options.clean) clean();
+  spawn(args[0], args.slice(1), options, (err) => {
+    exit(err ? -1 : 0);
   });
 }

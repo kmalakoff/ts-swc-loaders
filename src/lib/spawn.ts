@@ -11,7 +11,6 @@ const originalEmit = process.emit;
 // @ts-expect-error - TS complains about the return type of originalEmit.apply
 process.emit = (name, data, ..._args) => {
   if (name === 'warning' && typeof data === 'object' && data.name === 'ExperimentalWarning' && (data.message.includes('--experimental-loader') || data.message.includes('Custom ESM Loaders is an experimental feature'))) return false;
-
   return originalEmit.call(process, name, data, ..._args);
 };
 

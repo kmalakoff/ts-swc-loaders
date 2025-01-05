@@ -15,7 +15,6 @@ const NODE = isWindows ? 'node.exe' : 'node';
 
 import type { ParseResult, SpawnOptions } from '../types';
 
-let nodePath = null;
 export default function parse(type: string, command: string, args: string[], options: SpawnOptions = {}): ParseResult {
   if (type === 'commonjs') return { command, args: ['--require', loaderCJS, ...args], options };
 
@@ -25,10 +24,12 @@ export default function parse(type: string, command: string, args: string[], opt
     env.NODE_OPTIONS = `--loader ${loaderESM} ${env.NODE_OPTIONS || ''}`;
     return { command, args, options: { ...options, env } };
   }
-  if (!nodePath) nodePath = which.sync(NODE);
   const env = options.env || process.env;
-  const node = env.NODE || env.npm_node_execpath || nodePath;
-  const newArgs = command === node ? ['--import', js, ...args] : ['--import', js, command, ...args];
-  const parsed = { command: node, args: newArgs, options };
+  const node = env.NODE || env.npm_node_execpath || which.sync(NODE);
+  const parsed = {
+    command: node,
+    args: path.basename(command) === NODE ? ['--import', js, ...args] : ['--import', js, command, ...args],
+    options,
+  };
   return parsed;
 }

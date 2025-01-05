@@ -29,7 +29,7 @@ describe(`conventions (${type})`, () => {
       it('loader', (done) => {
         const parsed = parse(type, './loader.js', ['./test/index.test-test.ts'], { cwd: DATA_DIR, encoding: 'utf8' });
         spawn(parsed.command, parsed.args, parsed.options, (err, res) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.equal(cr(res.stdout).split('\n').slice(-2)[0], 'Success!');
           done();
         });
@@ -38,7 +38,7 @@ describe(`conventions (${type})`, () => {
       it('node', (done) => {
         const parsed = parse(type, process.execPath, ['./test/index.test-test.ts'], { cwd: DATA_DIR, encoding: 'utf8' });
         spawn(parsed.command, parsed.args, parsed.options, (err, res) => {
-          assert.ok(!err, err ? err.message : '');
+          if (err) return done(err);
           assert.equal(cr(res.stdout).split('\n').slice(-2)[0], 'Success!');
           done();
         });
@@ -54,8 +54,8 @@ describe(`conventions (${type})`, () => {
       assert.equal(typeof parsed.options.cwd, 'string');
       assert.equal(typeof parsed.options.env, 'object');
       spawn(parsed.command, parsed.args, parsed.options, (err, res) => {
-        assert.ok(!err, err ? err.message : '');
-        assert.ok(!err, err ? err.message : '');
+        if (err) return done(err);
+        if (err) return done(err);
         assert.equal(res.status, 0);
         assert.equal(cr(res.stdout).split('\n').slice(-2)[0], 'Success!');
         done();

@@ -36,8 +36,8 @@
   "scripts": {
     "build": "tsds build",
     "format": "biome check --write --unsafe src/ test/",
-    "test": "nvu engines tsds test:node --no-timeouts test/unit/*.test.*",
-    "test:engines": "npm test",
+    "test": "tsds test:node --no-timeouts",
+    "test:engines": "nvu engines npm test",
     "version": "tsds version"
   },
   "dependencies": {
@@ -66,7 +66,7 @@
     "getopts-compat": "^2.2.5",
     "module-link-unlink": "^0.1.12",
     "react": "^19.0.0",
-    "tsds-mocha": "^1.12.14"
+    "tsds-mocha": "^1.12.15"
   },
   "engines": {
     "node": ">=0.8"

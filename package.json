@@ -54,19 +54,19 @@
     "rimraf2": "^2.8.2",
     "short-hash": "^1.0.0",
     "starts-with": "^1.0.2",
-    "ts-swc-transform": "^1.13.10"
+    "ts-swc-transform": "^1.14.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@types/exit": "^0.1.33",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.10.5",
-    "core-js": "^3.39.0",
+    "core-js": "^3.40.0",
     "cr": "^0.1.0",
-    "getopts-compat": "^2.2.5",
+    "getopts-compat": "^2.2.6",
     "module-link-unlink": "^0.1.12",
     "react": "^19.0.0",
-    "tsds-mocha": "^1.12.18"
+    "tsds-mocha": "^1.12.19"
   },
   "engines": {
     "node": ">=0.8"

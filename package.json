@@ -17,12 +17,9 @@
   "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
   "type": "module",
   "exports": {
-    ".": {
-      "import": "./dist/esm/index.esm.mjs",
-      "require": "./dist/cjs/index.cjs.cjs",
-      "types": "./dist/types/index.d.ts"
-    },
-    "./*": "./*"
+    "import": "./dist/esm/index.esm.mjs",
+    "require": "./dist/cjs/index.cjs.cjs",
+    "types": "./dist/types/index.esm.d.ts"
   },
   "main": "dist/cjs/index.cjs.cjs",
   "module": "dist/dist/esm/index.esm.mjs",
@@ -54,7 +51,7 @@
     "rimraf2": "^2.8.2",
     "short-hash": "^1.0.0",
     "starts-with": "^1.0.2",
-    "ts-swc-transform": "^1.14.0"
+    "ts-swc-transform": "^1.15.1"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
@@ -66,7 +63,7 @@
     "getopts-compat": "^2.2.6",
     "module-link-unlink": "^0.1.12",
     "react": "^19.0.0",
-    "tsds-mocha": "^1.12.19"
+    "tsds-mocha": "^1.13.0"
   },
   "engines": {
     "node": ">=0.8"

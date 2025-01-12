@@ -1,3 +1,5 @@
 {
-  "type": "commonjs"
+  "name": "ts-swc-loaders-commonjs",
+  "type": "commonjs",
+  "private": true
 }

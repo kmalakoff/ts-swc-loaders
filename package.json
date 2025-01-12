@@ -45,9 +45,9 @@
     "homedir-polyfill": "^1.0.3",
     "is-builtin-module": "^3.2.1",
     "mkdirp-classic": "^0.5.3",
-    "module-root-sync": "^1.1.1",
+    "module-root-sync": "^1.1.2",
     "pirates": "^2.1.2",
-    "resolve-bin-sync": "^0.1.4",
+    "resolve-bin-sync": "^0.1.5",
     "rimraf2": "^2.8.2",
     "short-hash": "^1.0.0",
     "starts-with": "^1.0.2",
@@ -61,9 +61,9 @@
     "core-js": "^3.40.0",
     "cr": "^0.1.0",
     "getopts-compat": "^2.2.6",
-    "module-link-unlink": "^0.1.12",
+    "module-link-unlink": "^0.1.14",
     "react": "^19.0.0",
-    "tsds-mocha": "^1.13.0"
+    "tsds-mocha": "^1.13.6"
   },
   "engines": {
     "node": ">=0.8"

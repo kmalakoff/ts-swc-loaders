@@ -55,5 +55,5 @@ async function _transformSource(source, context, next) {
   };
 }
 
-export const getFormat = major < 16 ? _getFormat : undefined;
-export const transformSource = major < 16 ? _transformSource : undefined;
+export const getFormat = major > 14 ? undefined : _getFormat;
+export const transformSource = major > 14 ? undefined: _transformSource;

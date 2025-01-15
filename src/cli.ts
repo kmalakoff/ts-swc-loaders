@@ -14,10 +14,10 @@ export default function cli(argv) {
   const args = options._;
   if (!args.length) {
     console.log('Missing command. Example usage: ts-swc command arg1, arg2, etc');
-    return exit(options.clean ? 0 : 1);
+    return exit(options.clean ? 0 : 17);
   }
 
   spawn(args[0], args.slice(1), options, (err) => {
-    exit(err ? 1 : 0);
+    exit(err ? 18 : 0);
   });
 }

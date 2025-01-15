@@ -18,6 +18,7 @@ export default function cli(argv) {
   }
 
   spawn(args[0], args.slice(1), options, (err) => {
+    if (err) console.log(JSON.stringify({ err }));
     exit(err ? 18 : 0);
   });
 }

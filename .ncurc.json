@@ -1,4 +1,4 @@
 {
   "upgrade": true,
-  "reject": ["@types/*", "biomejs/*", "assert",  "pirates", "which", "is-builtin-module"]
+  "reject": ["pirates", "is-builtin-module"]
 }

@@ -28,7 +28,7 @@ describe('cli', () => {
 
   it('run with cli option', (done) => {
     spawn(CLI, [command, '--watch-extensions', 'ts,tsx', '--no-timeouts', 'test/*.test-test.ts'], { cwd: DATA_DIR, encoding: 'utf8' }, (err, res) => {
-      if (err) return done(err);
+      if (err) return done(err.message);
       assert.equal(cr(res.stdout).split('\n').slice(-2)[0], 'Success!');
       done();
     });

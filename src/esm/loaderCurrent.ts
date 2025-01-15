@@ -13,7 +13,7 @@ import extToFormat from './extToFormat';
 import fileType from './fileType';
 
 const major = +process.versions.node.split('.')[0];
-const importJSONKey = major >= 18 ? 'importAttributes' : 'importAssertions';
+const importJSONKey = major > 16 ? 'importAttributes' : 'importAssertions';
 
 const cache = new Cache();
 const config = loadTSConfig(process.cwd());

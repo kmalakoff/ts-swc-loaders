@@ -1,8 +1,9 @@
+import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import mkdirp from 'mkdirp-classic';
+import rimraf2 from 'rimraf2';
 import shortHash from 'short-hash';
-import { DEFAULT_CACHE_PATH } from '../constants';
 
 function unlinkSafe(filePath) {
   try {
@@ -11,74 +12,63 @@ function unlinkSafe(filePath) {
     // skip
   }
 }
+
 function timeMS() {
   return new Date().valueOf();
 }
 const MS_TO_DAYS = 1000 * 60 * 60 * 24;
 
-export interface CacheOptions {
-  root?: string;
-  maxAge?: number;
-}
+import type { CacheOptions, ClearOptions } from '../types';
 
 export default class Cache {
-  private cwd: string;
-  private cwdHash: string;
-  private root: string;
+  private cachePath: string;
   private maxAge: number;
+  private cwdHash: string;
 
   constructor(options: CacheOptions = {}) {
-    this.cwd = process.cwd();
-    this.cwdHash = shortHash(process.cwd());
-    this.root = options.root || DEFAULT_CACHE_PATH;
+    this.cwdHash = crypto.createHash('md5').update(process.cwd()).digest('hex');
+    this.cachePath = options.cachePath;
     this.maxAge = options.maxAge || 1 * MS_TO_DAYS;
   }
 
-  cachePath(filePath: string, options: object = {}) {
-    const relFilePath = path.relative(this.cwd, filePath);
-    const basename = path.basename(relFilePath);
-    const dirHash = `${shortHash(path.dirname(relFilePath))}-${shortHash(JSON.stringify(options))}`;
-    return path.join(this.root, this.cwdHash, dirHash, `${basename}.json`);
+  clear(options: ClearOptions = {}) {
+    rimraf2.sync(this.cachePath, { disableGlob: true });
+    if (!options.silent) console.log(`Cleared ${this.cachePath}`);
   }
 
-  get(cachePath) {
-    const record = this.getRecord(cachePath);
-    return record ? record.data : null;
+  hash(_contents: string): string {
+    return crypto.createHash('sha512').update(process.cwd()).digest('hex');
   }
 
-  getRecord(cachePath) {
+  key(filePath: string, options: object) {
+    const dirHash = shortHash(path.dirname(filePath));
+    const optionsHash = shortHash(JSON.stringify(options));
+    const basename = path.basename(filePath);
+    return path.join(this.cachePath, this.cwdHash, `${optionsHash}${dirHash}`, `${basename}.json`);
+  }
+
+  get(key, hash) {
     try {
-      const record = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
-      const time = timeMS();
-      if (time - record.time > this.maxAge) {
-        unlinkSafe(cachePath);
+      const record = JSON.parse(fs.readFileSync(key, 'utf8'));
+      const age = timeMS() - record.time;
+      if (age > this.maxAge || record.hash !== hash) {
+        unlinkSafe(key);
         return null;
       }
-      return record;
+      return record.data;
     } catch (_err) {
       return null;
     }
   }
 
-  getOrUpdate(cachePath, contents, fn) {
-    const hash = shortHash(contents);
-    const record = this.getRecord(cachePath);
-    if (record && record.hash === hash) return record.data;
-
-    // miss
-    const data = fn(contents);
-    this.set(cachePath, data, { hash: hash });
-    return data;
-  }
-
-  set(cachePath, data, options) {
-    options = options || {};
+  set(key, data, hash) {
     const record = {
-      data: data,
-      time: options.time || timeMS(),
-      hash: options.hash,
+      data,
+      hash,
+      time: timeMS(),
     };
-    mkdirp.sync(path.dirname(cachePath));
-    fs.writeFileSync(cachePath, JSON.stringify(record), 'utf8');
+    mkdirp.sync(path.dirname(key));
+    fs.writeFileSync(key, JSON.stringify(record), 'utf8');
+    return data;
   }
 }

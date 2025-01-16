@@ -3,7 +3,7 @@ import getopts from 'getopts-compat';
 import cache from './cache';
 import spawn from './lib/spawn';
 
-const DEBUG = !!process.env.TS_SWC_DEBUG;
+const DEBUG = typeof process.env.TS_SWC_DEBUG !== 'undefined';
 
 export default function cli(argv) {
   const options = getopts(argv, {

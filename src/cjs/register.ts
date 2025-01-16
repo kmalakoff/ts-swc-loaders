@@ -4,10 +4,10 @@ import pirates from 'pirates';
 import { constants, createMatcher, transformSync } from 'ts-swc-transform';
 
 import { typeFileRegEx } from '../constants';
-import Cache from '../lib/Cache';
 import loadTSConfig from '../lib/loadTSConfig';
 
-const cache = new Cache();
+import cache from '../cache';
+
 const config = loadTSConfig(process.cwd());
 config.config.compilerOptions.module = 'CommonJS';
 config.config.compilerOptions.target = 'ES5';
@@ -27,6 +27,8 @@ export function compile(contents, filePath) {
   if (ext === '.json') return contents || ' ';
   if (extensions.indexOf(ext) < 0) return contents || ' ';
 
-  const data = cache.getOrUpdate(cache.cachePath(filePath, config), contents, () => transformSync(contents, filePath, config));
-  return data.code;
+  const key = cache.key(filePath, config);
+  const hash = cache.hash(contents);
+  const compiled = cache.get(key, hash) || cache.set(key, transformSync(contents, filePath, config), hash);
+  return compiled.code;
 }

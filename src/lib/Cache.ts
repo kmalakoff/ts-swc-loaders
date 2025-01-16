@@ -36,8 +36,8 @@ export default class Cache {
     if (!options.silent) console.log(`Cleared ${this.cachePath}`);
   }
 
-  hash(_contents: string): string {
-    return crypto.createHash('sha512').update(process.cwd()).digest('hex');
+  hash(contents: string): string {
+    return crypto.createHash('sha512').update(contents).digest('hex');
   }
 
   key(filePath: string, options: object) {

@@ -17,8 +17,7 @@ export default function cli(argv) {
     return exit(options.clear ? 0 : 17);
   }
 
-  spawn(args[0], args.slice(1), { ...options, encoding: 'utf8' }, (err) => {
-    if (err) console.log(JSON.stringify({ err }));
+  spawn(args[0], args.slice(1), options, (err) => {
     exit(err ? 18 : 0);
   });
 }

@@ -6,16 +6,16 @@ import isBuiltinModule from 'is-builtin-module';
 import { constants, createMatcher, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
 
 import { typeFileRegEx } from '../constants';
-import Cache from '../lib/Cache';
 import loadTSConfig from '../lib/loadTSConfig';
 import type { Context, Loaded, Loader, Resolved, Resolver } from '../types';
 import extToFormat from './extToFormat';
 import fileType from './fileType';
 
+import cache from '../cache';
+
 const major = +process.versions.node.split('.')[0];
 const importJSONKey = major > 16 ? 'importAttributes' : 'importAssertions';
 
-const cache = new Cache();
 const config = loadTSConfig(process.cwd());
 const match = createMatcher(config);
 const { extensions } = constants;
@@ -68,7 +68,9 @@ export async function load(url: string, context: Context, next: Loader): Promise
   // transform
   if (!data.source) data.source = await fs.readFile(filePath);
   const contents = data.source.toString();
-  const compiled = cache.getOrUpdate(cache.cachePath(filePath, config), contents, () => transformSync(contents, filePath, config));
+  const key = cache.key(filePath, config);
+  const hash = cache.hash(contents);
+  const compiled = cache.get(key, hash) || cache.set(key, transformSync(contents, filePath, config), hash);
   return {
     ...data,
     source: compiled.code,

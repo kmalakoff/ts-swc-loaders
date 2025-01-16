@@ -4,15 +4,13 @@ import startsWith from 'starts-with';
 import { constants, createMatcher, toPath, transformSync } from 'ts-swc-transform';
 
 import { typeFileRegEx } from '../constants';
-import Cache from '../lib/Cache';
 import loadTSConfig from '../lib/loadTSConfig';
 import type { Context, Formatted, Formatter } from '../types';
 import extToFormat from './extToFormat';
 import fileType from './fileType';
 
-const major = +process.versions.node.split('.')[0];
+import cache from '../cache';
 
-const cache = new Cache();
 const config = loadTSConfig(process.cwd());
 const match = createMatcher(config);
 const { extensions } = constants;
@@ -48,12 +46,14 @@ async function _transformSource(source, context, next) {
   if (extensions.indexOf(ext) < 0) return loaded;
 
   const contents = loaded.source.toString();
-  const compiled = cache.getOrUpdate(cache.cachePath(filePath, config), contents, () => transformSync(contents, filePath, config));
-
+  const key = cache.key(filePath, config);
+  const hash = cache.hash(contents);
+  const compiled = cache.get(key, hash) || cache.set(key, transformSync(contents, filePath, config), hash);
   return {
     source: compiled.code,
   };
 }
 
+const major = +process.versions.node.split('.')[0];
 export const getFormat = major > 14 ? undefined : _getFormat;
 export const transformSource = major > 14 ? undefined : _transformSource;

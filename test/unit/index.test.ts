@@ -7,6 +7,7 @@ import url from 'url';
 import cr from 'cr';
 import spawn from 'cross-spawn-cb';
 import { linkModule, unlinkModule } from 'module-link-unlink';
+import rimraf2 from 'rimraf2';
 
 const major = +process.versions.node.split('.')[0];
 const type = typeof __filename !== 'undefined' ? 'commonjs' : 'module';
@@ -20,13 +21,13 @@ const TS_SWC_CACHE_PATH = path.join(__dirname, '..', '..', '.tmp');
 const spawnOptions = { cwd: DATA_DIR, encoding: 'utf8', env: { ...process.env, TS_SWC_CACHE_PATH } } as SpawnOptions;
 
 // @ts-ignore
-import { type SpawnOptions, cache, parse } from 'ts-swc-loaders';
+import { type SpawnOptions, parse } from 'ts-swc-loaders';
 
 describe(`conventions (${type})`, () => {
   before(linkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
   after(unlinkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
-  beforeEach(() => cache.clear());
-  afterEach(() => cache.clear());
+  beforeEach(() => rimraf2.sync(TS_SWC_CACHE_PATH, { disableGlob: true }));
+  afterEach(() => rimraf2.sync(TS_SWC_CACHE_PATH, { disableGlob: true }));
 
   describe('conventions', () => {
     if (major <= 0) {

@@ -17,6 +17,6 @@ export default function worker(command, args, options, callback) {
   const cwd = options.cwd || process.cwd();
   const env = options.env || process.env;
 
-  const parsed = parse(type, which(command), args, { stdio: 'inherit', cwd, env, ...options });
+  const parsed = parse(type, which(command), args, { cwd, env, ...options });
   spawn(parsed.command, parsed.args, parsed.options, callback);
 }

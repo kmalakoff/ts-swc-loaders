@@ -3,6 +3,8 @@ import getopts from 'getopts-compat';
 import cache from './cache';
 import spawn from './lib/spawn';
 
+const DEBUG = !!process.env.TS_SWC_DEBUG;
+
 export default function cli(argv) {
   const options = getopts(argv, {
     alias: { clear: 'c' },
@@ -17,7 +19,9 @@ export default function cli(argv) {
     return exit(options.clear ? 0 : 17);
   }
 
-  spawn(args[0], args.slice(1), options, (err) => {
+  const spawnOptions = DEBUG ? { ...options, encoding: 'utf8' } : options
+  spawn(args[0], args.slice(1), spawnOptions, (err, res) => {
+    if (DEBUG && err) console.log(JSON.stringify({ err, res })); 
     exit(err ? 18 : 0);
   });
 }

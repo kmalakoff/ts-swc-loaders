@@ -1,8 +1,13 @@
 import type { Context } from 'ts-swc-transform';
 export type { Context } from 'ts-swc-transform';
 
-export interface CleanOptions {
-  slient?: boolean;
+export interface ClearOptions {
+  silent?: boolean;
+}
+
+export interface CacheOptions {
+  cachePath?: string;
+  maxAge?: number;
 }
 
 export interface PackageJSON {

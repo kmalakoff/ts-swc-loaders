@@ -28,6 +28,7 @@ export default function cli(argv) {
     options.encoding = 'utf8';
     return run(args[0], args.slice(1), options, (err, res) => {
       if (err) console.log(JSON.stringify({ err, res }));
+      console.log((res || err || {}).stdout);
       next(err, res);
     });
   }

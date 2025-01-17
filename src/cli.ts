@@ -1,9 +1,9 @@
 import exit from 'exit';
 import getopts from 'getopts-compat';
 import cache from './cache';
-import spawn from './lib/spawn';
+import run from './lib/spawn';
 
-const DEBUG = typeof process.env.TS_SWC_DEBUG !== 'undefined';
+const ERROR_CODE = 17;
 
 export default function cli(argv) {
   const options = getopts(argv, {
@@ -16,12 +16,22 @@ export default function cli(argv) {
   const args = options._;
   if (!args.length) {
     console.log('Missing command. Example usage: ts-swc command arg1, arg2, etc');
-    return exit(options.clear ? 0 : 17);
+    return exit(options.clear ? 0 : ERROR_CODE);
   }
 
-  const spawnOptions = DEBUG ? { ...options, encoding: 'utf8' } : { ...options, stdio: 'inherit' };
-  spawn(args[0], args.slice(1), spawnOptions, (err, res) => {
-    if (DEBUG && err) console.log(JSON.stringify({ err, res }));
-    exit(err ? 18 : 0);
-  });
+  const next = (err, _res) => {
+    exit(err ? ERROR_CODE : 0);
+  };
+
+  // DEBUG MODE
+  if (typeof process.env.DEBUG !== 'undefined') {
+    options.encoding = 'utf8';
+    return run(args[0], args.slice(1), options, (err, res) => {
+      if (err) console.log(JSON.stringify({ err, res }));
+      next(err, res);
+    });
+  }
+
+  options.stdio = 'inherit'; // pass through stdio
+  return run(args[0], args.slice(1), options, next);
 }

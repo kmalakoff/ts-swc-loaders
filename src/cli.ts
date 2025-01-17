@@ -20,6 +20,7 @@ export default function cli(argv) {
   }
 
   const next = (err, _res) => {
+    if (err && err.status === 3221226505) err = null; // windows can give spurious errors
     exit(err ? ERROR_CODE : 0);
   };
 

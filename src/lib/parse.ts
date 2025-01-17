@@ -17,7 +17,7 @@ import type { ParseResult, SpawnOptions } from '../types';
 export default function parse(type: string, command: string, args: string[], options: SpawnOptions = {}): ParseResult {
   if (type === 'commonjs') return { command, args: ['--require', loaderCJS].concat(args), options };
 
-  if (major <= 16) {
+  if (major <= 18) {
     // https://stackoverflow.com/questions/55778283/how-to-disable-warnings-when-node-is-launched-via-a-global-shell-script
     const env = { ...(options.env || process.env) };
     env.NODE_OPTIONS = `--loader ${loaderESM} ${env.NODE_OPTIONS || ''}`;

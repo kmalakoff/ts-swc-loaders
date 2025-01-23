@@ -38,20 +38,20 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "cross-spawn-cb": "^2.1.19",
+    "cross-spawn-cb": "^2.1.20",
     "ends-with": "^1.0.1",
     "exit": "^0.1.2",
     "get-tsconfig-compat": "^2.0.3",
     "homedir-polyfill": "^1.0.3",
     "is-builtin-module": "^3.2.1",
     "mkdirp-classic": "^0.5.3",
-    "module-root-sync": "^1.1.7",
+    "module-root-sync": "^1.1.8",
     "pirates": "^2.1.2",
-    "resolve-bin-sync": "^0.1.10",
+    "resolve-bin-sync": "^0.1.11",
     "rimraf2": "^2.8.2",
     "short-hash": "^1.0.0",
     "starts-with": "^1.0.2",
-    "ts-swc-transform": "^1.15.40"
+    "ts-swc-transform": "^1.15.41"
   },
   "devDependencies": {
     "@types/exit": "*",

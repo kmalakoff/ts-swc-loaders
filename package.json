@@ -45,13 +45,13 @@
     "homedir-polyfill": "^1.0.3",
     "is-builtin-module": "^3.2.1",
     "mkdirp-classic": "^0.5.3",
-    "module-root-sync": "^1.1.8",
+    "module-root-sync": "^1.1.9",
     "pirates": "^2.1.2",
-    "resolve-bin-sync": "^0.1.11",
+    "resolve-bin-sync": "^0.1.12",
     "rimraf2": "^2.8.2",
     "short-hash": "^1.0.0",
     "starts-with": "^1.0.2",
-    "ts-swc-transform": "^1.15.48"
+    "ts-swc-transform": "^1.15.49"
   },
   "devDependencies": {
     "@types/exit": "*",

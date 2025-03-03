@@ -38,7 +38,7 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "cross-spawn-cb": "^2.1.22",
+    "cross-spawn-cb": "^2.1.23",
     "ends-with": "^1.0.1",
     "exit": "^0.1.2",
     "get-tsconfig-compat": "^2.0.3",
@@ -51,7 +51,7 @@
     "rimraf2": "^2.8.2",
     "short-hash": "^1.0.0",
     "starts-with": "^1.0.2",
-    "ts-swc-transform": "^1.15.52"
+    "ts-swc-transform": "^1.15.53"
   },
   "devDependencies": {
     "@types/exit": "*",

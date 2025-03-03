@@ -1,6 +1,6 @@
 {
   "name": "ts-swc-loaders",
-  "version": "1.12.65",
+  "version": "1.12.66",
   "description": "Typescript loaders for swc",
   "keywords": [
     "typescript",

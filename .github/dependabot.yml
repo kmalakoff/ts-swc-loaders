@@ -5,6 +5,8 @@ updates:
     schedule:
       interval: weekly
     ignore:
+      - dependency-name: "@types/mocha"
+      - dependency-name: "@types/node"
       - dependency-name: 'pirates'
       - dependency-name: 'is-builtin-module'      
   - package-ecosystem: 'github-actions'

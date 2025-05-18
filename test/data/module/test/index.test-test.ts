@@ -1,11 +1,8 @@
 import assert from 'assert';
 import exit from 'exit';
 
-// @ts-ignore
 import App from './lib/App.js';
-// @ts-ignore
-import guess from './lib/guess';
-// @ts-ignore
+import guess from './lib/guess.js';
 import string from './lib/string.cjs';
 
 assert.ok(App, 'App not loaded');

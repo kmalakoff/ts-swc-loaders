@@ -1,6 +1,6 @@
 {
   "name": "ts-swc-loaders",
-  "version": "1.12.69",
+  "version": "1.0.0",
   "description": "Typescript loaders for swc",
   "keywords": [
     "typescript",
@@ -18,12 +18,12 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/esm/index-esm.mjs",
-      "require": "./dist/cjs/index-cjs.cjs"
+      "import": "./dist/esm/index-esm.js",
+      "require": "./dist/cjs/index-cjs.js"
     },
     "./package.json": "./package.json"
   },
-  "main": "dist/cjs/index-cjs.cjs",
+  "main": "dist/cjs/index-cjs.js",
   "types": "dist/cjs/index-cjs.d.cts",
   "bin": {
     "ts-swc": "bin/cli.cjs"
@@ -52,7 +52,7 @@
     "rimraf2": "^2.8.2",
     "short-hash": "^1.0.0",
     "starts-with": "^1.0.2",
-    "ts-swc-transform": "^1.15.57"
+    "ts-swc-transform": "^2.0.0"
   },
   "devDependencies": {
     "@types/exit": "*",

@@ -17,13 +17,14 @@
   "author": "Kevin Malakoff <kmalakoff@gmail.com> (https://github.com/kmalakoff)",
   "type": "module",
   "exports": {
-    "import": "./dist/esm/index.esm.mjs",
-    "require": "./dist/cjs/index.cjs.cjs",
-    "types": "./dist/types/index.esm.d.ts"
+    ".": {
+      "import": "./dist/esm/index-esm.mjs",
+      "require": "./dist/cjs/index-cjs.cjs"
+    },
+    "./package.json": "./package.json"
   },
-  "main": "dist/cjs/index.cjs.cjs",
-  "module": "dist/dist/esm/index.esm.mjs",
-  "types": "dist/types/index.d.ts",
+  "main": "dist/cjs/index-cjs.cjs",
+  "types": "dist/cjs/index-cjs.d.cts",
   "bin": {
     "ts-swc": "bin/cli.cjs"
   },
@@ -38,16 +39,16 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "cross-spawn-cb": "^2.1.23",
+    "cross-spawn-cb": "^2.1.24",
     "ends-with": "^1.0.1",
     "exit": "^0.1.2",
     "get-tsconfig-compat": "^2.0.3",
     "homedir-polyfill": "^1.0.3",
     "is-builtin-module": "^3.2.1",
     "mkdirp-classic": "^0.5.3",
-    "module-root-sync": "^1.1.9",
+    "module-root-sync": "^1.1.10",
     "pirates": "^2.1.2",
-    "resolve-bin-sync": "^0.1.12",
+    "resolve-bin-sync": "^0.1.13",
     "rimraf2": "^2.8.2",
     "short-hash": "^1.0.0",
     "starts-with": "^1.0.2",
@@ -68,6 +69,6 @@
     "node": ">=0.8"
   },
   "tsds": {
-    "source": "src/index.esm.ts"
+    "source": "src/index-esm.ts"
   }
 }

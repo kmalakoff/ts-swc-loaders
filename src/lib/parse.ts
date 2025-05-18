@@ -3,8 +3,8 @@ import url from 'url';
 
 const __dirname = path.dirname(typeof __filename === 'undefined' ? url.fileURLToPath(import.meta.url) : __filename);
 const dist = path.join(__dirname, '..', '..');
-const loaderCJS = path.join(dist, 'cjs', 'index-cjs.cjs');
-const loaderESMBase = path.join(dist, 'esm', 'index-esm.mjs');
+const loaderCJS = path.join(dist, 'cjs', 'index-cjs.js');
+const loaderESMBase = path.join(dist, 'esm', 'index-esm.js');
 const loaderESM = url.pathToFileURL ? url.pathToFileURL(loaderESMBase).toString() : loaderESMBase;
 const js = `data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("${loaderESM}", pathToFileURL("./"));`;
 

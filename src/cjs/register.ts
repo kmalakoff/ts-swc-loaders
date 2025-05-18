@@ -3,10 +3,10 @@ import pirates from 'pirates';
 
 import { constants, createMatcher, transformSync } from 'ts-swc-transform';
 
-import { typeFileRegEx } from '../constants';
-import loadTSConfig from '../lib/loadTSConfig';
+import { typeFileRegEx } from '../constants.js';
+import loadTSConfig from '../lib/loadTSConfig.js';
 
-import cache from '../cache';
+import cache from '../cache.js';
 
 const config = loadTSConfig(process.cwd());
 config.config.compilerOptions.module = 'CommonJS';

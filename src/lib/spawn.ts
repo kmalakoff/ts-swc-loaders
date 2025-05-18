@@ -1,7 +1,7 @@
 import spawn from 'cross-spawn-cb';
 import resolveBin from 'resolve-bin-sync';
-import { moduleRegEx } from '../constants';
-import parse from './parse';
+import { moduleRegEx } from '../constants.js';
+import parse from './parse.js';
 
 const major = +process.versions.node.split('.')[0];
 const type = major < 12 ? 'commonjs' : 'module';

@@ -1,7 +1,7 @@
 import exit from 'exit';
 import getopts from 'getopts-compat';
-import cache from './cache';
-import run from './lib/spawn';
+import cache from './cache.js';
+import run from './lib/spawn.js';
 
 const ERROR_CODE = 17;
 

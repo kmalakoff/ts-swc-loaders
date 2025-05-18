@@ -3,13 +3,13 @@ import isBuiltinModule from 'is-builtin-module';
 import startsWith from 'starts-with';
 import { constants, createMatcher, toPath, transformSync } from 'ts-swc-transform';
 
-import { typeFileRegEx } from '../constants';
-import loadTSConfig from '../lib/loadTSConfig';
-import type { Context, Formatted, Formatter } from '../types';
-import extToFormat from './extToFormat';
-import fileType from './fileType';
+import { typeFileRegEx } from '../constants.js';
+import loadTSConfig from '../lib/loadTSConfig.js';
+import type { Context, Formatted, Formatter } from '../types.js';
+import extToFormat from './extToFormat.js';
+import fileType from './fileType.js';
 
-import cache from '../cache';
+import cache from '../cache.js';
 
 const config = loadTSConfig(process.cwd());
 const match = createMatcher(config);

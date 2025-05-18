@@ -1,3 +1,3 @@
-export * from './index-base';
-export * from './esm/loaderCurrent';
-export * from './esm/loaderLegacy';
+export * from './index-base.js';
+export * from './esm/loaderCurrent.js';
+export * from './esm/loaderLegacy.js';

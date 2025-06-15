@@ -12,7 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
     "allowJs": true,
-    "jsx": "react"
+    "jsx": "react-jsx"
   },
   "exclude": ["node_modules"],
   "include": ["test"]

@@ -1,6 +1,6 @@
 import fs from 'fs';
-import path from 'path';
 import moduleRoot from 'module-root-sync';
+import path from 'path';
 import type { PackageInfo, PackageJSON } from '../types.js';
 
 const cache = {};

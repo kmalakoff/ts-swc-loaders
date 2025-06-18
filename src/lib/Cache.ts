@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import fs from 'fs';
-import path from 'path';
 import mkdirp from 'mkdirp-classic';
+import path from 'path';
 import rimraf2 from 'rimraf2';
 import shortHash from 'short-hash';
 
@@ -14,7 +14,7 @@ function unlinkSafe(filePath) {
 }
 
 function timeMS() {
-  return new Date().valueOf();
+  return Date.now();
 }
 const MS_TO_DAYS = 1000 * 60 * 60 * 24;
 

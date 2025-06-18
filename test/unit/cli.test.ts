@@ -2,13 +2,13 @@
 delete process.env.NODE_OPTIONS;
 
 import assert from 'assert';
-import fs from 'fs';
-import path from 'path';
-import url from 'url';
 import cr from 'cr';
 import spawn from 'cross-spawn-cb';
+import fs from 'fs';
 import { linkModule, unlinkModule } from 'module-link-unlink';
+import path from 'path';
 import rimraf2 from 'rimraf2';
+import url from 'url';
 
 const major = +process.versions.node.split('.')[0];
 const type = major < 12 ? 'commonjs' : 'module';

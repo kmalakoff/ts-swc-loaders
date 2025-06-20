@@ -15,7 +15,7 @@ const type = major < 12 ? 'commonjs' : 'module';
 const mocha = major < 12 ? 'mocha-compat' : major < 14 ? 'mocha-compat-esm' : 'mocha';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
-const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.cjs');
+const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.js');
 const MODULE_DIR = path.join(__dirname, '..', '..');
 const DATA_DIR = path.join(__dirname, '..', 'data', type);
 const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules');

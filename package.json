@@ -26,7 +26,7 @@
   "main": "dist/cjs/index-cjs.js",
   "types": "dist/cjs/index-cjs.d.cts",
   "bin": {
-    "ts-swc": "bin/cli.cjs"
+    "ts-swc": "bin/cli.js"
   },
   "files": [
     "dist"
@@ -34,8 +34,8 @@
   "scripts": {
     "build": "tsds build",
     "format": "biome check --write --unsafe",
-    "test": "tsds test:node --no-timeouts",
-    "test:engines": "nvu engines npm test",
+    "test": "mocha --no-timeouts test/**/*.test.*",
+    "test:engines": "nvu engines tsds test:node --no-timeouts",
     "version": "tsds version"
   },
   "dependencies": {
@@ -52,7 +52,7 @@
     "rimraf2": "^2.8.2",
     "short-hash": "^1.0.0",
     "starts-with": "^1.0.2",
-    "ts-swc-transform": "^2.0.16"
+    "ts-swc-transform": "^2.0.17"
   },
   "devDependencies": {
     "@types/exit": "*",

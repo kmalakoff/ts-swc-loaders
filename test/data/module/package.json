@@ -1,5 +1,6 @@
 {
   "name": "ts-swc-loaders-module",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "version": ""
 }

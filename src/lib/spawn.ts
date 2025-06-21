@@ -1,4 +1,4 @@
-import spawn from 'cross-spawn-cb';
+import spawn, { type SpawnCallback, type SpawnOptions } from 'cross-spawn-cb';
 import resolveBin from 'resolve-bin-sync';
 import { moduleRegEx } from '../constants.js';
 import parse from './parse.js';
@@ -6,14 +6,14 @@ import parse from './parse.js';
 const major = +process.versions.node.split('.')[0];
 const type = major < 12 ? 'commonjs' : 'module';
 
-function which(command) {
+function which(command: string): string {
   try {
     if (moduleRegEx.test(command)) return resolveBin(command);
   } catch (_err) {}
   return command;
 }
 
-export default function worker(command, args, options, callback) {
+export default function worker(command: string, args: string[], options: SpawnOptions, callback: SpawnCallback): undefined {
   const cwd = options.cwd || process.cwd();
   const env = options.env || process.env;
 

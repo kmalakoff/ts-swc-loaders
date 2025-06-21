@@ -5,7 +5,7 @@ import path from 'path';
 import rimraf2 from 'rimraf2';
 import shortHash from 'short-hash';
 
-function unlinkSafe(filePath) {
+function unlinkSafe(filePath: string): undefined {
   try {
     fs.unlinkSync(filePath);
   } catch (_err) {
@@ -13,14 +13,14 @@ function unlinkSafe(filePath) {
   }
 }
 
-function timeMS() {
+function timeMS(): number {
   return Date.now();
 }
 const MS_TO_DAYS = 1000 * 60 * 60 * 24;
 
 import type { CacheOptions, ClearOptions } from '../types.js';
 
-export default class Cache {
+export default class Cache<T> {
   private cachePath: string;
   private maxAge: number;
   private cwdHash: string;
@@ -31,7 +31,7 @@ export default class Cache {
     this.maxAge = options.maxAge || 1 * MS_TO_DAYS;
   }
 
-  clear(options: ClearOptions = {}) {
+  clear(options: ClearOptions = {}): undefined {
     rimraf2.sync(this.cachePath, { disableGlob: true });
     if (!options.silent) console.log(`Cleared ${this.cachePath}`);
   }
@@ -40,14 +40,14 @@ export default class Cache {
     return crypto.createHash('sha512').update(contents).digest('hex');
   }
 
-  key(filePath: string, options: object) {
+  key(filePath: string, options: object): string {
     const dirHash = shortHash(path.dirname(filePath));
     const optionsHash = shortHash(JSON.stringify(options));
     const basename = path.basename(filePath);
     return path.join(this.cachePath, this.cwdHash, `${optionsHash}${dirHash}`, `${basename}.json`);
   }
 
-  get(key, hash) {
+  get(key: string, hash: string): T {
     try {
       const record = JSON.parse(fs.readFileSync(key, 'utf8'));
       const age = timeMS() - record.time;
@@ -61,7 +61,7 @@ export default class Cache {
     }
   }
 
-  set(key, data, hash) {
+  set(key: string, data: T, hash: string): T {
     const record = {
       data,
       hash,

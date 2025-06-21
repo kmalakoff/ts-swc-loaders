@@ -1,6 +1,6 @@
 import * as getTS from 'get-tsconfig-compat';
 
-export default function loadTSConfig(path): getTS.TsConfigResult {
+export default function loadTSConfig(path: string): getTS.TsConfigResult {
   let tsconfig = getTS.getTsconfig(path);
   if (!tsconfig || !tsconfig.path) {
     console.log(`tsconfig.json not found at: ${path}`);

@@ -1,5 +1,5 @@
 import path from 'path';
-import pirates from 'pirates';
+import pirates, { type Options, type RevertFunction } from 'pirates';
 
 import { constants, createMatcher, transformSync } from 'ts-swc-transform';
 import cache from '../cache.js';
@@ -12,11 +12,12 @@ config.config.compilerOptions.target = 'ES5';
 const match = createMatcher(config);
 const { extensions } = constants;
 
-export function register(_ = {}, hookOpts = {}) {
+export function register(_?: unknown, hookOpts?: Options): RevertFunction {
+  if (hookOpts === undefined) return pirates.addHook((code, filePath) => compile(code, filePath), { exts: extensions });
   return pirates.addHook((code, filePath) => compile(code, filePath), { ...hookOpts, exts: extensions });
 }
 
-export function compile(contents, filePath) {
+export function compile(contents: string, filePath: string): string {
   const ext = path.extname(filePath);
 
   // filter

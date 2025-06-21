@@ -7,7 +7,7 @@ import { pathToFileURL } from 'url';
 import cache from '../cache.js';
 import { typeFileRegEx } from '../constants.js';
 import loadTSConfig from '../lib/loadTSConfig.js';
-import type { Context, Loaded, Loader, Resolved, Resolver } from '../types.js';
+import type { LoadContext, Loaded, Loader, ResolveContext, Resolved, Resolver } from '../types.js';
 import extToFormat from './extToFormat.js';
 import fileType from './fileType.js';
 
@@ -18,7 +18,7 @@ const config = loadTSConfig(process.cwd());
 const match = createMatcher(config);
 const { extensions } = constants;
 
-export async function resolve(specifier: string, context: Context, next: Resolver): Promise<Resolved> | null {
+export async function resolve(specifier: string, context: ResolveContext, next: Resolver): Promise<Resolved> | null {
   if (isBuiltinModule(specifier)) return next(specifier, context);
   let filePath = toPath(specifier, context);
   const ext = path.extname(filePath);
@@ -43,7 +43,7 @@ export async function resolve(specifier: string, context: Context, next: Resolve
   return data;
 }
 
-export async function load(url: string, context: Context, next: Loader): Promise<Loaded> {
+export async function load(url: string, context: LoadContext, next: Loader): Promise<Loaded> {
   if (isBuiltinModule(url)) return next(url, context);
   if (endsWith(url, '.json')) context[importJSONKey] = { ...(context[importJSONKey] || {}), type: 'json' };
 

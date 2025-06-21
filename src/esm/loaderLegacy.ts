@@ -5,7 +5,7 @@ import { constants, createMatcher, toPath, transformSync } from 'ts-swc-transfor
 import cache from '../cache.js';
 import { typeFileRegEx } from '../constants.js';
 import loadTSConfig from '../lib/loadTSConfig.js';
-import type { Context, Formatted, Formatter } from '../types.js';
+import type { FormatContext, Formatted, Formatter, TransformContext, Transformed, Transformer } from '../types.js';
 import extToFormat from './extToFormat.js';
 import fileType from './fileType.js';
 
@@ -13,7 +13,7 @@ const config = loadTSConfig(process.cwd());
 const match = createMatcher(config);
 const { extensions } = constants;
 
-async function _getFormat(url: string, context: Context, next: Formatter): Promise<Formatted> {
+async function _getFormat(url: string, context: FormatContext, next: Formatter): Promise<Formatted> {
   if (isBuiltinModule(url)) return next(url, context);
   if (!startsWith(url, 'file://')) return await next(url, context);
   const filePath = toPath(url, context);
@@ -31,7 +31,7 @@ async function _getFormat(url: string, context: Context, next: Formatter): Promi
   return data;
 }
 
-async function _transformSource(source, context, next) {
+async function _transformSource(source: string, context: TransformContext, next: Transformer): Promise<Transformed> {
   if (isBuiltinModule(context.url)) return next(source, context);
   const loaded = await next(source, context);
   const filePath = toPath(context.url);

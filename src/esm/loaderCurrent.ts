@@ -4,12 +4,12 @@ import isBuiltinModule from 'is-builtin-module';
 import path from 'path';
 import { constants, createMatcher, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
 import { pathToFileURL } from 'url';
-import cache from '../cache.js';
-import { typeFileRegEx } from '../constants.js';
-import loadTSConfig from '../lib/loadTSConfig.js';
-import type { LoadContext, Loaded, Loader, ResolveContext, Resolved, Resolver } from '../types.js';
-import extToFormat from './extToFormat.js';
-import fileType from './fileType.js';
+import cache from '../cache.ts';
+import { typeFileRegEx } from '../constants.ts';
+import loadTSConfig from '../lib/loadTSConfig.ts';
+import type { LoadContext, Loaded, Loader, ResolveContext, Resolved, Resolver } from '../types.ts';
+import extToFormat from './extToFormat.ts';
+import fileType from './fileType.ts';
 
 const major = +process.versions.node.split('.')[0];
 const importJSONKey = major > 16 ? 'importAttributes' : 'importAssertions';

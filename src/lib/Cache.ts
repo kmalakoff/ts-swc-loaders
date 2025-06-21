@@ -18,7 +18,7 @@ function timeMS(): number {
 }
 const MS_TO_DAYS = 1000 * 60 * 60 * 24;
 
-import type { CacheOptions, ClearOptions } from '../types.js';
+import type { CacheOptions, ClearOptions } from '../types.ts';
 
 export default class Cache<T> {
   private cachePath: string;

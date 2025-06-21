@@ -46,7 +46,7 @@
     "homedir-polyfill": "^1.0.3",
     "is-builtin-module": "^3.2.1",
     "mkdirp-classic": "^0.5.3",
-    "module-root-sync": "^1.1.13",
+    "module-root-sync": "^1.1.14",
     "pirates": "^2.1.2",
     "resolve-bin-sync": "^0.1.16",
     "rimraf2": "^2.8.2",

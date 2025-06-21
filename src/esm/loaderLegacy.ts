@@ -2,12 +2,12 @@ import isBuiltinModule from 'is-builtin-module';
 import path from 'path';
 import startsWith from 'starts-with';
 import { constants, createMatcher, toPath, transformSync } from 'ts-swc-transform';
-import cache from '../cache.js';
-import { typeFileRegEx } from '../constants.js';
-import loadTSConfig from '../lib/loadTSConfig.js';
-import type { FormatContext, Formatted, Formatter, TransformContext, Transformed, Transformer } from '../types.js';
-import extToFormat from './extToFormat.js';
-import fileType from './fileType.js';
+import cache from '../cache.ts';
+import { typeFileRegEx } from '../constants.ts';
+import loadTSConfig from '../lib/loadTSConfig.ts';
+import type { FormatContext, Formatted, Formatter, TransformContext, Transformed, Transformer } from '../types.ts';
+import extToFormat from './extToFormat.ts';
+import fileType from './fileType.ts';
 
 const config = loadTSConfig(process.cwd());
 const match = createMatcher(config);

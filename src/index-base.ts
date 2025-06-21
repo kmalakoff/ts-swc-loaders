@@ -1,5 +1,5 @@
-export { default as cache } from './cache.js';
-export type { default as Cache } from './lib/Cache.js';
-export { default as parse } from './lib/parse.js';
-export { default as spawn } from './lib/spawn.js';
-export type * from './types.js';
+export { default as cache } from './cache.ts';
+export type { default as Cache } from './lib/Cache.ts';
+export { default as parse } from './lib/parse.ts';
+export { default as spawn } from './lib/spawn.ts';
+export type * from './types.ts';

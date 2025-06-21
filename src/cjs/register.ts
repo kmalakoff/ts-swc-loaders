@@ -2,9 +2,9 @@ import path from 'path';
 import pirates, { type Options, type RevertFunction } from 'pirates';
 
 import { constants, createMatcher, transformSync } from 'ts-swc-transform';
-import cache from '../cache.js';
-import { typeFileRegEx } from '../constants.js';
-import loadTSConfig from '../lib/loadTSConfig.js';
+import cache from '../cache.ts';
+import { typeFileRegEx } from '../constants.ts';
+import loadTSConfig from '../lib/loadTSConfig.ts';
 
 const config = loadTSConfig(process.cwd());
 config.config.compilerOptions.module = 'CommonJS';

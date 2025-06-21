@@ -1,5 +1,5 @@
-export * from './index-base.js';
+export * from './index-base.ts';
 
-import { register } from './cjs/register.js';
+import { register } from './cjs/register.ts';
 
 register();

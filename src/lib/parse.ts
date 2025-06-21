@@ -12,7 +12,7 @@ const major = +process.versions.node.split('.')[0];
 const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
 const NODE = isWindows ? 'node.exe' : 'node';
 
-import type { ParseResult, SpawnOptions } from '../types.js';
+import type { ParseResult, SpawnOptions } from '../types.ts';
 
 export default function parse(type: string, command: string, args: string[], options: SpawnOptions = {}): ParseResult {
   if (type === 'commonjs') return { command, args: ['--require', loaderCJS].concat(args), options };

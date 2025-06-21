@@ -52,7 +52,7 @@
     "rimraf2": "^2.8.2",
     "short-hash": "^1.0.0",
     "starts-with": "^1.0.2",
-    "ts-swc-transform": "^2.0.20"
+    "ts-swc-transform": "^2.1.0"
   },
   "devDependencies": {
     "@types/exit": "*",

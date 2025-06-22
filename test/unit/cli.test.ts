@@ -36,7 +36,10 @@ describe('cli', () => {
 
   it('run with cli option', (done) => {
     spawn(CLI, [mocha, '--watch-extensions', 'ts,tsx', '--no-timeouts', 'test/*.test-test.ts'], spawnOptions, (err, res) => {
-      if (err) return done(err.message);
+      if (err) {
+        done(err.message);
+        return;
+      }
       assert.equal(cr(res.stdout).split('\n').slice(-2)[0], 'Success!');
       done();
     });
@@ -45,7 +48,10 @@ describe('cli', () => {
   it('clear', (done) => {
     assert.ok(fs.readdirSync(TS_SWC_CACHE_PATH).length > 0);
     spawn(CLI, ['--clear'], spawnOptions, (err, _res) => {
-      if (err) return done(err.message);
+      if (err) {
+        done(err.message);
+        return;
+      }
 
       try {
         fs.statSync(TS_SWC_CACHE_PATH);

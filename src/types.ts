@@ -9,17 +9,6 @@ export interface CacheOptions {
   maxAge?: number;
 }
 
-export interface PackageJSON {
-  type?: string;
-  module?: string;
-  main?: string;
-}
-
-export interface PackageInfo {
-  json: PackageJSON;
-  dir: string;
-}
-
 export interface ResolveContext extends Context {}
 
 export interface Resolved {

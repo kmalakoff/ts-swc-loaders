@@ -1,7 +1,7 @@
-import * as getTS from 'get-tsconfig-compat';
+import { loadConfigSync, type TSConfig } from 'ts-swc-transform';
 
-export default function loadTSConfig(path: string): getTS.TsConfigResult {
-  let tsconfig = getTS.getTsconfig(path);
+export default function loadTSConfig(path: string): TSConfig {
+  let tsconfig = loadConfigSync(path);
   if (!tsconfig || !tsconfig.path) {
     console.log(`tsconfig.json not found at: ${path}`);
     tsconfig = { path: '', config: {} };

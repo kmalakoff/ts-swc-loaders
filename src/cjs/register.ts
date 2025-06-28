@@ -7,8 +7,8 @@ import { typeFileRegEx } from '../constants.ts';
 import loadTSConfig from '../lib/loadTSConfig.ts';
 
 const config = loadTSConfig(process.cwd());
-config.config.compilerOptions.module = 'CommonJS';
-config.config.compilerOptions.target = 'ES5';
+config.config.compilerOptions.module = 'commonjs';
+config.config.compilerOptions.target = 'es5';
 const match = createMatcher(config);
 const { extensions } = constants;
 

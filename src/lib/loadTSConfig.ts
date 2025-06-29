@@ -1,4 +1,4 @@
-import { loadConfigSync, type TSConfig } from 'ts-swc-transform';
+import loadConfigSync, { type TSConfig } from 'read-tsconfig-sync';
 
 export default function loadTSConfig(path: string): TSConfig {
   let tsconfig = loadConfigSync(path);

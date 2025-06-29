@@ -47,12 +47,12 @@
     "mkdirp-classic": "^0.5.3",
     "module-root-sync": "^1.2.0",
     "pirates": "^2.1.2",
-    "read-tsconfig-sync": "^0.1.1",
+    "read-tsconfig-sync": "^0.4.0",
     "resolve-bin-sync": "^0.1.16",
     "rimraf2": "^2.8.2",
     "short-hash": "^1.0.0",
     "starts-with": "^1.0.2",
-    "ts-swc-transform": "^2.4.4"
+    "ts-swc-transform": "^2.4.5"
   },
   "devDependencies": {
     "@types/exit": "*",

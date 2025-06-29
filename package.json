@@ -39,7 +39,7 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "cross-spawn-cb": "^2.3.9",
+    "cross-spawn-cb": "^2.3.10",
     "ends-with": "^1.0.1",
     "exit": "^0.1.2",
     "homedir-polyfill": "^1.0.3",
@@ -47,8 +47,8 @@
     "mkdirp-classic": "^0.5.3",
     "module-root-sync": "^1.2.0",
     "pirates": "^2.1.2",
-    "read-tsconfig-sync": "^0.4.0",
-    "resolve-bin-sync": "^0.1.16",
+    "read-tsconfig-sync": "^1.0.1",
+    "resolve-bin-sync": "^1.0.1",
     "rimraf2": "^2.8.2",
     "short-hash": "^1.0.0",
     "starts-with": "^1.0.2",

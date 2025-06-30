@@ -47,7 +47,7 @@
     "mkdirp-classic": "^0.5.3",
     "module-root-sync": "^1.2.0",
     "pirates": "^2.1.2",
-    "read-tsconfig-sync": "^1.0.1",
+    "read-tsconfig-sync": "^1.0.2",
     "resolve-bin-sync": "^1.0.1",
     "rimraf2": "^2.8.2",
     "short-hash": "^1.0.0",

@@ -53,7 +53,7 @@
     "short-hash": "^1.0.0",
     "starts-with": "^1.0.2",
     "test-match": "^1.0.1",
-    "ts-swc-transform": "^2.6.3"
+    "ts-swc-transform": "^2.6.4"
   },
   "devDependencies": {
     "@types/exit": "*",

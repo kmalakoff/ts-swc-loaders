@@ -39,7 +39,7 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "cross-spawn-cb": "^2.4.1",
+    "cross-spawn-cb": "^2.4.2",
     "ends-with": "^1.0.1",
     "exit": "^0.1.2",
     "homedir-polyfill": "^1.0.3",
@@ -53,7 +53,7 @@
     "short-hash": "^1.0.0",
     "starts-with": "^1.0.2",
     "test-match": "^1.0.1",
-    "ts-swc-transform": "^2.6.1"
+    "ts-swc-transform": "^2.6.2"
   },
   "devDependencies": {
     "@types/exit": "*",

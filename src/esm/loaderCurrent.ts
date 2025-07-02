@@ -2,7 +2,8 @@ import endsWith from 'ends-with';
 import { promises as fs } from 'fs';
 import isBuiltinModule from 'is-builtin-module';
 import path from 'path';
-import { constants, createMatcher, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
+import match from 'test-match';
+import { constants, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
 import { pathToFileURL } from 'url';
 import cache from '../cache.ts';
 import { typeFileRegEx } from '../constants.ts';
@@ -14,8 +15,8 @@ import fileType from './fileType.ts';
 const major = +process.versions.node.split('.')[0];
 const importJSONKey = major > 16 ? 'importAttributes' : 'importAssertions';
 
-const config = loadTSConfig(process.cwd());
-const match = createMatcher(config);
+const tsconfig = loadTSConfig(process.cwd());
+const matcher = match({ cwd: path.dirname(tsconfig.path), include: tsconfig.config.include as string[], exclude: tsconfig.config.exclude as string[] });
 const { extensions } = constants;
 
 export async function resolve(specifier: string, context: ResolveContext, next: Resolver): Promise<Resolved> | null {
@@ -24,7 +25,7 @@ export async function resolve(specifier: string, context: ResolveContext, next: 
   const ext = path.extname(filePath);
 
   // filtered
-  if (!match(filePath)) {
+  if (!matcher(filePath)) {
     const data = await next(specifier, context);
     if (!data.format) data.format = 'commonjs';
     if (path.isAbsolute(filePath) && !ext) data.format = 'commonjs'; // TODO: look up from package.json args bin is cjs in a module
@@ -53,7 +54,7 @@ export async function load(url: string, context: LoadContext, next: Loader): Pro
   if (!data.source && data.type === 'module') data.source = await fs.readFile(filePath);
 
   // filtered
-  if (!match(filePath)) return data;
+  if (!matcher(filePath)) return data;
   if (typeFileRegEx.test(filePath))
     return {
       ...data,
@@ -66,9 +67,9 @@ export async function load(url: string, context: LoadContext, next: Loader): Pro
   // transform
   if (!data.source) data.source = await fs.readFile(filePath);
   const contents = data.source.toString();
-  const key = cache.key(filePath, config);
+  const key = cache.key(filePath, tsconfig);
   const hash = cache.hash(contents);
-  const compiled = cache.get(key, hash) || cache.set(key, transformSync(contents, filePath, config), hash);
+  const compiled = cache.get(key, hash) || cache.set(key, transformSync(contents, filePath, tsconfig), hash);
   return {
     ...data,
     source: compiled.code,

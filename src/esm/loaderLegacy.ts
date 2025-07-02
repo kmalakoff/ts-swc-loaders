@@ -1,7 +1,8 @@
 import isBuiltinModule from 'is-builtin-module';
 import path from 'path';
 import startsWith from 'starts-with';
-import { constants, createMatcher, toPath, transformSync } from 'ts-swc-transform';
+import match from 'test-match';
+import { constants, toPath, transformSync } from 'ts-swc-transform';
 import cache from '../cache.ts';
 import { typeFileRegEx } from '../constants.ts';
 import loadTSConfig from '../lib/loadTSConfig.ts';
@@ -9,8 +10,8 @@ import type { FormatContext, Formatted, Formatter, TransformContext, Transformed
 import extToFormat from './extToFormat.ts';
 import fileType from './fileType.ts';
 
-const config = loadTSConfig(process.cwd());
-const match = createMatcher(config);
+const tsconfig = loadTSConfig(process.cwd());
+const matcher = match({ cwd: path.dirname(tsconfig.path), include: tsconfig.config.include as string[], exclude: tsconfig.config.exclude as string[] });
 const { extensions } = constants;
 
 async function _getFormat(url: string, context: FormatContext, next: Formatter): Promise<Formatted> {
@@ -20,7 +21,7 @@ async function _getFormat(url: string, context: FormatContext, next: Formatter):
   const ext = path.extname(filePath);
 
   // filtered
-  if (!match(filePath)) {
+  if (!matcher(filePath)) {
     if (!ext) return { format: 'commonjs' }; // args bin is cjs in a module
     return await next(url, context);
   }
@@ -38,15 +39,15 @@ async function _transformSource(source: string, context: TransformContext, next:
   const ext = path.extname(filePath);
 
   // filtered
-  if (!match(filePath)) return loaded;
+  if (!matcher(filePath)) return loaded;
   if (typeFileRegEx.test(filePath)) return { source: '' };
   if (ext === '.json') return loaded;
   if (extensions.indexOf(ext) < 0) return loaded;
 
   const contents = loaded.source.toString();
-  const key = cache.key(filePath, config);
+  const key = cache.key(filePath, tsconfig);
   const hash = cache.hash(contents);
-  const compiled = cache.get(key, hash) || cache.set(key, transformSync(contents, filePath, config), hash);
+  const compiled = cache.get(key, hash) || cache.set(key, transformSync(contents, filePath, tsconfig), hash);
   return {
     source: compiled.code,
   };

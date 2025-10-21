@@ -1,6 +1,6 @@
 {
   "name": "ts-swc-loaders",
-  "version": "2.3.17",
+  "version": "2.3.18",
   "description": "Typescript loaders for swc",
   "keywords": [
     "typescript",
@@ -24,7 +24,7 @@
     "./package.json": "./package.json"
   },
   "main": "dist/cjs/index-cjs.js",
-  "types": "dist/cjs/index-cjs.d.cts",
+  "types": "dist/cjs/index-cjs.d.ts",
   "bin": {
     "ts-swc": "bin/cli.js"
   },

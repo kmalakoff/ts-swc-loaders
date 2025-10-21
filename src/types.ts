@@ -44,7 +44,7 @@ export interface TransformContext extends Context {
 }
 export type Transformer = (specifier: string, context: TransformContext) => Promise<Transformed>;
 
-import type cp from 'node:child_process';
+import type cp from 'child_process';
 export type SpawnOptions = cp.SpawnOptions;
 export interface ParseResult {
   command: string;

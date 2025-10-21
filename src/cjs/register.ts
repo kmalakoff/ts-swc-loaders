@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 import pirates, { type Options, type RevertFunction } from 'pirates';
 
 import match from 'test-match';
@@ -10,12 +10,22 @@ import loadTSConfig from '../lib/loadTSConfig.ts';
 const tsconfig = loadTSConfig(process.cwd());
 tsconfig.config.compilerOptions.module = 'commonjs';
 tsconfig.config.compilerOptions.target = 'es5';
-const matcher = match({ cwd: path.dirname(tsconfig.path), include: tsconfig.config.include as string[], exclude: tsconfig.config.exclude as string[] });
+const matcher = match({
+  cwd: path.dirname(tsconfig.path),
+  include: tsconfig.config.include as string[],
+  exclude: tsconfig.config.exclude as string[],
+});
 const { extensions } = constants;
 
 export function register(_?: unknown, hookOpts?: Options): RevertFunction {
-  if (hookOpts === undefined) return pirates.addHook((code, filePath) => compile(code, filePath), { exts: extensions });
-  return pirates.addHook((code, filePath) => compile(code, filePath), { ...hookOpts, exts: extensions });
+  if (hookOpts === undefined)
+    return pirates.addHook((code, filePath) => compile(code, filePath), {
+      exts: extensions,
+    });
+  return pirates.addHook((code, filePath) => compile(code, filePath), {
+    ...hookOpts,
+    exts: extensions,
+  });
 }
 
 export function compile(contents: string, filePath: string): string {

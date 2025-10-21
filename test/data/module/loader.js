@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-import './shim.js';
+import "./shim.js";

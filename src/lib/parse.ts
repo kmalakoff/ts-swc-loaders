@@ -1,5 +1,5 @@
-import path from 'path';
-import url from 'url';
+import path from 'node:path';
+import url from 'node:url';
 
 const __dirname = path.dirname(typeof __filename === 'undefined' ? url.fileURLToPath(import.meta.url) : __filename);
 const dist = path.join(__dirname, '..', '..');

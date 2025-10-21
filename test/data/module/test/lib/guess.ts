@@ -1,1 +1,1 @@
-export default 'guess';
+export default "guess";

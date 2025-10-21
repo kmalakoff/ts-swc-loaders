@@ -1,10 +1,10 @@
-import { promises as fs } from 'node:fs';
-import path from 'node:path';
-import { pathToFileURL } from 'node:url';
 import endsWith from 'ends-with';
+import { promises as fs } from 'fs';
 import isBuiltinModule from 'is-builtin-module';
+import path from 'path';
 import match from 'test-match';
 import { constants, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
+import { pathToFileURL } from 'url';
 import cache from '../cache.ts';
 import { typeFileRegEx } from '../constants.ts';
 import loadTSConfig from '../lib/loadTSConfig.ts';

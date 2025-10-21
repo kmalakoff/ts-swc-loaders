@@ -1,5 +1,5 @@
-import path from 'node:path';
 import isBuiltinModule from 'is-builtin-module';
+import path from 'path';
 import startsWith from 'starts-with';
 import match from 'test-match';
 import { constants, toPath, transformSync } from 'ts-swc-transform';

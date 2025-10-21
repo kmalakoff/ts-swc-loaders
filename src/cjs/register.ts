@@ -1,4 +1,4 @@
-import path from 'node:path';
+import path from 'path';
 import pirates, { type Options, type RevertFunction } from 'pirates';
 
 import match from 'test-match';

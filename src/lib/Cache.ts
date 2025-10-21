@@ -1,7 +1,7 @@
-import crypto from 'node:crypto';
-import fs from 'node:fs';
-import path from 'node:path';
+import crypto from 'crypto';
+import fs from 'fs';
 import mkdirp from 'mkdirp-classic';
+import path from 'path';
 import rimraf2 from 'rimraf2';
 import shortHash from 'short-hash';
 

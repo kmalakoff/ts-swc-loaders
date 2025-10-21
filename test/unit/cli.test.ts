@@ -1,14 +1,15 @@
 // remove NODE_OPTIONS from ts-dev-stack
 delete process.env.NODE_OPTIONS;
 
-import assert from 'node:assert';
-import fs from 'node:fs';
-import path from 'node:path';
-import url from 'node:url';
+import assert from 'assert';
 import cr from 'cr';
 import spawn from 'cross-spawn-cb';
+import fs from 'fs';
 import { linkModule, unlinkModule } from 'module-link-unlink';
+import path from 'path';
 import rimraf2 from 'rimraf2';
+import type { SpawnOptions } from 'ts-swc-loaders';
+import url from 'url';
 
 const major = +process.versions.node.split('.')[0];
 const type = major < 12 ? 'commonjs' : 'module';
@@ -26,8 +27,6 @@ const spawnOptions = {
   encoding: 'utf8',
   env: { ...process.env, TS_SWC_CACHE_PATH },
 } as SpawnOptions;
-
-import type { SpawnOptions } from 'ts-swc-loaders';
 
 describe('cli', () => {
   if (major === 12) return; // TODO: fix mocha compat esm

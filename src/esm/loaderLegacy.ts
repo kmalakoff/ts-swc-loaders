@@ -1,5 +1,5 @@
+import path from 'node:path';
 import isBuiltinModule from 'is-builtin-module';
-import path from 'path';
 import startsWith from 'starts-with';
 import match from 'test-match';
 import { constants, toPath, transformSync } from 'ts-swc-transform';
@@ -11,7 +11,11 @@ import extToFormat from './extToFormat.ts';
 import fileType from './fileType.ts';
 
 const tsconfig = loadTSConfig(process.cwd());
-const matcher = match({ cwd: path.dirname(tsconfig.path), include: tsconfig.config.include as string[], exclude: tsconfig.config.exclude as string[] });
+const matcher = match({
+  cwd: path.dirname(tsconfig.path),
+  include: tsconfig.config.include as string[],
+  exclude: tsconfig.config.exclude as string[],
+});
 const { extensions } = constants;
 
 async function _getFormat(url: string, context: FormatContext, next: Formatter): Promise<Formatted> {

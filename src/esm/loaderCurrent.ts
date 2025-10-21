@@ -1,10 +1,10 @@
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 import endsWith from 'ends-with';
-import { promises as fs } from 'fs';
 import isBuiltinModule from 'is-builtin-module';
-import path from 'path';
 import match from 'test-match';
 import { constants, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
-import { pathToFileURL } from 'url';
 import cache from '../cache.ts';
 import { typeFileRegEx } from '../constants.ts';
 import loadTSConfig from '../lib/loadTSConfig.ts';
@@ -16,7 +16,11 @@ const major = +process.versions.node.split('.')[0];
 const importJSONKey = major > 16 ? 'importAttributes' : 'importAssertions';
 
 const tsconfig = loadTSConfig(process.cwd());
-const matcher = match({ cwd: path.dirname(tsconfig.path), include: tsconfig.config.include as string[], exclude: tsconfig.config.exclude as string[] });
+const matcher = match({
+  cwd: path.dirname(tsconfig.path),
+  include: tsconfig.config.include as string[],
+  exclude: tsconfig.config.exclude as string[],
+});
 const { extensions } = constants;
 
 export async function resolve(specifier: string, context: ResolveContext, next: Resolver): Promise<Resolved> | null {
@@ -46,7 +50,11 @@ export async function resolve(specifier: string, context: ResolveContext, next: 
 
 export async function load(url: string, context: LoadContext, next: Loader): Promise<Loaded> {
   if (isBuiltinModule(url)) return next(url, context);
-  if (endsWith(url, '.json')) context[importJSONKey] = { ...(context[importJSONKey] || {}), type: 'json' };
+  if (endsWith(url, '.json'))
+    context[importJSONKey] = {
+      ...(context[importJSONKey] || {}),
+      type: 'json',
+    };
 
   const data = await next(url, context);
   const filePath = toPath(data.responseURL || url, context);

@@ -24,7 +24,7 @@
     "./package.json": "./package.json"
   },
   "main": "dist/cjs/index-cjs.js",
-  "types": "dist/cjs/index-cjs.d.cts",
+  "types": "dist/cjs/index-cjs.d.ts",
   "bin": {
     "ts-swc": "bin/cli.js"
   },

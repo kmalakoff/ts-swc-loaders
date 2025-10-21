@@ -1,6 +1,6 @@
-import fs from 'fs';
+import fs from 'node:fs';
+import path from 'node:path';
 import moduleRoot from 'module-root-sync';
-import path from 'path';
 import startsWith from 'starts-with';
 
 function isEntry(contents: Record<string, string>, key: string, packageDir: string, filePath: string) {

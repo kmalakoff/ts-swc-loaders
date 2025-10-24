@@ -3,7 +3,7 @@ require("core-js/actual/symbol/for");
 require("core-js/actual/map");
 
 const exit = require("exit");
-const assert = require("node:assert");
+const assert = require("assert");
 
 const App = require("./lib/App.tsx");
 const string = require("./lib/string.cjs");

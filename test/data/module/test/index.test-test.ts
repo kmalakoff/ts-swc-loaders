@@ -1,4 +1,4 @@
-import assert from "node:assert";
+import assert from "assert";
 import exit from "exit";
 
 import App from "./lib/App.js";

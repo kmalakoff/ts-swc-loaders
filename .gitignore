@@ -4,5 +4,10 @@ dist/
 docs/
 npm-debug.log*
 .tmp/
-npm-debug.log
-lerna-debug.log
+.cache/
+
+# agents
+.agents/
+AGENTS.md
+.claude/
+CLAUDE.md

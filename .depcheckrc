@@ -1,1 +1,1 @@
-ignores: ["ts-swc-loaders", "react", "tsds-mocha", "core-js"]
+ignores: ["node-version-use", "ts-dev-stack", "@biomejs/biome", "ts-swc-loaders", "react", "tsds-mocha", "core-js"]

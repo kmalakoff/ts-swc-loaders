@@ -20,6 +20,7 @@ const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.js');
 const MODULE_DIR = path.join(__dirname, '..', '..');
 const DATA_DIR = path.join(__dirname, '..', 'data', type);
 const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules');
+const PKG_PATH = path.join(MODULE_DIR, 'package.json');
 
 const TS_SWC_CACHE_PATH = path.join(__dirname, '..', '..', '.tmp');
 const spawnOptions = {
@@ -62,6 +63,60 @@ describe('cli', () => {
         assert.ok(!!err);
         done();
       }
+    });
+  });
+
+  it('--version', (done) => {
+    const pkg = JSON.parse(fs.readFileSync(PKG_PATH, 'utf8'));
+    spawn(CLI, ['--version'], spawnOptions, (err, res) => {
+      if (err) {
+        done(err.message);
+        return;
+      }
+      assert.equal(cr(res.stdout).trim(), pkg.version);
+      done();
+    });
+  });
+
+  it('-v', (done) => {
+    const pkg = JSON.parse(fs.readFileSync(PKG_PATH, 'utf8'));
+    spawn(CLI, ['-v'], spawnOptions, (err, res) => {
+      if (err) {
+        done(err.message);
+        return;
+      }
+      assert.equal(cr(res.stdout).trim(), pkg.version);
+      done();
+    });
+  });
+
+  it('--help', (done) => {
+    spawn(CLI, ['--help'], spawnOptions, (err, res) => {
+      if (err) {
+        done(err.message);
+        return;
+      }
+      const output = cr(res.stdout);
+      assert.ok(output.indexOf('Usage:') >= 0);
+      assert.ok(output.indexOf('--clear') >= 0);
+      assert.ok(output.indexOf('--help') >= 0);
+      assert.ok(output.indexOf('--version') >= 0);
+      done();
+    });
+  });
+
+  it('-h', (done) => {
+    spawn(CLI, ['-h'], spawnOptions, (err, res) => {
+      if (err) {
+        done(err.message);
+        return;
+      }
+      const output = cr(res.stdout);
+      assert.ok(output.indexOf('Usage:') >= 0);
+      assert.ok(output.indexOf('--clear') >= 0);
+      assert.ok(output.indexOf('--help') >= 0);
+      assert.ok(output.indexOf('--version') >= 0);
+      done();
     });
   });
 });

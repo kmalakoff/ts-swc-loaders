@@ -5,6 +5,7 @@ import assert from 'assert';
 import cr from 'cr';
 import spawn from 'cross-spawn-cb';
 import fs from 'fs';
+import mkdirp from 'mkdirp-classic';
 import { linkModule, unlinkModule } from 'module-link-unlink';
 import path from 'path';
 import rimraf2 from 'rimraf2';
@@ -117,6 +118,44 @@ describe('cli', () => {
       assert.ok(output.indexOf('--help') >= 0);
       assert.ok(output.indexOf('--version') >= 0);
       done();
+    });
+  });
+
+  describe('edge cases', () => {
+    it('--clear exits cleanly when cache does not exist', (done) => {
+      rimraf2.sync(TS_SWC_CACHE_PATH, { disableGlob: true });
+      spawn(CLI, ['--clear'], spawnOptions, (err, res) => {
+        if (err) {
+          done(err.message);
+          return;
+        }
+        assert.equal(res.status, 0);
+        done();
+      });
+    });
+
+    it('shows error message when invoked with no arguments', (done) => {
+      spawn(CLI, [], spawnOptions, (err) => {
+        // CLI exits with error code 17 when no command provided
+        assert.ok(err);
+        assert.equal(err.status, 17);
+        assert.ok(err.stdout.indexOf('Missing command') >= 0);
+        done();
+      });
+    });
+
+    it('--clear works with silent flag implied', (done) => {
+      const key = path.join(TS_SWC_CACHE_PATH, 'test-file.json');
+      mkdirp.sync(path.dirname(key));
+      fs.writeFileSync(key, '{}', 'utf8');
+      spawn(CLI, ['--clear'], spawnOptions, (err, res) => {
+        if (err) {
+          done(err.message);
+          return;
+        }
+        assert.equal(res.status, 0);
+        done();
+      });
     });
   });
 });

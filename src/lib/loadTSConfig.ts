@@ -10,5 +10,6 @@ export default function loadTSConfig(path: string): TSConfig {
   tsconfig.config = tsconfig.config || {};
   tsconfig.config.compilerOptions = tsconfig.config.compilerOptions || {};
   tsconfig.config.include = tsconfig.config.include || [];
+  tsconfig.config.exclude = tsconfig.config.exclude || [];
   return tsconfig;
 }

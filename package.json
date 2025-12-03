@@ -41,7 +41,6 @@
   },
   "dependencies": {
     "cross-spawn-cb": "*",
-    "ends-with": "*",
     "exit": "*",
     "homedir-polyfill": "*",
     "is-builtin-module": "^3.2.1",
@@ -52,7 +51,6 @@
     "resolve-bin-sync": "*",
     "rimraf2": "*",
     "short-hash": "*",
-    "starts-with": "*",
     "test-match": "*",
     "ts-swc-transform": "*"
   },

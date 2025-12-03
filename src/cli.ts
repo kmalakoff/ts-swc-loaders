@@ -11,9 +11,13 @@ const ERROR_CODE = 17;
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 
 function getVersion(): string {
-  const pkgPath = path.join(__dirname, '..', '..', 'package.json');
-  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
-  return pkg.version;
+  try {
+    const pkgPath = path.join(__dirname, '..', '..', 'package.json');
+    const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+    return pkg.version;
+  } catch (_err) {
+    return 'unknown';
+  }
 }
 
 function showHelp(name: string): void {

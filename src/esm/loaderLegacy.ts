@@ -1,9 +1,9 @@
 import isBuiltinModule from 'is-builtin-module';
 import path from 'path';
-import startsWith from 'starts-with';
 import match from 'test-match';
 import { constants, toPath, transformSync } from 'ts-swc-transform';
 import cache from '../cache.ts';
+import { stringStartsWith } from '../compat.ts';
 import { typeFileRegEx } from '../constants.ts';
 import loadTSConfig from '../lib/loadTSConfig.ts';
 import type { FormatContext, Formatted, Formatter, TransformContext, Transformed, Transformer } from '../types.ts';
@@ -20,7 +20,7 @@ const { extensions } = constants;
 
 async function _getFormat(url: string, context: FormatContext, next: Formatter): Promise<Formatted> {
   if (isBuiltinModule(url)) return next(url, context);
-  if (!startsWith(url, 'file://')) return await next(url, context);
+  if (!stringStartsWith(url, 'file://')) return await next(url, context);
   const filePath = toPath(url, context);
   const ext = path.extname(filePath);
 

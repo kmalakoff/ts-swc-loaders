@@ -1,6 +1,6 @@
 {
   "name": "ts-swc-loaders",
-  "version": "2.3.22",
+  "version": "2.3.23",
   "description": "Typescript loaders for swc",
   "keywords": [
     "typescript",
@@ -41,7 +41,6 @@
   },
   "dependencies": {
     "cross-spawn-cb": "*",
-    "ends-with": "*",
     "exit": "*",
     "homedir-polyfill": "*",
     "is-builtin-module": "^3.2.1",
@@ -52,7 +51,6 @@
     "resolve-bin-sync": "*",
     "rimraf2": "*",
     "short-hash": "*",
-    "starts-with": "*",
     "test-match": "*",
     "ts-swc-transform": "*"
   },

@@ -42,6 +42,7 @@
   "dependencies": {
     "cross-spawn-cb": "*",
     "exit": "*",
+    "fs-remove-compat": "*",
     "homedir-polyfill": "*",
     "is-builtin-module": "^3.2.1",
     "mkdirp-classic": "*",
@@ -49,7 +50,6 @@
     "pirates": "^2.1.2",
     "read-tsconfig-sync": "*",
     "resolve-bin-sync": "*",
-    "rimraf2": "*",
     "short-hash": "*",
     "test-match": "*",
     "ts-swc-transform": "*"

@@ -1,8 +1,8 @@
 import crypto from 'crypto';
 import fs from 'fs';
+import { safeRmSync } from 'fs-remove-compat';
 import mkdirp from 'mkdirp-classic';
 import path from 'path';
-import rimraf2 from 'rimraf2';
 import shortHash from 'short-hash';
 
 function unlinkSafe(filePath: string): undefined {
@@ -32,7 +32,7 @@ export default class Cache<T> {
   }
 
   clear(options: ClearOptions = {}): undefined {
-    rimraf2.sync(this.cachePath, { disableGlob: true });
+    safeRmSync(this.cachePath);
     if (!options.silent) console.log(`Cleared ${this.cachePath}`);
   }
 

@@ -6,7 +6,11 @@ const dist = path.join(__dirname, '..', '..');
 const loaderCJS = path.join(dist, 'cjs', 'index-cjs.js');
 const loaderESMBase = path.join(dist, 'esm', 'index-esm.js');
 const loaderESM = url.pathToFileURL ? url.pathToFileURL(loaderESMBase).toString() : loaderESMBase;
-const js = `data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("${loaderESM}", pathToFileURL("./"));`;
+const registerHooksBase = path.join(dist, 'esm', 'registerHooks.js');
+const registerHooksURL = url.pathToFileURL ? url.pathToFileURL(registerHooksBase).toString() : registerHooksBase;
+// Register async hooks with module.register() for import(), and sync hooks with registerHooks() for require()
+// Node 22.15+ has module.registerHooks() which works with both import() and require()
+const js = `data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("${loaderESM}", pathToFileURL("./")); try { const h = await import("${registerHooksURL}"); h.registerSyncHooks(); } catch (e) {}`;
 
 const major = +process.versions.node.split('.')[0];
 const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);

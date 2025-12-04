@@ -86,6 +86,20 @@ describe('parse', () => {
           assert.ok(result.args[0] === '--import');
           assert.ok(result.args.indexOf('test.ts') >= 0);
         });
+
+        it('includes registerSyncHooks in data URL for Node 22.15+ support', () => {
+          const result = parse('module', 'node', ['test.ts'], {});
+          const importIndex = result.args.indexOf('--import');
+          const importArg = result.args[importIndex + 1];
+          assert.ok(importArg.indexOf('registerSyncHooks') >= 0, 'data URL should include registerSyncHooks');
+        });
+
+        it('includes registerHooks URL in data URL', () => {
+          const result = parse('module', 'node', ['test.ts'], {});
+          const importIndex = result.args.indexOf('--import');
+          const importArg = result.args[importIndex + 1];
+          assert.ok(importArg.indexOf('registerHooks.js') >= 0, 'data URL should reference registerHooks.js');
+        });
       });
     }
   });

@@ -33,7 +33,7 @@
   ],
   "scripts": {
     "build": "tsds build",
-    "format": "biome check --write --unsafe",
+    "format": "tsds format",
     "prepublishOnly": "tsds validate",
     "test": "tsds test:node --no-timeouts",
     "test:engines": "nvu engines tsds test:node --no-timeouts",
@@ -55,7 +55,6 @@
     "ts-swc-transform": "*"
   },
   "devDependencies": {
-    "@biomejs/biome": "*",
     "@types/exit": "*",
     "@types/mocha": "*",
     "@types/node": "*",
@@ -66,6 +65,7 @@
     "node-version-use": "*",
     "react": "*",
     "ts-dev-stack": "*",
+    "tsds-config": "*",
     "tsds-mocha": "*"
   },
   "engines": {

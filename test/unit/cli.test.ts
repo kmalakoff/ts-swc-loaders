@@ -5,10 +5,10 @@ import assert from 'assert';
 import cr from 'cr';
 import spawn from 'cross-spawn-cb';
 import fs from 'fs';
+import { safeRm, safeRmSync } from 'fs-remove-compat';
 import mkdirp from 'mkdirp-classic';
 import { linkModule, unlinkModule } from 'module-link-unlink';
 import path from 'path';
-import rimraf2 from 'rimraf2';
 import type { SpawnOptions } from 'ts-swc-loaders';
 import url from 'url';
 
@@ -36,7 +36,7 @@ describe('cli', () => {
   before(linkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
   after(unlinkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
 
-  it('rimraf', (done) => rimraf2(TS_SWC_CACHE_PATH, { disableGlob: true }, done));
+  it('rimraf', (done) => safeRm(TS_SWC_CACHE_PATH, done));
 
   it('run with cli option', (done) => {
     spawn(CLI, [mocha, '--watch-extensions', 'ts,tsx', '--no-timeouts', 'test/*.test-test.ts'], spawnOptions, (err, res) => {
@@ -123,7 +123,7 @@ describe('cli', () => {
 
   describe('edge cases', () => {
     it('--clear exits cleanly when cache does not exist', (done) => {
-      rimraf2.sync(TS_SWC_CACHE_PATH, { disableGlob: true });
+      safeRmSync(TS_SWC_CACHE_PATH);
       spawn(CLI, ['--clear'], spawnOptions, (err, res) => {
         if (err) {
           done(err.message);

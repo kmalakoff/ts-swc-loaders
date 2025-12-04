@@ -1,8 +1,8 @@
 import assert from 'assert';
 import fs from 'fs';
+import { safeRmSync } from 'fs-remove-compat';
 import mkdirp from 'mkdirp-classic';
 import path from 'path';
-import rimraf2 from 'rimraf2';
 import { Cache } from 'ts-swc-loaders';
 import url from 'url';
 
@@ -13,20 +13,20 @@ describe('Cache', () => {
   let cache: Cache<{ code: string }>;
 
   before(() => {
-    rimraf2.sync(TEST_CACHE_PATH, { disableGlob: true });
+    safeRmSync(TEST_CACHE_PATH);
   });
 
   after(() => {
-    rimraf2.sync(TEST_CACHE_PATH, { disableGlob: true });
+    safeRmSync(TEST_CACHE_PATH);
   });
 
   beforeEach(() => {
-    rimraf2.sync(TEST_CACHE_PATH, { disableGlob: true });
+    safeRmSync(TEST_CACHE_PATH);
     cache = new Cache({ cachePath: TEST_CACHE_PATH, maxAge: 100 }); // 100ms for expiration tests
   });
 
   afterEach(() => {
-    rimraf2.sync(TEST_CACHE_PATH, { disableGlob: true });
+    safeRmSync(TEST_CACHE_PATH);
   });
 
   describe('set and get', () => {
@@ -127,7 +127,7 @@ describe('Cache', () => {
     });
 
     it('works when cache directory does not exist', () => {
-      rimraf2.sync(TEST_CACHE_PATH, { disableGlob: true });
+      safeRmSync(TEST_CACHE_PATH);
       assert.doesNotThrow(() => {
         cache.clear({ silent: true });
       });

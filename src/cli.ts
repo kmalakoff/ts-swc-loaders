@@ -1,5 +1,5 @@
 import type { SpawnOptions } from 'cross-spawn-cb';
-import exit from 'exit';
+import exit from 'exit-compat';
 import fs from 'fs';
 import getopts from 'getopts-compat';
 import path from 'path';

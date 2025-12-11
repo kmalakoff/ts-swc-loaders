@@ -2,7 +2,7 @@ require("core-js/actual/object/assign"); // React uses Object.assign
 require("core-js/actual/symbol/for"); // React uses Symbol.for("react.transitional.element")
 require("core-js/actual/map"); // React uses Map
 
-const exit = require("exit");
+const exit = require("exit-compat");
 const assert = require("assert");
 
 const App = require("./lib/App.tsx");

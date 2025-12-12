@@ -10,7 +10,7 @@ import os from 'os';
  * - Uses native startsWith on Node 4.0+ / ES2015+
  * - Falls back to indexOf on Node 0.8-3.x
  */
-var hasStartsWith = typeof String.prototype.startsWith === 'function';
+const hasStartsWith = typeof String.prototype.startsWith === 'function';
 
 export function stringStartsWith(str: string, search: string, position?: number): boolean {
   if (hasStartsWith) {
@@ -25,14 +25,14 @@ export function stringStartsWith(str: string, search: string, position?: number)
  * - Uses native endsWith on Node 4.0+ / ES2015+
  * - Falls back to indexOf on Node 0.8-3.x
  */
-var hasEndsWith = typeof String.prototype.endsWith === 'function';
+const hasEndsWith = typeof String.prototype.endsWith === 'function';
 
 export function stringEndsWith(str: string, search: string, length?: number): boolean {
   if (hasEndsWith) {
     return str.endsWith(search, length);
   }
   length = length === undefined ? str.length : length;
-  var pos = length - search.length;
+  const pos = length - search.length;
   return pos >= 0 && str.indexOf(search, pos) === pos;
 }
 
@@ -41,13 +41,13 @@ export function stringEndsWith(str: string, search: string, length?: number): bo
  * - Uses native os.homedir on Node 4.0+
  * - Falls back to homedir-polyfill on Node 0.8-3.x
  */
-var hasHomedir = typeof os.homedir === 'function';
+const hasHomedir = typeof os.homedir === 'function';
 
 export function homedir(): string {
   if (hasHomedir) {
     return os.homedir();
   }
   // Fallback to polyfill for Node 0.8-3.x
-  var home = require('homedir-polyfill');
+  const home = require('homedir-polyfill');
   return home();
 }

@@ -42,11 +42,8 @@ export function stringEndsWith(str: string, search: string, length?: number): bo
  * - Falls back to homedir-polyfill on Node 0.8-3.x
  */
 const hasHomedir = typeof os.homedir === 'function';
-
 export function homedir(): string {
-  if (hasHomedir) {
-    return os.homedir();
-  }
+  if (hasHomedir) return os.homedir();
   // Fallback to polyfill for Node 0.8-3.x
   const home = require('homedir-polyfill');
   return home();

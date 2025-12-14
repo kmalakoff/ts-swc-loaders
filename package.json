@@ -40,31 +40,31 @@
     "version": "tsds version"
   },
   "dependencies": {
-    "cross-spawn-cb": "^2.4.12",
-    "exit-compat": "^1.0.1",
-    "fs-remove-compat": "^0.2.1",
+    "cross-spawn-cb": "^2.4.14",
+    "exit-compat": "^1.0.4",
+    "fs-remove-compat": "^0.2.3",
     "homedir-polyfill": "^1.0.3",
     "is-builtin-module": "^3.2.1",
     "mkdirp-classic": "^0.5.3",
-    "module-root-sync": "^2.0.0",
+    "module-root-sync": "^2.0.2",
     "pirates": "^2.1.2",
-    "read-tsconfig-sync": "^1.1.7",
-    "resolve-bin-sync": "^1.0.10",
+    "read-tsconfig-sync": "^1.1.9",
+    "resolve-bin-sync": "^1.0.12",
     "short-hash": "^1.0.0",
-    "test-match": "^1.1.2",
-    "ts-swc-transform": "^2.7.8"
+    "test-match": "^1.1.4",
+    "ts-swc-transform": "^2.7.10"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.10",
-    "@types/node": "^25.0.1",
+    "@types/node": "^25.0.2",
     "core-js": "^3.47.0",
     "cr": "^0.1.0",
     "getopts-compat": "^2.2.6",
-    "module-link-unlink": "^1.0.9",
-    "node-version-use": "^2.1.5",
+    "module-link-unlink": "^1.0.11",
+    "node-version-use": "^2.1.7",
     "react": "^19.2.3",
     "ts-dev-stack": "^1.21.3",
-    "tsds-config": "^0.2.1",
+    "tsds-config": "^0.2.2",
     "tsds-mocha": "^1.21.5"
   },
   "engines": {

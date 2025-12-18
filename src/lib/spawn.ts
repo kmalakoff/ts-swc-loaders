@@ -13,7 +13,7 @@ function which(command: string): string {
   return command;
 }
 
-export default function worker(command: string, args: string[], options: SpawnOptions, callback: SpawnCallback): undefined {
+export default function worker(command: string, args: string[], options: SpawnOptions, callback: SpawnCallback): void {
   const cwd = options.cwd || process.cwd();
   const env = options.env || process.env;
 

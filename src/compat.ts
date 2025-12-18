@@ -36,15 +36,6 @@ export function stringEndsWith(str: string, search: string, length?: number): bo
   return pos >= 0 && str.indexOf(search, pos) === pos;
 }
 
-/**
- * os.homedir wrapper for Node.js 0.8+
- * - Uses native os.homedir on Node 4.0+
- * - Falls back to homedir-polyfill on Node 0.8-3.x
- */
-const hasHomedir = typeof os.homedir === 'function';
 export function homedir(): string {
-  if (hasHomedir) return os.homedir();
-  // Fallback to polyfill for Node 0.8-3.x
-  const home = require('homedir-polyfill');
-  return home();
+  return typeof os.homedir === 'function' ? os.homedir() : require('homedir-polyfill')();
 }

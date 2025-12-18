@@ -5,7 +5,7 @@ import mkdirp from 'mkdirp-classic';
 import path from 'path';
 import shortHash from 'short-hash';
 
-function unlinkSafe(filePath: string): undefined {
+function unlinkSafe(filePath: string): void {
   try {
     fs.unlinkSync(filePath);
   } catch (_err) {
@@ -31,7 +31,7 @@ export default class Cache<T> {
     this.maxAge = options.maxAge || 1 * MS_TO_DAYS;
   }
 
-  clear(options: ClearOptions = {}): undefined {
+  clear(options: ClearOptions = {}): void {
     safeRmSync(this.cachePath);
     if (!options.silent) console.log(`Cleared ${this.cachePath}`);
   }

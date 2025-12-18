@@ -37,7 +37,7 @@ Examples:
   ${name} --clear`);
 }
 
-export default function cli(argv: string[], name = 'ts-swc'): undefined {
+export default function cli(argv: string[], name = 'ts-swc'): void {
   const options = getopts(argv, {
     alias: { clear: 'c', help: 'h', version: 'v' },
     boolean: ['clear', 'help', 'version'],

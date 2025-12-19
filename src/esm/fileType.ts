@@ -31,9 +31,15 @@ export default function fileType(filePath: string): string {
   const fileDir = path.dirname(filePath);
   if (cache[fileDir] !== undefined) return cache[fileDir]; // already cached
 
-  const packageDir = moduleRoot(fileDir);
-  const type = packageDir ? classifyPackage(packageDir, filePath) : 'commonjs';
-  cache[fileDir] = type;
-  if (packageDir) cache[packageDir] = type;
-  return type;
+  try {
+    const packageDir = moduleRoot(fileDir, { includeSynthetic: true });
+    const type = classifyPackage(packageDir, filePath);
+    cache[fileDir] = type;
+    cache[packageDir] = type;
+    return type;
+  } catch (_err) {
+    // No package.json found, default to commonjs
+    cache[fileDir] = 'commonjs';
+    return 'commonjs';
+  }
 }

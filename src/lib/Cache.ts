@@ -27,7 +27,7 @@ export default class Cache<T> {
 
   constructor(options: CacheOptions = {}) {
     this.cwdHash = crypto.createHash('md5').update(process.cwd()).digest('hex');
-    this.cachePath = options.cachePath;
+    this.cachePath = options.cachePath ?? process.env.TS_SWC_CACHE_PATH ?? '';
     this.maxAge = options.maxAge || 1 * MS_TO_DAYS;
   }
 
@@ -47,7 +47,7 @@ export default class Cache<T> {
     return path.join(this.cachePath, this.cwdHash, `${optionsHash}${dirHash}`, `${basename}.json`);
   }
 
-  get(key: string, hash: string): T {
+  get(key: string, hash: string): T | null {
     try {
       const record = JSON.parse(fs.readFileSync(key, 'utf8'));
       const age = timeMS() - record.time;

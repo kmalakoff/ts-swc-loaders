@@ -2,6 +2,7 @@
 delete process.env.NODE_OPTIONS;
 
 import assert from 'assert';
+// @ts-expect-error: no types for cr
 import cr from 'cr';
 import spawn from 'cross-spawn-cb';
 import fs from 'fs';
@@ -40,10 +41,9 @@ describe('cli', () => {
 
   it('run with cli option', (done) => {
     spawn(CLI, [mocha, '--watch-extensions', 'ts,tsx', '--no-timeouts', 'test/*.test-test.ts'], spawnOptions, (err, res) => {
-      if (err) {
-        done(err.message);
-        return;
-      }
+      if (err) return done(err);
+      if (!res) return done(new Error('no res'));
+
       assert.equal(cr(res.stdout).split('\n').slice(-2)[0], 'Success!');
       done();
     });
@@ -52,10 +52,7 @@ describe('cli', () => {
   it('clear', (done) => {
     assert.ok(fs.readdirSync(TS_SWC_CACHE_PATH).length > 0);
     spawn(CLI, ['--clear'], spawnOptions, (err, _res) => {
-      if (err) {
-        done(err.message);
-        return;
-      }
+      if (err) return done(err);
 
       try {
         fs.statSync(TS_SWC_CACHE_PATH);
@@ -70,10 +67,9 @@ describe('cli', () => {
   it('--version', (done) => {
     const pkg = JSON.parse(fs.readFileSync(PKG_PATH, 'utf8'));
     spawn(CLI, ['--version'], spawnOptions, (err, res) => {
-      if (err) {
-        done(err.message);
-        return;
-      }
+      if (err) return done(err);
+      if (!res) return done(new Error('no res'));
+
       assert.equal(cr(res.stdout).trim(), pkg.version);
       done();
     });
@@ -82,10 +78,9 @@ describe('cli', () => {
   it('-v', (done) => {
     const pkg = JSON.parse(fs.readFileSync(PKG_PATH, 'utf8'));
     spawn(CLI, ['-v'], spawnOptions, (err, res) => {
-      if (err) {
-        done(err.message);
-        return;
-      }
+      if (err) return done(err);
+      if (!res) return done(new Error('no res'));
+
       assert.equal(cr(res.stdout).trim(), pkg.version);
       done();
     });
@@ -93,10 +88,9 @@ describe('cli', () => {
 
   it('--help', (done) => {
     spawn(CLI, ['--help'], spawnOptions, (err, res) => {
-      if (err) {
-        done(err.message);
-        return;
-      }
+      if (err) return done(err);
+      if (!res) return done(new Error('no res'));
+
       const output = cr(res.stdout);
       assert.ok(output.indexOf('Usage:') >= 0);
       assert.ok(output.indexOf('--clear') >= 0);
@@ -108,10 +102,9 @@ describe('cli', () => {
 
   it('-h', (done) => {
     spawn(CLI, ['-h'], spawnOptions, (err, res) => {
-      if (err) {
-        done(err.message);
-        return;
-      }
+      if (err) return done(err);
+      if (!res) return done(new Error('no res'));
+
       const output = cr(res.stdout);
       assert.ok(output.indexOf('Usage:') >= 0);
       assert.ok(output.indexOf('--clear') >= 0);
@@ -125,10 +118,8 @@ describe('cli', () => {
     it('--clear exits cleanly when cache does not exist', (done) => {
       safeRmSync(TS_SWC_CACHE_PATH);
       spawn(CLI, ['--clear'], spawnOptions, (err, res) => {
-        if (err) {
-          done(err.message);
-          return;
-        }
+        if (err) return done(err as Error);
+        if (!res) return done(new Error('no res'));
         assert.equal(res.status, 0);
         done();
       });
@@ -149,10 +140,8 @@ describe('cli', () => {
       mkdirp.sync(path.dirname(key));
       fs.writeFileSync(key, '{}', 'utf8');
       spawn(CLI, ['--clear'], spawnOptions, (err, res) => {
-        if (err) {
-          done(err.message);
-          return;
-        }
+        if (err) return done(err as Error);
+        if (!res) return done(new Error('no res'));
         assert.equal(res.status, 0);
         done();
       });

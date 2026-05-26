@@ -23,7 +23,7 @@ const matcher = match({
 });
 const { extensions } = constants;
 
-export async function resolve(specifier: string, context: ResolveContext, next: Resolver): Promise<Resolved> | null {
+export async function resolve(specifier: string, context: ResolveContext, next: Resolver): Promise<Resolved> {
   if (isBuiltinModule(specifier)) return next(specifier, context);
   let filePath = toPath(specifier, context);
   const ext = path.extname(filePath);
@@ -37,7 +37,7 @@ export async function resolve(specifier: string, context: ResolveContext, next: 
   }
 
   // use default resolve and infer from package type
-  filePath = resolveFileSync(specifier, context);
+  filePath = resolveFileSync(specifier, context) as string;
   if (!filePath) throw new Error(`${specifier} not found. parentURL: ${context.parentURL}`);
   const data = {
     url: pathToFileURL(filePath).href,
@@ -51,8 +51,8 @@ export async function resolve(specifier: string, context: ResolveContext, next: 
 export async function load(url: string, context: LoadContext, next: Loader): Promise<Loaded> {
   if (isBuiltinModule(url)) return next(url, context);
   if (stringEndsWith(url, '.json'))
-    context[importJSONKey] = {
-      ...(context[importJSONKey] || {}),
+    (context as Record<string, unknown>)[importJSONKey] = {
+      ...(((context as Record<string, unknown>)[importJSONKey] as Record<string, unknown>) || {}),
       type: 'json',
     };
 

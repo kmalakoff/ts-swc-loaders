@@ -30,5 +30,5 @@ const hasEndsWith = typeof String.prototype.endsWith === 'function';
 export function stringEndsWith(str: string, search: string, position?: number): boolean {
   if (hasEndsWith) return str.endsWith(search, position);
   const len = position === undefined ? str.length : position;
-  return str.lastIndexOf(search) === len - search.length;
+  return len >= search.length && str.lastIndexOf(search) === len - search.length;
 }

@@ -67,7 +67,7 @@ export default function cli(argv: string[], name = 'ts-swc'): void {
 
   options.stdio = 'inherit'; // pass through stdio
   run(args[0], args.slice(1), options as SpawnOptions, (err) => {
-    if (err && err.status === 3221226505) err = null; // windows can give spurious errors on node 18
+    if (err && err.status === 3221226505) err = undefined; // windows can give spurious errors on node 18
     exit(err ? ERROR_CODE : 0);
   });
 }

@@ -1,4 +1,4 @@
-const EXT_TO_FORMAT = {
+const EXT_TO_FORMAT: Record<string, string> = {
   '.json': 'json',
   '.mjs': 'module',
   '.mts': 'module',

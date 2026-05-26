@@ -8,6 +8,7 @@ import { typeFileRegEx } from '../constants.ts';
 import loadTSConfig from '../lib/loadTSConfig.ts';
 
 const tsconfig = loadTSConfig(process.cwd());
+if (!tsconfig.config.compilerOptions) tsconfig.config.compilerOptions = {};
 tsconfig.config.compilerOptions.module = 'commonjs';
 tsconfig.config.compilerOptions.target = 'es5';
 const matcher = match({

@@ -57,6 +57,7 @@
   "devDependencies": {
     "@types/mocha": "*",
     "@types/node": "*",
+    "@types/short-hash": "^1.0.3",
     "core-js": "^3.20.0",
     "cr": "^0.1.0",
     "getopts-compat": "^2.2.5",

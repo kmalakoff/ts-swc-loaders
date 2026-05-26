@@ -38,7 +38,7 @@ export function resolveSync(specifier: string, context: ResolveContext, nextReso
   }
 
   // use default resolve and infer from package type
-  filePath = resolveFileSync(specifier, context);
+  filePath = resolveFileSync(specifier, context) as string;
   if (!filePath) throw new Error(`${specifier} not found. parentURL: ${context.parentURL}`);
   const data: Resolved = {
     url: pathToFileURL(filePath).href,

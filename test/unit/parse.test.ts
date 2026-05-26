@@ -32,8 +32,8 @@ describe('parse', () => {
       describe('Node <=16 path', () => {
         it('sets NODE_OPTIONS environment variable', () => {
           const result = parse('module', 'node', ['test.ts'], {});
-          assert.ok(result.options.env);
-          assert.ok(result.options.env.NODE_OPTIONS);
+          if (!result.options.env) throw new Error('no env');
+          if (!result.options.env.NODE_OPTIONS) throw new Error('no NODE_OPTIONS');
           assert.ok(result.options.env.NODE_OPTIONS.indexOf('--loader') >= 0);
         });
 
@@ -41,17 +41,20 @@ describe('parse', () => {
           const result = parse('module', 'node', ['test.ts'], {
             env: { NODE_OPTIONS: '--max-old-space-size=4096' },
           });
+          if (!result.options.env || !result.options.env.NODE_OPTIONS) throw new Error('no NODE_OPTIONS');
           assert.ok(result.options.env.NODE_OPTIONS.indexOf('--max-old-space-size=4096') >= 0);
           assert.ok(result.options.env.NODE_OPTIONS.indexOf('--loader') >= 0);
         });
 
         it('works when NODE_OPTIONS is undefined', () => {
           const result = parse('module', 'node', ['test.ts'], { env: {} });
+          if (!result.options.env || !result.options.env.NODE_OPTIONS) throw new Error('no NODE_OPTIONS');
           assert.ok(result.options.env.NODE_OPTIONS.indexOf('--loader') >= 0);
         });
 
         it('uses esm loader path in NODE_OPTIONS', () => {
           const result = parse('module', 'node', ['test.ts'], {});
+          if (!result.options.env || !result.options.env.NODE_OPTIONS) throw new Error('no NODE_OPTIONS');
           assert.ok(result.options.env.NODE_OPTIONS.indexOf('index-esm.js') >= 0);
         });
       });
@@ -114,6 +117,7 @@ describe('parse', () => {
       const result = parse('commonjs', 'node', ['test.ts'], {
         env: { CUSTOM_VAR: 'value' },
       });
+      if (!result.options.env) throw new Error('no env');
       assert.equal(result.options.env.CUSTOM_VAR, 'value');
     });
   });

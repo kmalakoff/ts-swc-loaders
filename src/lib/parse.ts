@@ -13,7 +13,7 @@ const registerHooksURL = url.pathToFileURL ? url.pathToFileURL(registerHooksBase
 const js = `data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("${loaderESM}", pathToFileURL("./")); try { const h = await import("${registerHooksURL}"); h.registerSyncHooks(); } catch (e) {}`;
 
 const major = +process.versions.node.split('.')[0];
-const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE);
+const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE ?? '');
 const NODE = isWindows ? 'node.exe' : 'node';
 
 import type { ParseResult, SpawnOptions } from '../types.ts';

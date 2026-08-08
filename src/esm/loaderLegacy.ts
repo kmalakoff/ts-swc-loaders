@@ -18,8 +18,10 @@ const matcher = match({
 });
 const { extensions } = constants;
 
+const isBuiltin = (specifier: string): boolean => stringStartsWith(specifier, 'node:') || isBuiltinModule(specifier);
+
 async function _getFormat(url: string, context: FormatContext, next: Formatter): Promise<Formatted> {
-  if (isBuiltinModule(url)) return next(url, context);
+  if (isBuiltin(url)) return next(url, context);
   if (!stringStartsWith(url, 'file://')) return await next(url, context);
   const filePath = toPath(url, context);
   const ext = path.extname(filePath);
@@ -37,7 +39,7 @@ async function _getFormat(url: string, context: FormatContext, next: Formatter):
 }
 
 async function _transformSource(source: string, context: TransformContext, next: Transformer): Promise<Transformed> {
-  if (isBuiltinModule(context.url)) return next(source, context);
+  if (isBuiltin(context.url)) return next(source, context);
   const loaded = await next(source, context);
   const filePath = toPath(context.url);
   const ext = path.extname(filePath);

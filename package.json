@@ -71,6 +71,16 @@
   "engines": {
     "node": ">=0.8"
   },
+  "allowScripts": {
+    "core-js": true,
+    "core-js-pure": true,
+    "tsds-mocha": true,
+    "@swc/core": true,
+    "node-filename-to-dist-paths": true,
+    "node-semvers": true,
+    "node-version-use": true,
+    "thread-sleep-compat": true
+  },
   "tsds": {
     "source": "src/index-esm.ts"
   }

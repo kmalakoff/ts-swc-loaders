@@ -50,7 +50,7 @@
     "mkdirp-classic": "^0.5.3",
     "module-root-sync": "^1.1.1",
     "pirates": "^2.1.2",
-    "resolve-bin-sync": "^0.1.4",
+    "resolve-bin-sync": "^1.0.15",
     "rimraf2": "^2.8.2",
     "short-hash": "^1.0.0",
     "starts-with": "^1.0.2",

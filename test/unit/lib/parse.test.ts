@@ -1,10 +1,12 @@
 import assert from 'assert';
+import Module from 'module';
 import path from 'path';
 import { parse } from 'ts-swc-loaders';
 import url from 'url';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
-const major = +process.versions.node.split('.')[0];
+// Mirrors parse's own gate: module.register (18.19 / 20.6) is what selects the --import bootstrap.
+const hasRegister = typeof (Module as { register?: unknown }).register === 'function';
 
 describe('parse', () => {
   describe('commonjs', () => {
@@ -28,8 +30,8 @@ describe('parse', () => {
   });
 
   describe('module (ESM)', () => {
-    if (major <= 16) {
-      describe('Node <=16 path', () => {
+    if (!hasRegister) {
+      describe('without module.register', () => {
         it('sets NODE_OPTIONS environment variable', () => {
           const result = parse('module', 'node', ['test.ts'], {});
           if (!result.options.env) throw new Error('no env');
@@ -59,7 +61,7 @@ describe('parse', () => {
         });
       });
     } else {
-      describe('Node >16 path', () => {
+      describe('with module.register', () => {
         it('uses --import flag', () => {
           const result = parse('module', 'node', ['test.ts'], {});
           assert.ok(result.args.indexOf('--import') >= 0);
@@ -105,6 +107,29 @@ describe('parse', () => {
         });
       });
     }
+  });
+
+  describe('node executable detection', () => {
+    // Windows spells the executable node.exe / node.cmd and matches filenames case-insensitively,
+    // so every spelling means the command already IS node and must not be repeated as a script.
+    const spellings = ['node', 'node.exe', 'node.cmd', 'NODE.EXE', path.join('/usr/local/bin', 'node'), process.execPath];
+
+    spellings.forEach((command) => {
+      it(`does not pass ${command} to node as a script argument`, () => {
+        const result = parse('module', command, ['test.ts'], {});
+        assert.equal(result.command, process.execPath);
+        assert.equal(result.args.indexOf(command), -1);
+        assert.equal(result.args[result.args.length - 1], 'test.ts');
+      });
+    });
+
+    it('passes a non-node command to node as a script argument', () => {
+      const bin = path.join(__dirname, 'mocha.js');
+      const result = parse('module', bin, ['test.ts'], {});
+      assert.equal(result.command, process.execPath);
+      assert.ok(result.args.indexOf(bin) >= 0);
+      assert.ok(result.args.indexOf(bin) < result.args.indexOf('test.ts'));
+    });
   });
 
   describe('options passthrough', () => {

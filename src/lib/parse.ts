@@ -13,8 +13,12 @@ const registerHooksURL = url.pathToFileURL ? url.pathToFileURL(registerHooksBase
 // Node 22.15+ has module.registerHooks() which works with both import() and require()
 const js = `data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("${loaderESM}", pathToFileURL("./")); try { const h = await import("${registerHooksURL}"); h.registerSyncHooks(); } catch (e) {}`;
 
-const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE ?? '');
-const NODE = isWindows ? 'node.exe' : 'node';
+// A command that already IS the node executable must not also be handed to node as a script.
+// Windows spells it node.exe / node.cmd and matches filenames case-insensitively (cross-spawn-cb's parse).
+const NODES = ['node', 'node.exe', 'node.cmd'];
+function isNode(command: string): boolean {
+  return NODES.indexOf(path.basename(command).toLowerCase()) >= 0;
+}
 
 import type { ParseResult, SpawnOptions } from '../types.ts';
 
@@ -31,13 +35,13 @@ export default function parse(type: string, command: string, args: string[], opt
     // executable bit on bins it links, so an aliased copy losing a bin-name collision has none.
     return {
       command: process.execPath,
-      args: path.basename(command) === NODE ? args : [command].concat(args),
+      args: isNode(command) ? args : [command].concat(args),
       options: { ...options, env },
     };
   }
   const parsed = {
     command: process.execPath,
-    args: path.basename(command) === NODE ? ['--import', js].concat(args) : ['--import', js, command].concat(args),
+    args: isNode(command) ? ['--import', js].concat(args) : ['--import', js, command].concat(args),
     options,
   };
   return parsed;

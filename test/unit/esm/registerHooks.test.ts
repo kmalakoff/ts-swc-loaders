@@ -1,7 +1,7 @@
 import assert from 'assert';
 import Module from 'module';
 
-import { registerSyncHooks } from '../../src/esm/registerHooks.ts';
+import { registerSyncHooks } from '../../../src/esm/registerHooks.ts';
 
 describe('registerSyncHooks', () => {
   const hasRegisterHooks = typeof Module.registerHooks === 'function';

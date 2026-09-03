@@ -7,7 +7,7 @@ import { Cache } from 'ts-swc-loaders';
 import url from 'url';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
-const TEST_CACHE_PATH = path.join(__dirname, '..', '..', '.tmp-cache-test');
+const TEST_CACHE_PATH = path.join(__dirname, '..', '..', '..', '.tmp-cache-test');
 
 describe('Cache', () => {
   let cache: Cache<{ code: string }>;

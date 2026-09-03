@@ -1,3 +1,4 @@
+import Module from 'module';
 import path from 'path';
 import url from 'url';
 
@@ -12,7 +13,6 @@ const registerHooksURL = url.pathToFileURL ? url.pathToFileURL(registerHooksBase
 // Node 22.15+ has module.registerHooks() which works with both import() and require()
 const js = `data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("${loaderESM}", pathToFileURL("./")); try { const h = await import("${registerHooksURL}"); h.registerSyncHooks(); } catch (e) {}`;
 
-const major = +process.versions.node.split('.')[0];
 const isWindows = process.platform === 'win32' || /^(msys|cygwin)$/.test(process.env.OSTYPE ?? '');
 const NODE = isWindows ? 'node.exe' : 'node';
 
@@ -21,11 +21,19 @@ import type { ParseResult, SpawnOptions } from '../types.ts';
 export default function parse(type: string, command: string, args: string[], options: SpawnOptions = {}): ParseResult {
   if (type === 'commonjs') return { command, args: ['--require', loaderCJS].concat(args), options };
 
-  if (major <= 16) {
+  // module.register (18.19 / 20.6) is the true boundary for the --import bootstrap: it implies --import.
+  // Without it NODE_OPTIONS carries the loader, which survives wrappers that re-spawn node (mocha's bin does).
+  if (typeof (Module as { register?: unknown }).register !== 'function') {
     // https://stackoverflow.com/questions/55778283/how-to-disable-warnings-when-node-is-launched-via-a-global-shell-script
     const env = { ...(options.env || process.env) };
     env.NODE_OPTIONS = `--loader ${loaderESM} ${env.NODE_OPTIONS || ''}`;
-    return { command, args, options: { ...options, env } };
+    // Run the command as an argument to node rather than as an executable: npm only sets the
+    // executable bit on bins it links, so an aliased copy losing a bin-name collision has none.
+    return {
+      command: process.execPath,
+      args: path.basename(command) === NODE ? args : [command].concat(args),
+      options: { ...options, env },
+    };
   }
   const parsed = {
     command: process.execPath,

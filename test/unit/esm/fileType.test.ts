@@ -4,7 +4,7 @@ import { fileType } from 'ts-swc-loaders';
 import url from 'url';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
-const FIXTURES = path.join(__dirname, '..', 'data', 'filetypes');
+const FIXTURES = path.join(__dirname, '..', '..', 'data', 'filetypes');
 
 describe('fileType', () => {
   describe('explicit type field', () => {

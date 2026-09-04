@@ -12,16 +12,13 @@ import { linkModule, unlinkModule } from 'module-link-unlink';
 import path from 'path';
 import resolveBin from 'resolve-bin-sync';
 import type { SpawnOptions } from 'ts-swc-loaders';
+import { mochaBin } from 'tsds-mocha';
 import url from 'url';
 
 const major = +process.versions.node.split('.')[0];
 const type = major < 12 ? 'commonjs' : 'module';
-// tsds-mocha's routing table, which owns these aliases: the pinned mocha-cjs (10.8.2) serves every
-// runtime without require_module, and only the floating 'mocha' slot tracks latest (engines 20.19+).
-// An alias keeps the bin name of the package it aliases, which ts-swc's own name-keyed lookup cannot
-// find, so the path is resolved here exactly as tsds-mocha resolves it before spawning the loader.
-const mochaPkg = major < 12 ? 'mocha-compat' : process.features?.require_module ? 'mocha' : 'mocha-cjs';
-const mocha = resolveBin(mochaPkg, mochaPkg === 'mocha-compat' ? 'mocha-compat' : 'mocha');
+// Each slot name doubles as its npm alias and its bin name, so package and bin are the same string.
+const mocha = resolveBin(mochaBin, mochaBin);
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.js');

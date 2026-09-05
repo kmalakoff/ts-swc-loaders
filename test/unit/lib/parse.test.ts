@@ -1,4 +1,5 @@
 import assert from 'assert';
+import fs from 'fs';
 import Module from 'module';
 import path from 'path';
 import { parse } from 'ts-swc-loaders';
@@ -7,6 +8,13 @@ import url from 'url';
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 // Mirrors parse's own gate: module.register (18.19 / 20.6) is what selects the --import bootstrap.
 const hasRegister = typeof (Module as { register?: unknown }).register === 'function';
+// Mirrors parse's own registerHooksUnreliable: on this Node, the bootstrap skips the sync-hooks
+// attempt entirely (Node bug, 22.15-22.21), so it never mentions registerSyncHooks/registerHooks.js.
+const [nodeMajor, nodeMinor, nodePatch] = process.versions.node.split('.').map(Number);
+const registerHooksUnreliable = nodeMajor === 22 && ((nodeMinor >= 15 && nodeMinor <= 21) || (nodeMinor === 22 && nodePatch < 3));
+// Mirrors parse's own gate: require(esm) exists but no trustworthy sync hooks, so the pirates
+// CommonJS register is what covers require() of TypeScript on this Node.
+const needsCJSRegister = !!process.features.require_module && !(typeof (Module as { registerHooks?: unknown }).registerHooks === 'function' && !registerHooksUnreliable);
 
 describe('parse', () => {
   describe('commonjs', () => {
@@ -88,22 +96,35 @@ describe('parse', () => {
 
         it('prepends loader args when command is node executable', () => {
           const result = parse('module', process.execPath, ['test.ts'], {});
-          assert.ok(result.args[0] === '--import');
+          // The pirates CJS register leads only where require() needs it; otherwise --import leads.
+          assert.equal(result.args[0], needsCJSRegister ? '--require' : '--import');
+          assert.ok(result.args.indexOf('--import') >= 0);
           assert.ok(result.args.indexOf('test.ts') >= 0);
         });
 
-        it('includes registerSyncHooks in data URL for Node 22.15+ support', () => {
+        it('attempts the sync hooks exactly where this Node can be trusted with them', () => {
           const result = parse('module', 'node', ['test.ts'], {});
-          const importIndex = result.args.indexOf('--import');
-          const importArg = result.args[importIndex + 1];
-          assert.ok(importArg.indexOf('registerSyncHooks') >= 0, 'data URL should include registerSyncHooks');
+          const importArg = result.args[result.args.indexOf('--import') + 1];
+          const attempts = importArg.indexOf('registerSyncHooks') >= 0 && importArg.indexOf('registerHooks.js') >= 0;
+          assert.equal(attempts, !registerHooksUnreliable, `sync-hooks attempt should be ${!registerHooksUnreliable} on ${process.versions.node}`);
         });
 
-        it('includes registerHooks URL in data URL', () => {
+        it('always registers the async chain, which is what injects the json import attribute', () => {
           const result = parse('module', 'node', ['test.ts'], {});
+          const importArg = result.args[result.args.indexOf('--import') + 1];
+          assert.ok(importArg.indexOf('register("file://') >= 0, 'bootstrap must always call module.register()');
+        });
+
+        it('every file:// URL in the bootstrap resolves to a file that exists on disk', () => {
+          const result = parse('module', process.execPath, [], {});
           const importIndex = result.args.indexOf('--import');
-          const importArg = result.args[importIndex + 1];
-          assert.ok(importArg.indexOf('registerHooks.js') >= 0, 'data URL should reference registerHooks.js');
+          const importArg = result.args[importIndex + 1] as string;
+          const urls = importArg.match(/file:\/\/[^"]+/g) || [];
+          assert.ok(urls.length > 0, 'expected at least one file:// URL in the bootstrap');
+          urls.forEach((fileURL) => {
+            const filePath = url.fileURLToPath(fileURL);
+            assert.ok(fs.existsSync(filePath), `bootstrap references a missing file: ${fileURL}`);
+          });
         });
       });
     }

@@ -7,11 +7,19 @@ const dist = path.join(__dirname, '..', '..');
 const loaderCJS = path.join(dist, 'cjs', 'index-cjs.js');
 const loaderESMBase = path.join(dist, 'esm', 'index-esm.js');
 const loaderESM = url.pathToFileURL ? url.pathToFileURL(loaderESMBase).toString() : loaderESMBase;
-const registerHooksBase = path.join(dist, 'esm', 'registerHooks.js');
+// tsds build mirrors src/, so src/esm/registerHooks.ts lands at dist/esm/esm/registerHooks.js.
+const registerHooksBase = path.join(dist, 'esm', 'esm', 'registerHooks.js');
 const registerHooksURL = url.pathToFileURL ? url.pathToFileURL(registerHooksBase).toString() : registerHooksBase;
-// Register async hooks with module.register() for import(), and sync hooks with registerHooks() for require()
-// Node 22.15+ has module.registerHooks() which works with both import() and require()
-const js = `data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("${loaderESM}", pathToFileURL("./")); try { const h = await import("${registerHooksURL}"); h.registerSyncHooks(); } catch (e) {}`;
+const [nodeMajor, nodeMinor, nodePatch] = process.versions.node.split('.').map(Number);
+// Node's own registerHooks cannot serve require(esm) of a builtin until 22.22.3, and corrupts the
+// async chain when both are registered. Reproduced with no-op hooks on stock Node.
+const registerHooksUnreliable = nodeMajor === 22 && ((nodeMinor >= 15 && nodeMinor <= 21) || (nodeMinor === 22 && nodePatch < 3));
+
+// Only the async chain injects the json import attribute, so it always registers; the sync hooks
+// ride alongside it to cover require().
+const js = registerHooksUnreliable
+  ? `data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("${loaderESM}", pathToFileURL("./"));`
+  : `data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("${loaderESM}", pathToFileURL("./")); try { const h = await import("${registerHooksURL}"); h.registerSyncHooks(); } catch (e) { console.error("ts-swc-loaders: sync hooks not registered:", e && e.message); }`;
 
 // A command that already IS the node executable must not also be handed to node as a script.
 // Windows spells it node.exe / node.cmd and matches filenames case-insensitively (cross-spawn-cb's parse).
@@ -39,10 +47,15 @@ export default function parse(type: string, command: string, args: string[], opt
       options: { ...options, env },
     };
   }
-  const parsed = {
+  let importArgs = isNode(command) ? ['--import', js].concat(args) : ['--import', js, command].concat(args);
+  // The pirates register covers require() of TypeScript wherever the sync hooks cannot.
+  const hasRequireModule = !!process.features.require_module;
+  const hasReliableRegisterHooks = typeof (Module as { registerHooks?: unknown }).registerHooks === 'function' && !registerHooksUnreliable;
+  if (hasRequireModule && !hasReliableRegisterHooks) importArgs = ['--require', loaderCJS].concat(importArgs);
+
+  return {
     command: process.execPath,
-    args: isNode(command) ? ['--import', js].concat(args) : ['--import', js, command].concat(args),
+    args: importArgs,
     options,
   };
-  return parsed;
 }

@@ -5,6 +5,9 @@
 
 import os from 'os';
 
+// Node 20.19+ / 22.12+: require() can load ESM.
+export const hasRequireModule = !!process.features.require_module;
+
 export function homedir(): string {
   return typeof os.homedir === 'function' ? os.homedir() : require('homedir-polyfill')();
 }

@@ -64,10 +64,8 @@ export default function cli(argv: string[], name = 'ts-swc'): void {
     }
 
     options.stdio = 'inherit'; // pass through stdio
-    // deferred: lib/spawn.ts pulls cross-spawn-cb/resolve-bin-sync. require() cannot load this ESM
-    // sibling below Node 20.19 (require(esm)), so the ESM half needs a real dynamic import; the
-    // CJS half's sibling is genuine CommonJS, so a plain synchronous require avoids depending on
-    // Promise, which isn't global before Node 0.12.
+    // deferred: lib/spawn.ts pulls cross-spawn-cb and resolve-bin-sync. An ESM sibling cannot be
+    // require()d below Node 20.19, and a bare await import() needs Promise, absent before 0.12.
     loadSibling('./lib/spawn.js', (err, runModule) => {
       if (err || !runModule) {
         console.error(err ? err.message : 'Failed to load spawn module');
@@ -83,10 +81,8 @@ export default function cli(argv: string[], name = 'ts-swc'): void {
   }
 
   if (options.clear) {
-    // deferred: cache.ts pulls the on-disk cache (fs-remove-compat, mkdirp-classic, short-hash).
-    // require() cannot load this ESM sibling below Node 20.19 (require(esm)), so the ESM half needs
-    // a real dynamic import; the CJS half's sibling is genuine CommonJS, so a plain synchronous
-    // require avoids depending on Promise, which isn't global before Node 0.12.
+    // deferred: cache.ts pulls the on-disk cache. An ESM sibling cannot be require()d below Node
+    // 20.19, and a bare await import() needs Promise, absent before 0.12.
     loadSibling('./cache.js', (err, cacheModule) => {
       if (err || !cacheModule) {
         console.error(err ? err.message : 'Failed to load cache module');

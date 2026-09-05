@@ -5,7 +5,7 @@ import match from 'test-match';
 import { constants, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
 import { pathToFileURL } from 'url';
 import cache from '../cache.ts';
-import { stringEndsWith, stringStartsWith } from '../compat.ts';
+import { hasRequireModule, stringEndsWith, stringStartsWith } from '../compat.ts';
 import { typeFileRegEx } from '../constants.ts';
 import loadTSConfig from '../lib/loadTSConfig.ts';
 import type { LoadContext, Loaded, Loader, ResolveContext, Resolved, Resolver } from '../types.ts';
@@ -41,9 +41,11 @@ export async function resolve(specifier: string, context: ResolveContext, next: 
   // use default resolve and infer from package type
   filePath = resolveFileSync(specifier, context) as string;
   if (!filePath) throw new Error(`${specifier} not found. parentURL: ${context.parentURL}`);
+  // An extensionless specifier resolves to a file with its own extension (e.g. a directory's
+  // index.mjs): that extension is authoritative over the specifier's, so re-derive it.
   const data = {
     url: pathToFileURL(filePath).href,
-    format: extToFormat(ext),
+    format: extToFormat(path.extname(filePath)),
     shortCircuit: true,
   };
   if (!data.format) data.format = fileType(filePath);
@@ -59,6 +61,9 @@ export async function load(url: string, context: LoadContext, next: Loader): Pro
     };
 
   const data = await next(url, context);
+  // A CommonJS file returned without a source goes to Node's own CJS loader, whose require()
+  // can load ESM; the ESM loader's own require() for hook-supplied CJS cannot before Node 24.
+  if (hasRequireModule && data.format === 'commonjs') return data;
   const filePath = toPath(data.responseURL || url, context);
   const ext = path.extname(filePath);
   if (!data.source && data.type === 'module') data.source = await fs.readFile(filePath);

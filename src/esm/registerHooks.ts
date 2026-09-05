@@ -5,7 +5,7 @@ import match from 'test-match';
 import { constants, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
 import { pathToFileURL } from 'url';
 import cache from '../cache.ts';
-import { typeFileRegEx } from '../constants.ts';
+import { moduleRegEx, typeFileRegEx } from '../constants.ts';
 import loadTSConfig from '../lib/loadTSConfig.ts';
 import type { LoadContext, Loaded, ResolveContext, Resolved } from '../types.ts';
 import extToFormat from './extToFormat.ts';
@@ -26,13 +26,25 @@ export function resolveSync(specifier: string, context: ResolveContext, nextReso
     return nextResolve(specifier, context);
   }
 
-  let filePath = toPath(specifier, context);
+  // Bare specifiers resolve through the host's own algorithm: toPath throws on ones nextResolve
+  // finds perfectly well.
+  if (moduleRegEx.test(specifier) || specifier[0] === '#') {
+    return nextResolve(specifier, context);
+  }
+
+  let filePath: string;
+  try {
+    filePath = toPath(specifier, context);
+  } catch (_err) {
+    return nextResolve(specifier, context);
+  }
   const ext = path.extname(filePath);
 
   // filtered
   if (!matcher(filePath)) {
     const data = nextResolve(specifier, context);
-    if (!data.format) data.format = 'commonjs';
+    // require()'s default resolve leaves format unset for Node to infer; forcing commonjs here
+    // breaks a require(esm) target such as mocha's own files under "type": "module".
     if (path.isAbsolute(filePath) && !ext) data.format = 'commonjs';
     return data;
   }

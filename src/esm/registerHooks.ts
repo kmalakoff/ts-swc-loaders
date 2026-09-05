@@ -5,6 +5,7 @@ import match from 'test-match';
 import { constants, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
 import { pathToFileURL } from 'url';
 import cache from '../cache.ts';
+import { hasRequireModule } from '../compat.ts';
 import { moduleRegEx, typeFileRegEx } from '../constants.ts';
 import loadTSConfig from '../lib/loadTSConfig.ts';
 import type { LoadContext, Loaded, ResolveContext, Resolved } from '../types.ts';
@@ -52,9 +53,11 @@ export function resolveSync(specifier: string, context: ResolveContext, nextReso
   // use default resolve and infer from package type
   filePath = resolveFileSync(specifier, context) as string;
   if (!filePath) throw new Error(`${specifier} not found. parentURL: ${context.parentURL}`);
+  // An extensionless specifier resolves to a file with its own extension (e.g. a directory's
+  // index.mjs): that extension is authoritative over the specifier's, so re-derive it.
   const data: Resolved = {
     url: pathToFileURL(filePath).href,
-    format: extToFormat(ext),
+    format: extToFormat(path.extname(filePath)),
     shortCircuit: true,
   };
   if (!data.format) data.format = fileType(filePath);
@@ -69,6 +72,9 @@ export function loadSync(url: string, context: LoadContext, nextLoad: (url: stri
   }
 
   const data = nextLoad(url, context);
+  // Only the import() path is left to Node's CJS loader; the CJS loader's own call (conditions
+  // include 'require') must still get the transform, since nothing else will supply it.
+  if (hasRequireModule && data.format === 'commonjs' && !(context.conditions || []).includes('require')) return data;
   const filePath = toPath(data.responseURL || url, context);
   const ext = path.extname(filePath);
 

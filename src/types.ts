@@ -18,13 +18,15 @@ export interface Resolved {
 }
 export type Resolver = (specifier: string, context: ResolveContext) => Promise<Resolved>;
 
-export interface LoadContext extends Context {}
+export interface LoadContext extends Context {
+  conditions?: string[];
+}
 
 export interface Loaded {
   type: string;
   responseURL: string;
   format: string;
-  source: Buffer<ArrayBufferLike> | string;
+  source?: Buffer<ArrayBufferLike> | string;
   shortCircuit: boolean;
 }
 export type Loader = (specifier: string, context: LoadContext) => Promise<Loaded>;

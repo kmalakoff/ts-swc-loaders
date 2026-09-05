@@ -48,4 +48,13 @@ describe('require() of a .ts file', () => {
       done();
     });
   });
+
+  it('import() of a .cjs file whose require() reaches ESM through bin/import-cjs.mjs', (done) => {
+    spawn(CLI, ['node', 'bin/import-cjs.mjs'], spawnOptions, (err, res) => {
+      if (err) return done(err as Error);
+      if (!res) return done(new Error('no res'));
+      assert.ok(cr(res.stdout).indexOf('IMPORT_CJS_OK') >= 0, `expected IMPORT_CJS_OK, got: ${res.stdout}`);
+      done();
+    });
+  });
 });

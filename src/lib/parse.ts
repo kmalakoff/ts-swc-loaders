@@ -1,6 +1,8 @@
 import Module from 'module';
 import path from 'path';
 import url from 'url';
+import { hasRequireModule } from '../compat.ts';
+import type { ParseResult, SpawnOptions } from '../types.ts';
 
 const __dirname = path.dirname(typeof __filename === 'undefined' ? url.fileURLToPath(import.meta.url) : __filename);
 const dist = path.join(__dirname, '..', '..');
@@ -28,8 +30,6 @@ function isNode(command: string): boolean {
   return NODES.indexOf(path.basename(command).toLowerCase()) >= 0;
 }
 
-import type { ParseResult, SpawnOptions } from '../types.ts';
-
 export default function parse(type: string, command: string, args: string[], options: SpawnOptions = {}): ParseResult {
   if (type === 'commonjs') return { command, args: ['--require', loaderCJS].concat(args), options };
 
@@ -49,7 +49,6 @@ export default function parse(type: string, command: string, args: string[], opt
   }
   let importArgs = isNode(command) ? ['--import', js].concat(args) : ['--import', js, command].concat(args);
   // The pirates register covers require() of TypeScript wherever the sync hooks cannot.
-  const hasRequireModule = !!process.features.require_module;
   const hasReliableRegisterHooks = typeof (Module as { registerHooks?: unknown }).registerHooks === 'function' && !registerHooksUnreliable;
   if (hasRequireModule && !hasReliableRegisterHooks) importArgs = ['--require', loaderCJS].concat(importArgs);
 

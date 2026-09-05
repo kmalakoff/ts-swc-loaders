@@ -11,9 +11,8 @@ describe('registerSyncHooks', () => {
   });
 
   (hasRegisterHooks ? it : it.skip)('returns true when Module.registerHooks is available', () => {
-    // Note: We can't easily verify the hooks were registered without side effects,
-    // but we can verify the function doesn't throw and returns the expected value.
-    // The actual hook behavior is tested via integration tests (generic.ts fixtures).
+    // Registration has no observable effect beyond this boolean; the hooks' behaviour is covered
+    // by test/integration/require.test.ts.
     const result = registerSyncHooks();
     assert.equal(result, true);
   });

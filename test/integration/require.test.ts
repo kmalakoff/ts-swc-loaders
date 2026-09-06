@@ -11,8 +11,11 @@ import spawn from 'cross-spawn-cb';
 import { safeRm } from 'fs-remove-compat';
 import { linkModule, unlinkModule } from 'module-link-unlink';
 import path from 'path';
+import resolveBin from 'resolve-bin-sync';
 import type { SpawnOptions } from 'ts-swc-loaders';
+import { mochaBin } from 'tsds-mocha';
 import url from 'url';
+import { hasReliableRegisterHooks } from '../../src/compat.ts';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 const CLI = path.join(__dirname, '..', '..', 'bin', 'cli.js');
@@ -37,7 +40,9 @@ describe('require() of a .ts file', () => {
 
   it('rimraf', (done) => safeRm(TS_SWC_CACHE_PATH, done));
 
-  it('transpiles require("./generic-fn.ts") through bin/require-ts.cjs', (done) => {
+  // require() of TypeScript is served only where the sync hooks are reliable: nothing else hooks
+  // the CommonJS loader, so below that band require() of a .ts file throws.
+  (hasReliableRegisterHooks ? it : it.skip)('transpiles require("./generic-fn.ts") through bin/require-ts.cjs', (done) => {
     // Node strips types natively from 22.18 (process.features.typescript === 'strip'), which
     // would mask the loader on this path; disable it so the assertion proves the loader, not Node.
     const args = ['node', ...(process.features.typescript !== undefined ? ['--no-experimental-strip-types'] : []), 'bin/require-ts.cjs'];
@@ -54,6 +59,31 @@ describe('require() of a .ts file', () => {
       if (err) return done(err as Error);
       if (!res) return done(new Error('no res'));
       assert.ok(cr(res.stdout).indexOf('IMPORT_CJS_OK') >= 0, `expected IMPORT_CJS_OK, got: ${res.stdout}`);
+      done();
+    });
+  });
+});
+
+describe('mocha loads a .ts spec as ESM in a "type": "module" package', () => {
+  // Below Node's require_module, mocha's requireModule calls import() directly with no require()
+  // fallback attempt, so there is nothing here that a CommonJS require() hook could hijack.
+  if (!process.features.require_module) return;
+
+  // Each slot name doubles as its npm alias and its bin name, so package and bin are the same string.
+  const mocha = resolveBin(mochaBin, mochaBin);
+
+  before(linkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
+  after(unlinkModule.bind(null, MODULE_DIR, DATA_MODULE_DIR));
+
+  it('rimraf', (done) => safeRm(TS_SWC_CACHE_PATH, done));
+
+  it('runs test/esm-only.test-test.ts as ESM, not CommonJS', (done) => {
+    // mocha's requireModule tries require(file) before import(), so a CommonJS require() hook on
+    // this band would load the fixture as CommonJS and it would report that instead of ESM.
+    spawn(CLI, [mocha, 'test/esm-only.test-test.ts'], spawnOptions, (err, res) => {
+      if (err) return done(err as Error);
+      if (!res) return done(new Error('no res'));
+      assert.ok(cr(res.stdout).indexOf('ESM_ONLY_OK') >= 0, `expected ESM_ONLY_OK, got: ${res.stdout}`);
       done();
     });
   });

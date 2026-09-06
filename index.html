@@ -16,13 +16,11 @@
 <h3 id="node-support-for-of-typescript" class="tsd-anchor-link">Node support for <code>require()</code> of TypeScript<a href="#node-support-for-of-typescript" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <p><code>import()</code>/<code>--loader</code> transpilation works on every supported Node: through <code>module.registerHooks()</code>
 on 22.22.3 and later and on 24/26, and through <code>module.register()</code> (deprecated by Node 26) below that.
-<code>require()</code> of a <code>.ts</code> file additionally needs Node's own <code>require(esm)</code> support, so coverage
-depends on the version: below Node 20.19/22.12 there is none, and only <code>import()</code> is covered;
-20.19-22.14, plus Node's own unreliable <code>module.registerHooks()</code> window (22.15-22.22.2), get it from
-a CommonJS <code>require()</code> hook this package installs; 22.22.3 and later, and 24/26, get it from the
-same <code>module.registerHooks()</code> hooks, which serve both <code>import()</code> and <code>require()</code>. On Node
-with <code>require(esm)</code>, a CommonJS file reached through <code>import()</code> is left to Node's own CJS loader so
-its <code>require()</code> can load ESM.</p>
+<code>require()</code> of a <code>.ts</code> file additionally needs Node's own <code>require(esm)</code> support and trustworthy
+sync hooks, so it is served only on 22.22.3 and later and on 24/26, where <code>module.registerHooks()</code>
+covers both <code>import()</code> and <code>require()</code>. Below Node 20.19/22.12 there is no <code>require(esm)</code> at all,
+and on 20.19 through 22.22.2 only <code>import()</code> is covered. On Node with <code>require(esm)</code>, a CommonJS
+file reached through <code>import()</code> is left to Node's own CJS loader so its <code>require()</code> can load ESM.</p>
 </div></div>
 <div class="col-sidebar">
 <div class="page-menu">

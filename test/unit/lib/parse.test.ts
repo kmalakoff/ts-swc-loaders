@@ -12,9 +12,11 @@ const hasRegister = typeof (Module as { register?: unknown }).register === 'func
 // attempt entirely (Node bug, 22.15-22.21), so it never mentions registerSyncHooks/registerHooks.js.
 const [nodeMajor, nodeMinor, nodePatch] = process.versions.node.split('.').map(Number);
 const registerHooksUnreliable = nodeMajor === 22 && ((nodeMinor >= 15 && nodeMinor <= 21) || (nodeMinor === 22 && nodePatch < 3));
+// Mirrors parse's own hasReliableRegisterHooks: registerHooks exists and isn't in the broken band.
+const hasReliableRegisterHooks = typeof (Module as { registerHooks?: unknown }).registerHooks === 'function' && !registerHooksUnreliable;
 // Mirrors parse's own gate: require(esm) exists but no trustworthy sync hooks, so the pirates
 // CommonJS register is what covers require() of TypeScript on this Node.
-const needsCJSRegister = !!process.features.require_module && !(typeof (Module as { registerHooks?: unknown }).registerHooks === 'function' && !registerHooksUnreliable);
+const needsCJSRegister = !!process.features.require_module && !hasReliableRegisterHooks;
 
 describe('parse', () => {
   describe('commonjs', () => {
@@ -106,13 +108,14 @@ describe('parse', () => {
           const result = parse('module', 'node', ['test.ts'], {});
           const importArg = result.args[result.args.indexOf('--import') + 1];
           const attempts = importArg.indexOf('registerSyncHooks') >= 0 && importArg.indexOf('registerHooks.js') >= 0;
-          assert.equal(attempts, !registerHooksUnreliable, `sync-hooks attempt should be ${!registerHooksUnreliable} on ${process.versions.node}`);
+          assert.equal(attempts, hasReliableRegisterHooks, `sync-hooks attempt should be ${hasReliableRegisterHooks} on ${process.versions.node}`);
         });
 
-        it('always registers the async chain, which is what injects the json import attribute', () => {
+        it('calls the deprecated module.register() only where registerHooks cannot be trusted', () => {
           const result = parse('module', 'node', ['test.ts'], {});
           const importArg = result.args[result.args.indexOf('--import') + 1];
-          assert.ok(importArg.indexOf('register("file://') >= 0, 'bootstrap must always call module.register()');
+          const callsAsyncRegister = importArg.indexOf('register("file://') >= 0;
+          assert.equal(callsAsyncRegister, !hasReliableRegisterHooks, `async register() call should be ${!hasReliableRegisterHooks} on ${process.versions.node}`);
         });
 
         it('every file:// URL in the bootstrap resolves to a file that exists on disk', () => {

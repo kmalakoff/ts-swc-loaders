@@ -16,12 +16,11 @@ const [nodeMajor, nodeMinor, nodePatch] = process.versions.node.split('.').map(N
 // Node's own registerHooks cannot serve require(esm) of a builtin until 22.22.3, and corrupts the
 // async chain when both are registered. Reproduced with no-op hooks on stock Node.
 const registerHooksUnreliable = nodeMajor === 22 && ((nodeMinor >= 15 && nodeMinor <= 21) || (nodeMinor === 22 && nodePatch < 3));
+const hasReliableRegisterHooks = typeof (Module as { registerHooks?: unknown }).registerHooks === 'function' && !registerHooksUnreliable;
 
-// Only the async chain injects the json import attribute, so it always registers; the sync hooks
-// ride alongside it to cover require().
-const js = registerHooksUnreliable
-  ? `data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("${loaderESM}", pathToFileURL("./"));`
-  : `data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("${loaderESM}", pathToFileURL("./")); try { const h = await import("${registerHooksURL}"); h.registerSyncHooks(); } catch (e) { console.error("ts-swc-loaders: sync hooks not registered:", e && e.message); }`;
+// registerHooks.ts's sync load hook injects the json import attribute itself (measured on Node 26),
+// so where registerHooks is reliable the deprecated async module.register() is skipped entirely.
+const js = hasReliableRegisterHooks ? `data:text/javascript,const h = await import("${registerHooksURL}"); h.registerSyncHooks();` : `data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("${loaderESM}", pathToFileURL("./"));`;
 
 // A command that already IS the node executable must not also be handed to node as a script.
 // Windows spells it node.exe / node.cmd and matches filenames case-insensitively (cross-spawn-cb's parse).
@@ -49,7 +48,6 @@ export default function parse(type: string, command: string, args: string[], opt
   }
   let importArgs = isNode(command) ? ['--import', js].concat(args) : ['--import', js, command].concat(args);
   // The pirates register covers require() of TypeScript wherever the sync hooks cannot.
-  const hasReliableRegisterHooks = typeof (Module as { registerHooks?: unknown }).registerHooks === 'function' && !registerHooksUnreliable;
   if (hasRequireModule && !hasReliableRegisterHooks) importArgs = ['--require', loaderCJS].concat(importArgs);
 
   return {

@@ -15,11 +15,12 @@ $ cross-env NODE_OPTIONS='--loader ts-swc-loaders' mocha 'test/**/*.test.*'
 
 ### Node support for `require()` of TypeScript
 
-`import()`/`--loader` transpilation works on every supported Node, through `module.register()`.
+`import()`/`--loader` transpilation works on every supported Node: through `module.registerHooks()`
+on 22.22.3 and later and on 24/26, and through `module.register()` (deprecated by Node 26) below that.
 `require()` of a `.ts` file additionally needs Node's own `require(esm)` support, so coverage
 depends on the version: below Node 20.19/22.12 there is none, and only `import()` is covered;
-20.19-22.14, plus Node's own unreliable `module.registerHooks()` window (22.15-22.21), get it from
-a CommonJS `require()` hook this package installs; 22.22.3 and later, and 24/26, get it from
-`module.registerHooks()`, registered alongside the async chain rather than in place of it. On Node
+20.19-22.14, plus Node's own unreliable `module.registerHooks()` window (22.15-22.22.2), get it from
+a CommonJS `require()` hook this package installs; 22.22.3 and later, and 24/26, get it from the
+same `module.registerHooks()` hooks, which serve both `import()` and `require()`. On Node
 with `require(esm)`, a CommonJS file reached through `import()` is left to Node's own CJS loader so
 its `require()` can load ESM.

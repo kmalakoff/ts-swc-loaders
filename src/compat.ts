@@ -3,10 +3,17 @@
  * Local to this package - contains only needed functions.
  */
 
+import Module from 'module';
 import os from 'os';
 
 // Node 20.19+ / 22.12+: require() can load ESM.
 export const hasRequireModule = !!process.features.require_module;
+
+const [nodeMajor, nodeMinor, nodePatch] = process.versions.node.split('.').map(Number);
+// Node's own registerHooks cannot serve require(esm) of a builtin until 22.22.3, and corrupts the
+// async chain when both are registered. Reproduced with no-op hooks on stock Node.
+const registerHooksUnreliable = nodeMajor === 22 && ((nodeMinor >= 15 && nodeMinor <= 21) || (nodeMinor === 22 && nodePatch < 3));
+export const hasReliableRegisterHooks = typeof (Module as { registerHooks?: unknown }).registerHooks === 'function' && !registerHooksUnreliable;
 
 export function homedir(): string {
   return typeof os.homedir === 'function' ? os.homedir() : require('homedir-polyfill')();

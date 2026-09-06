@@ -4,19 +4,11 @@ import Module from 'module';
 import path from 'path';
 import { parse } from 'ts-swc-loaders';
 import url from 'url';
+import { hasReliableRegisterHooks } from '../../../src/compat.ts';
 
 const __dirname = path.dirname(typeof __filename !== 'undefined' ? __filename : url.fileURLToPath(import.meta.url));
 // Mirrors parse's own gate: module.register (18.19 / 20.6) is what selects the --import bootstrap.
 const hasRegister = typeof (Module as { register?: unknown }).register === 'function';
-// Mirrors parse's own registerHooksUnreliable: on this Node, the bootstrap skips the sync-hooks
-// attempt entirely (Node bug, 22.15-22.21), so it never mentions registerSyncHooks/registerHooks.js.
-const [nodeMajor, nodeMinor, nodePatch] = process.versions.node.split('.').map(Number);
-const registerHooksUnreliable = nodeMajor === 22 && ((nodeMinor >= 15 && nodeMinor <= 21) || (nodeMinor === 22 && nodePatch < 3));
-// Mirrors parse's own hasReliableRegisterHooks: registerHooks exists and isn't in the broken band.
-const hasReliableRegisterHooks = typeof (Module as { registerHooks?: unknown }).registerHooks === 'function' && !registerHooksUnreliable;
-// Mirrors parse's own gate: require(esm) exists but no trustworthy sync hooks, so the pirates
-// CommonJS register is what covers require() of TypeScript on this Node.
-const needsCJSRegister = !!process.features.require_module && !hasReliableRegisterHooks;
 
 describe('parse', () => {
   describe('commonjs', () => {
@@ -98,9 +90,8 @@ describe('parse', () => {
 
         it('prepends loader args when command is node executable', () => {
           const result = parse('module', process.execPath, ['test.ts'], {});
-          // The pirates CJS register leads only where require() needs it; otherwise --import leads.
-          assert.equal(result.args[0], needsCJSRegister ? '--require' : '--import');
-          assert.ok(result.args.indexOf('--import') >= 0);
+          // require() of TypeScript is not served by this bootstrap; --import always leads.
+          assert.equal(result.args[0], '--import');
           assert.ok(result.args.indexOf('test.ts') >= 0);
         });
 

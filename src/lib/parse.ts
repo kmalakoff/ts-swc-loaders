@@ -1,7 +1,7 @@
 import Module from 'module';
 import path from 'path';
 import url from 'url';
-import { hasRequireModule } from '../compat.ts';
+import { hasReliableRegisterHooks } from '../compat.ts';
 import type { ParseResult, SpawnOptions } from '../types.ts';
 
 const __dirname = path.dirname(typeof __filename === 'undefined' ? url.fileURLToPath(import.meta.url) : __filename);
@@ -12,11 +12,6 @@ const loaderESM = url.pathToFileURL ? url.pathToFileURL(loaderESMBase).toString(
 // tsds build mirrors src/, so src/esm/registerHooks.ts lands at dist/esm/esm/registerHooks.js.
 const registerHooksBase = path.join(dist, 'esm', 'esm', 'registerHooks.js');
 const registerHooksURL = url.pathToFileURL ? url.pathToFileURL(registerHooksBase).toString() : registerHooksBase;
-const [nodeMajor, nodeMinor, nodePatch] = process.versions.node.split('.').map(Number);
-// Node's own registerHooks cannot serve require(esm) of a builtin until 22.22.3, and corrupts the
-// async chain when both are registered. Reproduced with no-op hooks on stock Node.
-const registerHooksUnreliable = nodeMajor === 22 && ((nodeMinor >= 15 && nodeMinor <= 21) || (nodeMinor === 22 && nodePatch < 3));
-const hasReliableRegisterHooks = typeof (Module as { registerHooks?: unknown }).registerHooks === 'function' && !registerHooksUnreliable;
 
 // registerHooks.ts's sync load hook injects the json import attribute itself (measured on Node 26),
 // so where registerHooks is reliable the deprecated async module.register() is skipped entirely.
@@ -46,9 +41,7 @@ export default function parse(type: string, command: string, args: string[], opt
       options: { ...options, env },
     };
   }
-  let importArgs = isNode(command) ? ['--import', js].concat(args) : ['--import', js, command].concat(args);
-  // The pirates register covers require() of TypeScript wherever the sync hooks cannot.
-  if (hasRequireModule && !hasReliableRegisterHooks) importArgs = ['--require', loaderCJS].concat(importArgs);
+  const importArgs = isNode(command) ? ['--import', js].concat(args) : ['--import', js, command].concat(args);
 
   return {
     command: process.execPath,

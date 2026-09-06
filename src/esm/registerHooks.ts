@@ -71,6 +71,15 @@ export function loadSync(url: string, context: LoadContext, nextLoad: (url: stri
     return nextLoad(url, context);
   }
 
+  // registerHooks only exists from Node 22.15, where json imports need importAttributes (not the
+  // older importAssertions key); without this, an unattributed json import throws ERR_IMPORT_ATTRIBUTE_MISSING.
+  if (url.endsWith('.json')) {
+    (context as Record<string, unknown>).importAttributes = {
+      ...(((context as Record<string, unknown>).importAttributes as Record<string, unknown>) || {}),
+      type: 'json',
+    };
+  }
+
   const data = nextLoad(url, context);
   // Only the import() path is left to Node's CJS loader; the CJS loader's own call (conditions
   // include 'require') must still get the transform, since nothing else will supply it.

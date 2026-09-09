@@ -21,6 +21,13 @@ sync hooks, so it is served only on 22.22.3 and later and on 24/26, where <code>
 covers both <code>import()</code> and <code>require()</code>. Below Node 20.19/22.12 there is no <code>require(esm)</code> at all,
 and on 20.19 through 22.22.2 only <code>import()</code> is covered. On Node with <code>require(esm)</code>, a CommonJS
 file reached through <code>import()</code> is left to Node's own CJS loader so its <code>require()</code> can load ESM.</p>
+<p>In module mode, consumers can check whether the bootstrap supports loading TypeScript through
+<code>require()</code> without installing hooks:</p>
+<pre><code class="js"><span class="hl-5">const</span><span class="hl-2"> { </span><span class="hl-4">supportsRequireTypeScript</span><span class="hl-2"> } = </span><span class="hl-6">require</span><span class="hl-2">(</span><span class="hl-3">&#39;ts-swc-loaders/capabilities&#39;</span><span class="hl-2">);</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Legacy CommonJS mode supports TypeScript on every supported Node version when the main entry is
+loaded with <code>--require ts-swc-loaders</code>.</p>
 </div></div>
 <div class="col-sidebar">
 <div class="page-menu">

@@ -21,6 +21,10 @@
       "import": "./dist/esm/index-esm.js",
       "require": "./dist/cjs/index-cjs.js"
     },
+    "./capabilities": {
+      "import": "./dist/esm/capabilities.js",
+      "require": "./dist/cjs/capabilities.js"
+    },
     "./package.json": "./package.json"
   },
   "main": "dist/cjs/index-cjs.js",
@@ -29,7 +33,9 @@
     "ts-swc": "bin/cli.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "capabilities.d.ts",
+    "capabilities.js"
   ],
   "scripts": {
     "build": "tsds build",

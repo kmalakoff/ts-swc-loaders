@@ -5,7 +5,7 @@ import match from 'test-match';
 import { constants, resolveFileSync, toPath, transformSync } from 'ts-swc-transform';
 import { pathToFileURL } from 'url';
 import cache from '../cache.ts';
-import { stringEndsWith } from '../compat.ts';
+import { stringEndsWith, stringStartsWith } from '../compat.ts';
 import { typeFileRegEx } from '../constants.ts';
 import loadTSConfig from '../lib/loadTSConfig.ts';
 import type { LoadContext, Loaded, Loader, ResolveContext, Resolved, Resolver } from '../types.ts';
@@ -23,8 +23,10 @@ const matcher = match({
 });
 const { extensions } = constants;
 
+const isBuiltin = (specifier: string): boolean => stringStartsWith(specifier, 'node:') || isBuiltinModule(specifier);
+
 export async function resolve(specifier: string, context: ResolveContext, next: Resolver): Promise<Resolved> {
-  if (isBuiltinModule(specifier)) return next(specifier, context);
+  if (isBuiltin(specifier)) return next(specifier, context);
   let filePath = toPath(specifier, context);
   const ext = path.extname(filePath);
 
@@ -49,7 +51,7 @@ export async function resolve(specifier: string, context: ResolveContext, next: 
 }
 
 export async function load(url: string, context: LoadContext, next: Loader): Promise<Loaded> {
-  if (isBuiltinModule(url)) return next(url, context);
+  if (isBuiltin(url)) return next(url, context);
   if (stringEndsWith(url, '.json'))
     (context as Record<string, unknown>)[importJSONKey] = {
       ...(((context as Record<string, unknown>)[importJSONKey] as Record<string, unknown>) || {}),

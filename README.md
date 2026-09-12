@@ -1,19 +1,30 @@
-## ts-swc-loaders
+# ts-swc-loaders
 
-Typescript loaders for swc.
+TypeScript loaders for SWC that transpile TypeScript for Node.js test runners and scripts.
 
-```
-// universal
-$ ts-swc mocha 'test/**/*.test.*'
-
-// commonjs
-$ mocha --require ts-swc-loaders 'test/**/*.test.*'
-
-// module
-$ cross-env NODE_OPTIONS='--loader ts-swc-loaders' mocha 'test/**/*.test.*'
+```bash
+npm install --save-dev ts-swc-loaders
 ```
 
-### Node support for `require()` of TypeScript
+```bash
+# Run a command with the appropriate loader:
+ts-swc mocha 'test/**/*.test.*'
+
+# CommonJS bootstrap:
+mocha --require ts-swc-loaders 'test/**/*.test.*'
+
+# ESM loader:
+NODE_OPTIONS='--loader ts-swc-loaders' mocha 'test/**/*.test.*'
+```
+
+The `ts-swc` command runs a command with the loader enabled, and supports `--clear`, `--help`, and `--version`:
+
+```bash
+ts-swc mocha 'test/**/*.test.*'
+ts-swc --clear
+```
+
+## Node support for `require()` of TypeScript
 
 `import()`/`--loader` transpilation works on every supported Node: through `module.registerHooks()`
 on 22.22.3 and later and on 24/26, and through `module.register()` (deprecated by Node 26) below that.

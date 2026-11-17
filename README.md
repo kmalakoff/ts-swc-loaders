@@ -24,6 +24,10 @@ ts-swc mocha 'test/**/*.test.*'
 ts-swc --clear
 ```
 
+Compiled output is cached in `ts-swc-<uid>` under the system temp directory (`ts-swc` on Windows, where the temp
+directory is already per user), so the operating system trims it. Set `TS_SWC_CACHE_PATH` to use another folder.
+`ts-swc --clear` deletes the cache folder. On Windows nothing trims the temp folder; run `ts-swc --clear` now and then.
+
 ## Node support for `require()` of TypeScript
 
 `import()`/`--loader` transpilation works on every supported Node: through `module.registerHooks()`

@@ -15,8 +15,8 @@ const [nodeMajor, nodeMinor, nodePatch] = process.versions.node.split('.').map(N
 const registerHooksUnreliable = nodeMajor === 22 && ((nodeMinor >= 15 && nodeMinor <= 21) || (nodeMinor === 22 && nodePatch < 3));
 export const hasReliableRegisterHooks = typeof (Module as { registerHooks?: unknown }).registerHooks === 'function' && !registerHooksUnreliable;
 
-export function homedir(): string {
-  return typeof os.homedir === 'function' ? os.homedir() : require('homedir-polyfill')();
+export function tmpdir(): string {
+  return typeof os.tmpdir === 'function' ? os.tmpdir() : require('os-shim').tmpdir();
 }
 
 /**

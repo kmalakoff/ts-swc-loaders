@@ -23,7 +23,7 @@ const MODULE_DIR = path.join(__dirname, '..', '..');
 const DATA_DIR = path.join(__dirname, '..', 'data', 'module');
 const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules');
 
-const TS_SWC_CACHE_PATH = path.join(__dirname, '..', '..', '.tmp');
+const TS_SWC_CACHE_PATH = path.join(__dirname, '..', '..', '.tmp', 'cache');
 const spawnOptions = {
   cwd: DATA_DIR,
   encoding: 'utf8',

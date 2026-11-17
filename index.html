@@ -20,6 +20,9 @@
 <pre><code class="bash"><span class="hl-0">ts-swc</span><span class="hl-1"> </span><span class="hl-2">mocha</span><span class="hl-1"> </span><span class="hl-2">&#39;test/**/*.test.*&#39;</span><br/><span class="hl-0">ts-swc</span><span class="hl-1"> </span><span class="hl-3">--clear</span>
 </code><button type="button">Copy</button></pre>
 
+<p>Compiled output is cached in <code>ts-swc-&lt;uid&gt;</code> under the system temp directory (<code>ts-swc</code> on Windows, where the temp
+directory is already per user), so the operating system trims it. Set <code>TS_SWC_CACHE_PATH</code> to use another folder.
+<code>ts-swc --clear</code> deletes the cache folder. On Windows nothing trims the temp folder; run <code>ts-swc --clear</code> now and then.</p>
 <h2 id="node-support-for-of-typescript" class="tsd-anchor-link">Node support for <code>require()</code> of TypeScript<a href="#node-support-for-of-typescript" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
 <p><code>import()</code>/<code>--loader</code> transpilation works on every supported Node: through <code>module.registerHooks()</code>
 on 22.22.3 and later and on 24/26, and through <code>module.register()</code> (deprecated by Node 26) below that.

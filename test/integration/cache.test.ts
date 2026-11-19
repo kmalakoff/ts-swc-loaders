@@ -67,7 +67,8 @@ describe('Cache across processes and folders', () => {
       const key = cache.key(file, tsconfig);
       const hash = cache.hash(source);
       const code = (cache.get(key, hash) || cache.set(key, transformSync(source, file, tsconfig), hash)).code;
-      assert.ok(code.indexOf(file) >= 0, 'code names its own file');
+      // swc emits the path as a JS string literal, so Windows backslashes are doubled
+      assert.ok(code.indexOf(JSON.stringify(file).slice(1, -1)) >= 0, 'code names its own file');
       assert.equal(code, transformSync(source, file, tsconfig).code);
       compiled.push(code);
     });

@@ -11,6 +11,7 @@ const guess = require("./lib/guess");
 const generic = require("./lib/generic.ts");
 
 assert.ok(App, "App not loaded");
+assert.equal(App.default().type, "div", "tsconfig jsx not applied");
 assert.equal(string, "string", "String not equal to string");
 assert.equal(guess, "guess", "guess not equal to guess");
 assert.equal(generic.default, 42, "Generic TypeScript not transpiled correctly");

@@ -1,4 +1,6 @@
 import assert from 'assert';
+// @ts-expect-error: no types for cr
+import cr from 'cr';
 import spawn from 'cross-spawn-cb';
 import fs from 'fs';
 import { safeRmSync } from 'fs-remove-compat';
@@ -14,6 +16,8 @@ const ROOT = path.join(__dirname, '..', '..');
 const SCRIPT = path.join(ROOT, 'test', 'lib', 'compile.cjs');
 const PROJECT_DIR = path.join(ROOT, 'test', 'data', 'commonjs');
 const SCRATCH = path.join(ROOT, '.tmp', 'cache-integration');
+const CLI = path.join(ROOT, 'bin', 'cli.js');
+const major = +process.versions.node.split('.')[0];
 
 const FILES = ['App.tsx', 'generic.ts'].map((name) => path.join(PROJECT_DIR, 'test', 'lib', name));
 const PROCESSES = 3;
@@ -67,12 +71,44 @@ describe('Cache across processes and folders', () => {
       const key = cache.key(file, tsconfig);
       const hash = cache.hash(source);
       const code = (cache.get(key, hash) || cache.set(key, transformSync(source, file, tsconfig), hash)).code;
-      assert.ok(code.indexOf(file) >= 0, 'code names its own file');
+      // swc emits the path as a JS string literal, so Windows backslashes are doubled
+      assert.ok(code.indexOf(JSON.stringify(file).slice(1, -1)) >= 0, 'code names its own file');
       assert.equal(code, transformSync(source, file, tsconfig).code);
       compiled.push(code);
     });
 
     assert.notEqual(compiled[0], compiled[1]);
     assert.equal(fs.readdirSync(path.join(SCRATCH, 'jsxdev-cache')).length, 2);
+  });
+
+  it('a run after the source changes compiles the new source', (done) => {
+    // tsconfig discovery starts at the working directory, so the project folder is the cwd.
+    const project = path.join(SCRATCH, 'edited');
+    const file = path.join(project, 'value.ts');
+    mkdirp.sync(project);
+    fs.writeFileSync(path.join(project, 'package.json'), '{ "type": "module" }', 'utf8');
+    fs.writeFileSync(path.join(project, 'tsconfig.json'), '{ "include": ["**/*.ts"] }', 'utf8');
+    const cachePath = path.join(SCRATCH, 'edited-cache');
+    const env: NodeJS.ProcessEnv = { ...process.env, TS_SWC_CACHE_PATH: cachePath };
+    delete env.NODE_OPTIONS;
+    const options = { cwd: project, encoding: 'utf8', env } as const;
+
+    const run = (value: number, next: () => void) => {
+      // an enum, which Node's own type stripping rejects, so only the loader can run this file
+      fs.writeFileSync(file, `enum Value { Current = ${value} }\nconsole.log(Value.Current);\n`, 'utf8');
+      // Node 0.x has no --require flag, so there the entry requires the CommonJS register itself.
+      const args = major > 0 ? ['node', file] : ['-e', `require(${JSON.stringify(path.join(ROOT, 'dist', 'cjs', 'index-cjs.js'))}); require(${JSON.stringify(file)});`];
+      spawn(major > 0 ? CLI : process.execPath, args, options, (err, res) => {
+        if (err || !res) return done(err || new Error('no res'));
+        try {
+          assert.equal(cr(res.stdout as string).trim(), String(value));
+          assert.ok(fs.readdirSync(cachePath).length > 0, 'the first run fills the cache');
+        } catch (error) {
+          return done(error as Error);
+        }
+        next();
+      });
+    };
+    run(1, () => run(2, () => done()));
   });
 });

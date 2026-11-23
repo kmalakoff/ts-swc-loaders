@@ -18,7 +18,7 @@ const MODULE_DIR = path.join(__dirname, '..', '..');
 const DATA_DIR = path.join(__dirname, '..', 'data', type);
 const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules');
 
-const TS_SWC_CACHE_PATH = path.join(__dirname, '..', '..', '.tmp', 'cache');
+const TS_SWC_CACHE_PATH = path.join(__dirname, '..', '..', '.tmp', 'ts-swc-cache');
 const spawnOptions = {
   cwd: DATA_DIR,
   encoding: 'utf8',
@@ -55,6 +55,33 @@ describe(`conventions (${type})`, () => {
         });
       });
     }
+  });
+
+  describe('a "type": "commonjs" package', () => {
+    // A module-mode run takes the ESM route above, so it covers the CommonJS fixture here.
+    if (type === 'commonjs') return;
+    const COMMONJS_DIR = path.join(__dirname, '..', 'data', 'commonjs');
+    const options = { ...spawnOptions, cwd: COMMONJS_DIR };
+
+    it('runs TypeScript through the --require bootstrap', (done) => {
+      const parsed = parse('commonjs', process.execPath, ['./test/index.test-test.ts'], options);
+      spawn(parsed.command, parsed.args, parsed.options, (err, res) => {
+        if (err) return done(err as Error);
+        if (!res) return done(new Error('no res'));
+        assert.equal(cr(res.stdout).split('\n').slice(-2)[0], 'Success!');
+        done();
+      });
+    });
+
+    it('loads a .mts file as ESM through the module bootstrap', (done) => {
+      const parsed = parse('module', process.execPath, ['./test/esm.test-test.mts'], options);
+      spawn(parsed.command, parsed.args, parsed.options, (err, res) => {
+        if (err) return done(err as Error);
+        if (!res) return done(new Error('no res'));
+        assert.equal(cr(res.stdout).split('\n').slice(-2)[0], 'Success!');
+        done();
+      });
+    });
   });
 
   describe('happy path', () => {

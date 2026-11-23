@@ -8,6 +8,7 @@ import string from "./lib/string.cjs";
 import generic from "./lib/generic.js";
 
 assert.ok(App, "App not loaded");
+assert.equal(App().type, "div", "tsconfig jsx not applied");
 assert.equal(string, "string", "String not equal to string");
 assert.equal(guess, "guess", "guess not equal to guess");
 assert.equal(generic, 42, "Generic TypeScript not transpiled correctly");

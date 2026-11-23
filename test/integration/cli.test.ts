@@ -27,7 +27,7 @@ const DATA_DIR = path.join(__dirname, '..', 'data', type);
 const DATA_MODULE_DIR = path.join(DATA_DIR, 'node_modules');
 const PKG_PATH = path.join(MODULE_DIR, 'package.json');
 
-const TS_SWC_CACHE_PATH = path.join(__dirname, '..', '..', '.tmp', 'cache');
+const TS_SWC_CACHE_PATH = path.join(__dirname, '..', '..', '.tmp', 'ts-swc-cache');
 const spawnOptions = {
   cwd: DATA_DIR,
   encoding: 'utf8',
@@ -124,6 +124,15 @@ describe('cli', () => {
         if (err) return done(err as Error);
         if (!res) return done(new Error('no res'));
         assert.equal(res.status, 0);
+        done();
+      });
+    });
+
+    // Node 0.x has no --require flag, so 'ts-swc node' cannot run anything there.
+    (major > 0 ? it : it.skip)('exits 17 when the command fails', (done) => {
+      spawn(CLI, ['node', '-e', 'process.exit(3)'], spawnOptions, (err) => {
+        assert.ok(err);
+        assert.equal(err.status, 17);
         done();
       });
     });
